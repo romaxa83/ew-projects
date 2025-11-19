@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Lang;
+use {{ namespacedModel }};
+use {{ namespacedModel }}Translation;
+
+/**
+ * @extends Factory<{{model}}Translation>
+ *
+ * @method Collection<{{ model }}Translation>|{{ model }}Translation create($attributes = [], ?Model $parent = null)
+ * @method Collection<{{ model }}Translation>|{{ model }}Translation make($attributes = [], ?Model $parent = null)
+ */
+class DummyClassTranslationFactory extends Factory
+{
+    public function definition(): array
+    {
+        return [
+            'row_id' => {{model}}::factory(),
+            'language' => Lang::getLocale(),
+            'name' => $this->faker->realText(20),
+        ];
+    }
+}

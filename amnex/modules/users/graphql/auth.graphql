@@ -1,0 +1,42 @@
+extend type Mutation {
+    siteUserRegistration(
+        user: UserRegistrationInput!,
+        session: String
+    ): AuthUserPayload!
+
+    siteUserLogin(
+        email: String!,
+        password: String!
+        session: String
+    ): AuthUserPayload!
+
+    siteUserRefreshToken(
+        refreshToken: String!
+    ): AuthUserPayload!
+
+    siteUserLogout: Boolean!
+
+    siteUserResendEmailVerification: Boolean!
+
+    siteUserVerifyEmail(
+        token: String!
+    ): Boolean!
+
+    siteUserForgotPassword(
+        email: String!
+    ): Boolean!
+
+    siteUserResetPassword(
+        token: String!,
+        password: String!,
+        passwordConfirmation: String!
+    ): Boolean!
+}
+
+type AuthUserPayload {
+    tokenType: String!
+    accessExpiresIn: Int!
+    refreshExpiresIn: Int!
+    accessToken: String!
+    refreshToken: String!
+}

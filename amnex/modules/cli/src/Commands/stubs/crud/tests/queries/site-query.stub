@@ -1,0 +1,90 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\Test;
+use Wezom\Admins\Testing\TestCase;
+use Wezom\Core\Contracts\OrderColumnEnumInterface;
+use Wezom\Core\Enums\OrderDirectionEnum;
+use Wezom\Core\Permissions\Ability;
+use {{namespacedOrderColumnEnum}};
+use {{namespacedModel}};
+use {{namespacedProjection}}\{{ProjectionName}};
+
+class DummyClass extends TestCase
+{
+    #[Test]
+    public function success(): void
+    {
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->disabled()->create();
+
+        $this->queryRequest()
+            ->assertNoErrors()
+            ->assertJsonCount(1, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment([
+                'id' => (string)$model1->id,
+                'active' => true,
+                'createdAt' => $model1->created_at->format(config('app.datetime_format')),
+                'updatedAt' => $model1->updated_at->format(config('app.datetime_format')),
+            ])
+            ->assertJsonMissing(['id' => (string)$model2->id]);
+    }
+
+    protected function queryRequest(array $args = []): TestResponse
+    {
+        $projection = {{ProjectionName}}::root();
+
+        return $this->queryPaginate()
+            ->select($projection)
+            ->args($args)
+            ->executeAndReturnResponse();
+    }
+
+    #[Test]
+    public function filterByIds(): void
+    {
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->create();
+        ModelClass::factory()->create();
+
+        $this->queryRequest(['filtering' => ['ids' => [$model1->id, $model2->id]]])
+            ->assertNoErrors()
+            ->assertJsonCount(2, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment(['id' => (string)$model1->id])
+            ->assertJsonFragment(['id' => (string)$model2->id]);
+    }
+
+    #[Test]
+    public function orderById(): void
+    {
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->create();
+        $model3 = ModelClass::factory()->create();
+        $model4 = ModelClass::factory()->create();
+
+        $this->assertOrderedBy(
+            {{OrderColumnEnum}}::ID,
+            OrderDirectionEnum::DESC,
+            $model4,
+            $model3,
+            $model2,
+            $model1
+        );
+    }
+
+    private function assertOrderedBy(OrderColumnEnumInterface $column, OrderDirectionEnum $direction, ...$models): void
+    {
+        $ids = $this->queryPaginate()
+            ->select('id')
+            ->ordering($column, $direction)
+            ->execute()
+            ->pluck('id');
+
+        $this->assertSameOrder($ids, ...$models);
+    }
+{{methods}}
+}

@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Model;
+
+// {{docblock}}
+class DummyClass extends Model
+{
+{{traits}}
+{{attributes}}
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+}

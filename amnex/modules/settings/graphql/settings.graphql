@@ -1,0 +1,25 @@
+extend type Query {
+    backSettings: [Settings!]!
+
+    siteSettings: [Settings!]!
+}
+
+extend type Mutation {
+    backSettingsCreateOrUpdate(
+        settings: [SettingsInput!]!
+    ): [Settings!]!
+}
+
+type Settings {
+    "Unique"
+    key: String!
+    value: String
+    title: String
+    group: String @rename(attribute: "group_title")
+    type: String
+}
+
+input SettingsInput {
+    key: String!
+    value: String
+}

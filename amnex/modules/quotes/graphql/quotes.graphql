@@ -1,0 +1,114 @@
+extend type Query {
+    backQuotes(
+        ids: [ID]
+        status: QuoteStatusEnum
+    ): [Quote!]!
+    @paginate
+
+    backQuotesAnalyticData(
+        dateRange: DateRangeInput
+    ): QuoteAnalytic!
+
+    siteUserQuote(
+        containerNumber: String!
+    ): Quote
+
+    siteTerminals: [Terminal!]!
+}
+
+extend type Mutation {
+    backQuoteUpdate(
+        quote: QuoteBackUpdateInput!
+    ): Quote!
+    backQuoteChangeStatus(
+        quote: QuoteBackChangeStatusInput!
+    ): Quote!
+
+    siteQuoteCreate(
+        quote: QuoteCreateInput!
+    ): Quote!
+    siteQuoteAccept(
+        quote: QuoteAcceptInput!
+    ): Quote!
+}
+
+input QuoteCreateInput {
+    containerType: ContainerTypeEnum
+    isOutOfGauge: Boolean!
+    isTransload: Boolean!
+    isPalletized: Boolean
+    pickupTerminalId: Int!
+    deliveryAddress: String!
+    numberPallets: Int
+    pieceCount: Int
+    daysStored: Int
+    email: String
+    phone: String
+    userName: String
+}
+input QuoteAcceptInput {
+    quoteId: Int!
+    email: String!
+    phone: String!
+    userName: String!
+}
+input QuoteBackUpdateInput {
+    quoteId: Int!
+    containerNumber: String
+    mileageCost: Float
+    cargoCost: Float
+    storageCost: Float
+}
+input QuoteBackChangeStatusInput {
+    quoteId: Int!
+    status: QuoteStatusEnum!
+}
+
+"Quote"
+type Quote {
+    "Unique primary key."
+    id: ID!
+    status: QuoteStatusEnum!
+    pickupTerminal: Terminal! @belongsTo
+    deliveryAddress: String! @rename(attribute: "delivery_address")
+    containerType: ContainerTypeEnum! @rename(attribute: "container_type")
+    isOutOfGauge: Boolean! @rename(attribute: "is_not_standard_dimension")
+    isTransload: Boolean! @rename(attribute: "is_transload")
+    isPalletized: Boolean @rename(attribute: "is_palletized")
+    numberPallets: Int @rename(attribute: "number_pallets")
+    pieceCount: Int @rename(attribute: "piece_count")
+    daysStored: Int @rename(attribute: "days_stored")
+    containerNumber: String @rename(attribute: "container_number")
+    mileageCost: Float @rename(attribute: "mileage_cost")
+    cargoCost: Float @rename(attribute: "cargo_cost")
+    storageCost: Float @rename(attribute: "storage_cost")
+    total: Float
+    email: String
+    phone: String
+    userName: String @rename(attribute: "user_name")
+    acceptedAt: DateTimeForFront  @field(resolver:"Wezom\\Quotes\\Models\\Quote@convertDateQuoteAccepted")
+    createdAt: DateTimeForFront!  @field(resolver:"Wezom\\Quotes\\Models\\Quote@convertDateCreated")
+    updatedAt: DateTimeForFront  @field(resolver:"Wezom\\Quotes\\Models\\Quote@convertDateUpdated")
+}
+
+"Terminal"
+type Terminal {
+    "Unique primary key."
+    id: ID!
+    address: String!
+    name: String!
+}
+
+type QuoteAnalytic {
+    count_all: Int!
+    count_expired: Int!
+    count_processed: Int!
+}
+
+enum ContainerTypeEnum {
+    NONE
+    FT20
+    FT40
+    FT40_HC
+    FT53
+}

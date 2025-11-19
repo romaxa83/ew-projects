@@ -1,0 +1,140 @@
+extend type Query {
+    backAdmins(
+        ids: [ID]
+        ordering: [AdminOrderInput!] = [{column: ID, direction: DESC}]
+        roleIds: [ID!] @rename(attribute: "role_ids")
+        query: String
+        status: AdminStatusEnum
+    ): [Admin!]!
+    @paginate
+
+    backAdminRoles(
+        query: String
+        ids: [ID]
+        active: Boolean
+        name: String
+        perPage: Int
+        ordering: [RoleOrderInput!] = [{column: ID, direction: DESC}]
+    ): [Role!]!
+    @paginate
+
+    backAdminProfile: Admin!
+
+    backPermissions: [String!]!
+}
+
+extend type Mutation {
+    backAdminCreate(
+        admin: AdminInput!
+    ): Admin!
+
+    backAdminUpdate(
+        id: ID!
+        admin: AdminInput!
+    ): Admin!
+
+    backAdminDelete(
+        ids: [ID!]!
+    ): [ResponseMessageType!]!
+    @massDelete(model: "Wezom\\Admins\\Models\\Admin")
+
+    backAdminToggleActive(
+        ids: [ID!]!
+    ): [ResponseMessageType!]!
+    @toggleActive(abilityAction: "change-status" model: "Wezom\\Admins\\Models\\Admin")
+
+    backAdminResendInvite(
+        id: ID!,
+    ): [ResponseMessageType!]!
+
+    backAdminResendEmailVerification(
+        id: ID!,
+    ): [ResponseMessageType!]!
+
+    backAdminLogin(
+        email: String!
+        password: String!
+        remember: Boolean!
+    ): AuthAdminPayload! @validator
+
+    backAdminEmailVerification(
+        token: String!
+    ): Boolean!
+
+    backAdminRefreshToken(
+        refreshToken: String! @rename(attribute: "refresh_token")
+    ): AuthAdminPayload!
+
+    "Change password admin"
+    backAdminChangePassword(
+        current: String!
+        password: String!
+        passwordConfirmation: String! @rename(attribute: "password_confirmation")
+    ): Boolean!
+
+    "Forgot password admin"
+    backAdminForgotPassword(
+        email: String!
+    ): Boolean!
+
+
+    "Reset password admin"
+    backAdminResetPassword(
+        token: String!
+        password: String!
+        passwordConfirmation: String! @rename(attribute: "password_confirmation")
+    ): Boolean!
+
+    "Logout admin"
+    backAdminLogout: Boolean!
+}
+
+"Admin auth data"
+type AuthAdminPayload {
+    tokenType: String! @rename(attribute: "token_type")
+    accessExpiresIn: Int! @rename(attribute: "access_expires_in")
+    refreshExpiresIn: Int! @rename(attribute: "refresh_expires_in")
+    accessToken: String! @rename(attribute: "access_token")
+    refreshToken: String! @rename(attribute: "refresh_token")
+}
+
+"Admins for admin panel"
+type Admin {
+    "Unique primary key."
+    id: ID!
+
+    "Non-unique name."
+    firstName: String! @rename(attribute: "first_name")
+    lastName: String! @rename(attribute: "last_name")
+    active: Boolean!
+    phone: String
+    newEmailForVerification: String @rename(attribute: "new_email_for_verification")
+    inviteAccepted: Boolean! @method(name: "getInviteAcceptedAttribute")
+    roles: [Role!]! @hasMany
+    status: AdminStatusEnum
+
+    "Unique email address."
+    email: String!
+
+    createdAt: DateTimeForFront! @rename(attribute: "created_at")
+    updatedAt: DateTimeForFront @rename(attribute: "updated_at")
+
+    abilities: AbilitiesListInterface!
+
+    isSuperAdmin: Boolean! @method(name: "isSuperAdmin")
+}
+
+type Role @model(class: "Wezom\\Core\\Models\\Permission\\Role") {
+    "Unique primary key."
+    id: ID!
+    name: String!
+    note: String
+    active: Boolean
+    permissions: [String!]! @method(name: "getPermissionListAttribute")
+
+    createdAt: DateTimeForFront! @rename(attribute: "created_at")
+    updatedAt: DateTimeForFront @rename(attribute: "updated_at")
+
+    abilities: AbilitiesListInterface!
+}
+

@@ -1,0 +1,34 @@
+{
+    "name": "wezom/admins",
+    "autoload": {
+        "psr-4": {
+            "Wezom\\Admins\\": "src/",
+            "Wezom\\Admins\\Database\\Factories\\": "database/factories/",
+            "Wezom\\Admins\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wezom\\Admins\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wezom\\Admins\\AdminsServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Boreyko Vladyslav"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "type": "library",
+    "version": "1.0.0",
+    "require": {
+        "wezom/core": "^1.0.0"
+    }
+}

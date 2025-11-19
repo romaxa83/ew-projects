@@ -1,0 +1,24 @@
+extend type Query {
+    siteUserProfile: UserProfile!
+    @guard(with:["graph_user"])
+}
+
+type UserProfile {
+    id: ID!
+    firstName: String! @rename(attribute: "first_name")
+    lastName: String! @rename(attribute: "last_name")
+    email: String!
+    emailVerifiedAt: DateTimeForFront @rename(attribute: "email_verified_at")
+}
+
+type User {
+    id: ID!
+    firstName: String! @rename(attribute: "first_name")
+    lastName: String! @rename(attribute: "last_name")
+    email: String!
+    emailVerifiedAt: DateTimeForFront @rename(attribute: "email_verified_at")
+    "When the account was created."
+    createdAt: DateTimeForFront! @rename(attribute: "created_at")
+    "When the account was last updated."
+    updatedAt: DateTimeForFront @rename(attribute: "updated_at")
+}

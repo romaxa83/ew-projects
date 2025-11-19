@@ -1,0 +1,31 @@
+{
+    "name": "wezom/quotes",
+    "autoload": {
+        "psr-4": {
+            "Wezom\\Quotes\\": "src/",
+            "Wezom\\Quotes\\Database\\Factories\\": "database/factories/",
+            "Wezom\\Quotes\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wezom\\Quotes\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wezom\\Quotes\\QuotesServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "type": "library",
+    "version": "1.0.0",
+    "require": {
+        "wezom/core": "^1.0.0",
+        "wezom/users": "^1.0.0",
+        "wezom/admins": "^1.0.0"
+    }
+}

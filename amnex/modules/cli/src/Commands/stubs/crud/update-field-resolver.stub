@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+{{uses}}
+
+final class DummyClass extends BackFieldResolver
+{
+    protected bool $runInTransaction = true;
+    protected string $inputDto = DtoClass::class;
+
+    public function __construct(protected ServiceClass $service)
+    {
+    }
+
+    public function resolve(Context $context): ModelClass
+    {
+        $dto = $context->getDto(DtoClass::class, $this->inputName);
+
+        return $this->service->update($context->getArg('id'), $dto);
+    }
+
+    protected function rules(array $args = []): array
+    {
+        return $this->idRule(ModelClass::class);
+    }
+
+    protected function ability(): Ability
+    {
+        return Ability::toModel(ModelClass::class)->updateAction();
+    }
+}

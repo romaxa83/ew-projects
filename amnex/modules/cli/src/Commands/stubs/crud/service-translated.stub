@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+{{uses}}
+use {{namespacedModel}};
+
+class DummyClass
+{
+    use InteractsWithTranslations;
+
+    public function create(DtoClass $dto): ModelClass
+    {
+        $model = new ModelClass();
+
+        $this->fill($model, $dto);
+
+        return $model;
+    }
+
+    public function update(string|int $id, DtoClass $dto): ModelClass
+    {
+        $model = ModelClass::query()->findOrFail($id);
+
+        $this->fill($model, $dto);
+
+        return $model;
+    }
+
+    protected function fill(ModelClass $model, DtoClass $dto): void
+    {
+        $model->fill($dto->all());
+        $model->save();
+
+        $this->syncTranslations($model, $dto);
+    }
+}

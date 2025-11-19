@@ -1,0 +1,32 @@
+{
+    "develop": [
+        "php artisan optimize:clear",
+        "git reset --hard",
+        "git checkout develop",
+        "git pull origin develop",
+        "composer install --no-dev",
+        "php artisan lighthouse:clear-cache",
+        "php artisan cms:install --force --no-interaction",
+        "php artisan cache:clear",
+        "php artisan optimize",
+        "php artisan lighthouse:cache",
+        "php artisan lighthouse:validate-schema",
+        "php artisan horizon:terminate",
+        "php artisan octane:stop"
+    ],
+    "master": [
+        "php artisan optimize:clear",
+        "git reset --hard",
+        "git checkout master",
+        "git pull origin master",
+        "composer install --no-dev",
+        "php artisan lighthouse:clear-cache",
+        "php artisan cms:install --force --no-interaction",
+        "php artisan cache:clear",
+        "php artisan optimize",
+        "php artisan lighthouse:cache",
+        "php artisan lighthouse:validate-schema",
+        "php artisan horizon:terminate",
+        "php artisan octane:stop"
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "private": true,
+    "scripts": {
+        "mail-dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=mail.mix.js --watch",
+        "mail": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js --env.mixfile=mail.mix.js"
+    },
+    "devDependencies": {
+        "browser-sync": "^2.26.7",
+        "browser-sync-webpack-plugin": "^2.2.2",
+        "cross-env": "^5.2.1",
+        "laravel-mix": "^4.1.4",
+        "resolve-url-loader": "^2.3.2",
+        "sass": "^1.22.12",
+        "sass-loader": "^7.3.1"
+    },
+    "dependencies": {
+        "css-loader": "^1.0.1"
+    }
+}

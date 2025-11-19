@@ -1,0 +1,132 @@
+image: wzmhub/php:latest
+
+definitions:
+  steps:
+    - step: &run-tests-with-coverage
+        name: Run tests and generate coverage
+        runs-on:
+          - linux
+        caches:
+          - composer
+        script:
+          # Installing dependencies via Composer
+          - composer install --no-progress --no-interaction --prefer-dist
+          # Start postgresql
+          - service postgresql start
+          # Set up Laravel and running migrations
+          - cp .env.pipeline .env
+          - php artisan key:generate
+          - php artisan migrate --force --env=testing
+          - php ./vendor/bin/paratest --passthru-php="'-d' 'pcov.enabled=1' '-d' 'pcov.directory=.'" --coverage-clover=coverage.xml
+        artifacts:
+          - coverage.xml
+
+    - step: &run-tests-pint-phpstan
+        name: Run tests, Pint and PHPStan
+        runs-on:
+          - linux
+        caches:
+          - composer
+        script:
+          # Installing dependencies via Composer
+          - composer install --no-progress --no-interaction --prefer-dist
+          # Start postgresql
+          - service postgresql start
+          # Set up Laravel and running migrations
+          - cp .env.pipeline .env
+          - php artisan key:generate
+          - php artisan migrate --force --env=testing
+          - php ./vendor/bin/pint --test && php ./vendor/bin/phpstan && php ./vendor/bin/paratest
+
+    - step: &run-pint
+        name: Run Pint
+        runs-on:
+          - linux
+        caches:
+          - composer
+        script:
+          # Installing dependencies via Composer
+          - composer install --no-progress --no-interaction --prefer-dist
+          # Set up Laravel and running migrations
+          - cp .env.pipeline .env
+          - php artisan key:generate
+          - php ./vendor/bin/pint --test
+
+    - step: &run-phpstan
+        name: Run PHPStan
+        runs-on:
+          - linux
+        caches:
+          - composer
+        script:
+          # Installing dependencies via Composer
+          - composer install --no-progress --no-interaction --prefer-dist
+          # Set up Laravel and running migrations
+          - cp .env.pipeline .env
+          - php artisan key:generate
+          - php ./vendor/bin/phpstan
+
+    - step: &run-tests
+        name: Run tests
+        runs-on:
+          - linux
+        caches:
+          - composer
+        script:
+          # Installing dependencies via Composer
+          - composer install --no-progress --no-interaction --prefer-dist
+          # Start postgresql
+          - service postgresql start
+          # Set up Laravel and running migrations
+          - cp .env.pipeline .env
+          - php artisan key:generate
+          - php artisan migrate --force --env=testing
+          - php ./vendor/bin/paratest
+
+    - step: &scan-sonar
+        name: SonarQube analysis
+        runs-on:
+          - linux
+        caches:
+          - composer
+        script:
+          - pipe: sonarsource/sonarqube-scan:2.0.1
+            variables:
+              SONAR_HOST_URL: ${SONAR_HOST_URL}
+              SONAR_TOKEN: ${SONAR_TOKEN}
+              #DEBUG: "false"
+  services:
+    docker:
+      memory: 3072
+
+  caches:
+    composer: ~/.composer/cache
+
+  clone:
+    depth: full
+
+pipelines:
+  #  branches:
+  #    develop:
+  #      - step: *build-step
+  #      - step: *scan-sonar
+  pull-requests:
+    "**":
+      - parallel:
+          - step: *run-pint
+          - step: *run-phpstan
+          - step: *run-tests
+
+  custom:
+    scheduled-run:
+      - step: *run-tests-with-coverage
+      - step: *scan-sonar
+
+    check-sequentially-run:
+      - step: *run-tests-pint-phpstan
+
+    check-run:
+      - parallel:
+          - step: *run-pint
+          - step: *run-phpstan
+          - step: *run-tests

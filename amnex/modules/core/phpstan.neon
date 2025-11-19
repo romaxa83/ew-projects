@@ -1,0 +1,11 @@
+parameters:
+    ignoreErrors:
+        - '#^Attribute class JetBrains\\PhpStorm\\Pure does not exist\.$#'
+        - '#^Attribute class JetBrains\\PhpStorm\\NoReturn does not exist\.$#'
+        - '#^Unsafe usage of new static#'
+        -
+            message: "#^Called 'env' outside of the config directory which returns null when the config is cached, use 'config'.$#"
+            path: */config/*.php
+    excludePaths:
+        - src/ExtendPackage/Lighthouse/ResolveInfo.php
+        - src/Traits/Filter/SortFilterTrait.php

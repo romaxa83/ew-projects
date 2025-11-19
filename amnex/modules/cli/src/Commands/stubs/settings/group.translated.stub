@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Wezom\Core\Enums\Images\ImageSizeEnum;
+use Wezom\Settings\BaseSettings;
+use Wezom\Settings\SettingBuilder;
+
+class DummyClass extends BaseSettings
+{
+    protected function registerFields(SettingBuilder $builder): void
+    {
+        $builder->text('seoH1')
+            ->multilingual()
+            ->default('DummyClass');
+
+        $builder->text('seoTitle')
+            ->multilingual()
+            ->default('DummyClass');
+
+        $builder->text('seoDescription')
+            ->multilingual();
+
+        $builder->text('seoText')
+            ->multilingual();
+
+        $builder->image('seoTextImage')
+            ->conversions()
+            ->addSize(ImageSizeEnum::BIG)
+            ->defaultResize(1920, 615)
+            ->nonOptimized();
+    }
+}

@@ -1,0 +1,15 @@
+
+type DummyClassSetting {
+    seoTextImage: File
+    translation: DummyClassSettingTranslation!
+    translations: [DummyClassSettingTranslation!]!
+}
+
+type DummyClassSettingTranslation {
+    seoH1: String
+    seoTitle: String
+    seoDescription: String
+    seoText: String
+
+    language: String!
+}

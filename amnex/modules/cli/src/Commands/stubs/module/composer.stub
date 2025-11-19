@@ -1,0 +1,26 @@
+{
+    "name": "wezom/dummy_module",
+    "type": "library",
+    "version": "DummyVersion",
+    "require": {
+        "wezom/core": "DummyCoreDependencyVersion"
+    },
+    "autoload": {
+        "psr-4": {
+            "DummyNamespace\\": "src/",
+            "DummyNamespace\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DummyNamespace\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DummyNamespace\\DummyServiceProvider"
+            ]
+        }
+    }
+}

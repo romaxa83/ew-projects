@@ -1,0 +1,16 @@
+type {{EntityType}} {
+    id: ID!
+    active: Boolean!
+
+    translation: {{EntityType}}Translation! @hasOne
+    translations: [{{EntityType}}Translation!]! @hasMany
+
+    createdAt: DateTimeForFront! @rename(attribute: "created_at")
+    updatedAt: DateTimeForFront @rename(attribute: "updated_at")
+}
+
+type {{EntityType}}Translation {
+    id: ID!
+    language: String!
+    name: String!
+}

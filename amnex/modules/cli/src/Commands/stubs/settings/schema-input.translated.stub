@@ -1,0 +1,22 @@
+
+input DummyClassSettingsInput {
+    """
+    Formats: jpg, jpeg, png
+    Max size: 2048Kb
+    Image sizes:
+    big: 1920x615 px
+    big2x_webp: 3840x1230 px
+    """
+    seoTextImage: Upload
+
+    translations: [DummyClassSettingsTranslationInput!]!
+}
+
+input DummyClassSettingsTranslationInput {
+    seoH1: String
+    seoTitle: String
+    seoDescription: String
+    seoText: String
+
+    language: String!
+}

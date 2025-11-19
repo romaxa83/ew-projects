@@ -1,0 +1,18 @@
+
+    #[Test]
+    public function orderBySort(): void
+    {
+        $model1 = ModelClass::factory()->create(['sort' => 5]);
+        $model2 = ModelClass::factory()->create(['sort' => 2]);
+        $model3 = ModelClass::factory()->create(['sort' => 8]);
+        $model4 = ModelClass::factory()->create(['sort' => 1]);
+
+        $this->assertOrderedBy(
+            {{OrderColumnEnum}}::SORT,
+            OrderDirectionEnum::ASC,
+            $model4,
+            $model2,
+            $model1,
+            $model3
+        );
+    }

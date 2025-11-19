@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Model;
+
+// {{docblock}}
+class DummyClass extends Model
+{
+{{traits}}
+    public $timestamps = false;
+    protected $fillable = [
+        'language',
+        'row_id',
+        'name',
+    ];
+}

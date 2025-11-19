@@ -1,0 +1,7 @@
+    """
+    PERMISSION: "{{updatePermission}}"
+    """
+    {{BackUpdateSortMutationName}}(
+        input: UpdateSortPositionInput!
+    ): [ResponseMessageType!]!
+    @updateSort(model: "{{ModelClassName}}")

@@ -1,0 +1,27 @@
+interface SeoInterface {
+    h1: String
+    title: String
+    description: String
+}
+
+type Seo implements SeoInterface {
+    h1: String
+    title: String
+    description: String
+}
+
+type SeoWithText implements SeoInterface {
+    h1: String
+    title: String
+    description: String
+    text: String
+}
+
+type SeoWithTextAndImages implements SeoInterface {
+    h1: String
+    title: String
+    description: String
+    text: String
+    imageTitle: String @rename(attribute: "image_title")
+    imageAlt: String @rename(attribute: "image_alt")
+}

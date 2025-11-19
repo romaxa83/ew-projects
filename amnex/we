@@ -1,0 +1,226 @@
+#!/usr/bin/env bash
+
+source .env 2> /dev/null
+
+CMS_VERSION="1.0"
+
+TERM=xterm-256color
+
+GREEN_BOLD="\e[1;32m"
+GREEN="\e[32m"
+BLUE_BOLD="\e[1;34m"
+BLUE="\e[34m"
+YELLOW_BOLD="\e[1;33m"
+YELLOW="\e[0;33m"
+WHITE_BOLD="\e[1;97m"
+ENDCOLOR="\e[0m"
+
+COMMAND=$1
+arg2=$2
+args="${*:2}"
+
+dc="docker compose -p ${APP_NAME} ${args}"
+dcc="docker compose -p ${APP_NAME}"
+
+php="php"
+db="db"
+db_testing="db_testing"
+cache="cache"
+
+ADDRESS=${DOCKER_ADDRESS} || 'localhost'
+MESSAGE="http://${ADDRESS}"
+
+case ${COMMAND} in
+  install)
+      MODULE_NAME=${arg2}
+
+      if [ -z "${MODULE_NAME}" ]; then
+          MODULE_NAME="--help"
+      fi
+
+      INSTALLER="./module-installer"
+
+      FINGERPRINT="execute-script-from-we-file"
+
+      if [ ! -x "${INSTALLER}" ]; then
+          chmod +x "${INSTALLER}"
+      fi
+
+      # Using an array to hold the command and its arguments
+      COMMAND_TO_RUN=("${INSTALLER}" "${MODULE_NAME}" "${CMS_VERSION}" "${FINGERPRINT}")
+
+      # Execute the command safely without eval
+      "${COMMAND_TO_RUN[@]}"
+      exit;
+  ;;
+  init)
+    echo "Choose your OS:"
+    select name in "win" "linux" "macos" ;
+    do
+      case ${name} in
+        win|macos)
+          cp -n ./docker/docker-compose.example.yml docker-compose.yml
+          cp -n .env.example .env
+          cp -n .env.testing.example .env.testing
+        ;;
+
+        linux)
+          cp --update ./docker/docker-compose.example.yml docker-compose.yml
+          cp --update .env.example .env
+          cp --update .env.testing.example .env.testing
+        ;;
+
+      esac
+    break
+    done
+    echo "Configuration done."
+  ;;
+
+  build)
+    sudo chmod 777 -R .
+    ${dc} up --build --force-recreate
+  ;;
+
+  rebuild)
+    sudo chmod 777 -R .
+    ${dc} up -d --build --force-recreate --no-deps ${arg2}
+  ;;
+
+  start)
+    ${dc} start
+    echo ${MESSAGE}
+  ;;
+
+  up)
+    ${dc} up -d
+    echo ${MESSAGE}
+  ;;
+
+  stop)
+    ${dc} stop
+  ;;
+
+  down)
+    ${dc} down --remove-orphans
+  ;;
+
+  logs)
+    ${dc} logs -f
+  ;;
+
+  ps)
+    ${dc} ps
+  ;;
+
+  restart)
+    ${dc} restart
+    echo ${MESSAGE}
+  ;;
+
+  php)
+    ${dc} exec ${php} bash
+  ;;
+
+  artisan)
+    ${dcc} exec ${php} php artisan ${args}
+    ${dcc} exec ${php} chmod -R 0777 .
+  ;;
+
+  phpstan)
+    ${dcc} exec ${php} ./vendor/bin/phpstan ${args}
+  ;;
+
+  lh)
+    ${dcc} exec ${php} php artisan lighthouse:ide-helper
+  ;;
+
+  pint)
+    ${dcc} exec ${php} ./vendor/bin/pint ${args}
+  ;;
+
+  check)
+    ${dcc} exec ${php} ./vendor/bin/pint && ${dcc} exec ${php} ./vendor/bin/phpstan && ${dcc} exec ${php} php artisan test --parallel
+  ;;
+
+  mw)
+    ${dcc} exec ${php} php artisan ide-helper:models -W ${args}
+  ;;
+
+  composer)
+    ${dcc} exec ${php} composer ${args}
+    ${dcc} exec ${php} chmod -R 0777 .
+  ;;
+
+  db)
+    ${dc} exec ${db} bash
+  ;;
+
+  db_testing)
+    ${dc} exec ${db_testing} bash
+  ;;
+
+  cache)
+    ${dc} exec ${cache} bash
+  ;;
+
+  ws)
+    ${dc} exec ${php} php artisan websockets:serve
+
+    echo "Stop websocket serv"
+  ;;
+
+  wlog)
+    echo > storage/logs/laravel.log
+    tail -f storage/logs/laravel.log
+  ;;
+
+  paratest)
+    ${dcc} exec ${php} php artisan test --parallel ${args}
+  ;;
+
+  coverage)
+    ${dcc} exec ${php} php artisan test --parallel --coverage-clover=coverage.xml --coverage-html=storage/coverage
+  ;;
+
+  help|--help|'')
+    USAGE="${YELLOW_BOLD}Wezom CMS Utils:${ENDCOLOR}
+${YELLOW}install [module-name]${ENDCOLOR} : Install cms module. [Version ${WHITE_BOLD}${CMS_VERSION}${ENDCOLOR} will be installed]
+
+${GREEN_BOLD}Development commands:${ENDCOLOR}
+${GREEN}artisan  [--OPTIONS]${ENDCOLOR}  : Run artisan command in container
+${GREEN}composer [--OPTIONS]${ENDCOLOR}  : Run composer command in container
+${GREEN}lh${ENDCOLOR}                    : Run 'lighthouse:ide-helper' command
+${GREEN}mw${ENDCOLOR}                    : Run 'php artisan ide-helper:model -W' command
+${GREEN}ws${ENDCOLOR}                    : Run 'php artisan websockets:serve' command
+${GREEN}wlog${ENDCOLOR}                  : Read laravel.log file (in tail -f mode)
+
+${GREEN_BOLD}Code quality:${ENDCOLOR}
+${GREEN}phpstan${ENDCOLOR}               : Run phpstan
+${GREEN}pint${ENDCOLOR}                  : Run pint
+${GREEN}paratest${ENDCOLOR}              : Run tests in parallel
+${GREEN}coverage${ENDCOLOR}              : Run tests in parallel with coverage
+${GREEN}check${ENDCOLOR}                 : Run pint & phpstan & paratest
+
+${BLUE_BOLD}Containers:${ENDCOLOR}
+${BLUE}php${ENDCOLOR}                   : Go to php's container bash
+${BLUE}db${ENDCOLOR}                    : Go to db's container bash
+${BLUE}db_testing${ENDCOLOR}            : Go to db_testing's container bash
+${BLUE}cache${ENDCOLOR}                 : Go to cache's container bash
+
+${BLUE_BOLD}Docker:${ENDCOLOR}
+${BLUE}init${ENDCOLOR}                  : Init docker configuration
+${BLUE}build${ENDCOLOR}                 : Build or rebuild services
+${BLUE}rebuild${ENDCOLOR}               : Build or rebuild services (in Detached mode \"-d option\")
+${BLUE}start${ENDCOLOR}                 : Start services
+${BLUE}up${ENDCOLOR}                    : UP projects
+${BLUE}stop${ENDCOLOR}                  : Stop services
+${BLUE}restart${ENDCOLOR}               : Restart services
+${BLUE}down${ENDCOLOR}                  : Stop and remove containers, networks
+${BLUE}logs${ENDCOLOR}                  : View output from containers
+${BLUE}ps${ENDCOLOR}                    : List containers
+"
+
+    printf '%s'"$USAGE"
+  ;;
+
+esac

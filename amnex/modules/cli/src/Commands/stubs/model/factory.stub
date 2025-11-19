@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use {{ namespacedModel }};
+use Wezom\Core\Traits\Factory\ActiveFactoryTrait;
+
+/**
+ * @extends Factory<{{ model }}>
+ *
+ * @method Collection<int, {{ model }}>|{{ model }} create($attributes = [], ?Model $parent = null)
+ * @method Collection<int, {{ model }}>|{{ model }} make($attributes = [], ?Model $parent = null)
+ */
+class DummyClassFactory extends Factory
+{
+    use ActiveFactoryTrait;
+
+    public function definition(): array
+    {
+        return [
+            'active' => true,
+        ];
+    }
+}

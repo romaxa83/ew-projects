@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Wezom\DummyModule\GraphQL\Queries\Back;
+
+use Wezom\DummyModule\Settings\DummyClass;
+use Wezom\Settings\GraphQL\BackSettingsFieldResolver;
+
+class BackDummyClassSettings extends BackSettingsFieldResolver
+{
+    protected function abilityKey(): string
+    {
+        return '{{permissions}}';
+    }
+
+    protected function group(): string
+    {
+        return DummyClass::group();
+    }
+}

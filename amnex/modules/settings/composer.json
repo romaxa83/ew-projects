@@ -1,0 +1,31 @@
+{
+    "name": "wezom/settings",
+    "autoload": {
+        "psr-4": {
+            "Wezom\\Settings\\": "src/",
+            "Wezom\\Settings\\Database\\Factories\\": "database/factories/",
+            "Wezom\\Settings\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wezom\\Settings\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wezom\\Settings\\SettingsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "type": "library",
+    "version": "1.0.0",
+    "require": {
+        "wezom/core": "^1.0.0",
+        "wezom/users": "^1.0.0",
+        "wezom/admins": "^1.0.0"
+    }
+}

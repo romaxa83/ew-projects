@@ -1,0 +1,55 @@
+extend type Query {
+    """
+    PERMISSION: "{{viewPermission}}"
+    """
+    {{BackQueryName}}(
+        filtering: {{EntityType}}FilteringInput
+        ordering: [{{EntityType}}OrderInput!] = [{column: {{defaultOrderColumn}}, direction: {{defaultOrderDirection}}}]
+    ): [{{EntityType}}!]!
+    @paginate
+
+{{queries}}
+}
+
+extend type Mutation {
+    """
+    PERMISSION: "{{createPermission}}"
+    """
+    {{BackCreateMutationName}}(
+        input: {{EntityType}}Input!
+    ): {{EntityType}}!
+
+    """
+    PERMISSION: "{{updatePermission}}"
+    """
+    {{BackUpdateMutationName}}(
+        id: ID!
+        input: {{EntityType}}Input!
+    ): {{EntityType}}!
+
+    """
+    PERMISSION: "{{deletePermission}}"
+    """
+    {{BackDeleteMutationName}}(
+        ids: [ID!]!
+    ): [ResponseMessageType!]!
+    @massDelete(model: "{{ModelClassName}}")
+
+    """
+    PERMISSION: "{{updatePermission}}"
+    """
+    {{BackToggleActiveMutationName}}(
+        ids: [ID!]!
+    ): [ResponseMessageType!]!
+    @toggleActive(model: "{{ModelClassName}}")
+
+{{mutations}}
+}
+
+input {{EntityType}}FilteringInput {
+    ids: [ID!]
+    active: Boolean
+    query: String
+}
+
+{{types}}

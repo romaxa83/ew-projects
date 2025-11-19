@@ -1,0 +1,80 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Wezom\DummyModule\Tests\Feature\Mutations\Back;
+
+use Illuminate\Support\Arr;
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\Test;
+use Wezom\Admins\Testing\TestCase;
+use Wezom\DummyModule\GraphQL\Mutations\Back\BackDummyClassSettingsUpdate;
+use Wezom\Settings\Database\Seeders\SettingsSeeder;
+use Wezom\Settings\Models\SettingTranslation;
+
+class BackDummyClassUpdateTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        app(SettingsSeeder::class)->sync(DummyClass::class);
+    }
+
+    protected function attrs(): array
+    {
+        return [
+            'adminLimit' => 10,
+        ];
+    }
+
+    #[Test]
+    public function unauthorized(): void
+    {
+        $attrs = $this->attrs();
+        $result = $this->updateRequest($attrs);
+
+        $this->assertGraphQlUnauthorized($result);
+    }
+
+    #[Test]
+    public function forbidden(): void
+    {
+        $this->loginAsAdmin();
+
+        $attrs = $this->attrs();
+        $result = $this->updateRequest($attrs);
+
+        $this->assertGraphQlForbidden($result);
+    }
+
+    #[Test]
+    public function success(): void
+    {
+        $this->loginAsAdminWithPermissions(['{{permissions}}.edit-settings']);
+        $attrs = $this->attrs();
+
+        $this->updateRequest($attrs)
+            ->assertNoErrors()
+            ->assertSuccessResponseMessage();
+
+        $translation = $attrs['input']['translations'][0];
+
+        foreach (Arr::except($translation, ['language']) as $value) {
+            $this->assertDatabaseHas(
+                SettingTranslation::class,
+                [
+                    'value' => $value,
+                ]
+            );
+        }
+    }
+
+    protected function updateRequest(array $input): TestResponse
+    {
+        return $this->upload(BackDummyClassSettingsUpdate::getName())
+            ->args(compact('input'))
+            ->selectResponseMessage()
+            ->executeAndReturnResponse();
+    }
+}

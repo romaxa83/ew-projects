@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Builder;
+use Wezom\Core\ModelFilters\ModelFilter;
+use {{ namespacedModel }}Translation;
+
+class DummyClassFilter extends ModelFilter
+{
+{{traits}}
+    public function query(string $query): void
+    {
+        $this->related('translation', function (Builder|{{model}}Translation $builder) use ($query) {
+            $builder->where('name', 'ilike', "%$query%");
+        });
+    }
+}

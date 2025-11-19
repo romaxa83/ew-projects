@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Wezom\Admins\Traits\AdminTestTrait;
+use Wezom\Core\Testing\Crud\DeleteTestAbstract;
+use {{namespacedModel}};
+
+class DummyClass extends DeleteTestAbstract
+{
+    use AdminTestTrait;
+
+    protected function model(): string
+    {
+        return ModelClass::class;
+    }
+
+    public function testCantDeleteByNotAuthAdmin(): void
+    {
+        $this->executeCantDeleteByNotAuthAdmin();
+    }
+
+    public function testCantDeleteByNotPermittedAdmin(): void
+    {
+        $this->executeCantDeleteByNotPermittedAdmin();
+    }
+
+    public function testDoSuccess(): void
+    {
+        $this->executeDoSuccess();
+    }
+
+    public function testDeleteNotExisting(): void
+    {
+        $this->executeDeleteNotExisting();
+    }
+}

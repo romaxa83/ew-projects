@@ -1,0 +1,143 @@
+extend type Query {
+    languages: [Language!]! @orderBy(column: "default" direction: DESC) @all
+
+    "List translations."
+    backTranslations(
+        ids: [ID!]
+        ordering: [TranslationOrderInput!] = [{column: ID, direction: DESC}]
+        side: [TranslationSideEnum!]
+        key: String
+        "en"
+        language: String
+    ): [Translation!]!
+
+    "List all translations."
+    siteTranslations(
+        side: [TranslationSideEnum!]!
+        "en"
+        language: String!
+        ordering: [TranslationOrderInput!] = [{column: ID, direction: DESC}]
+    ): [Translation!]!
+}
+
+extend type Mutation {
+    backTranslationCreate(
+        translation: TranslationInput!
+    ): Translation!
+
+    "Create translations with InsertOrIgnore algorithm"
+    backTranslationMassCreate(
+        translations: [TranslationInput!]!
+    ): [Translation!]
+
+    backTranslationUpdate(
+        id: ID!
+        translation: TranslationInput!
+    ): Translation!
+
+    backTranslationDelete(
+        ids: [ID!]!,
+    ): [ResponseMessageType!]!
+    @massDelete(model: "Wezom\\Core\\Models\\Translation")
+
+    siteGuestSessionCreate(
+        session: String!
+    ): GuestSession!
+}
+
+type GuestSession {
+    session: String!
+    expires_at: DateTimeForFront!
+}
+
+type Language {
+    name: String!
+    slug: String!
+    default: Boolean!
+}
+
+type Translation {
+    id: ID!
+    language: String!
+    text: String
+    key: String!
+    side: TranslationSideEnum!
+    createdAt: DateTimeForFront! @rename(attribute: "created_at")
+    updatedAt: DateTimeForFront! @rename(attribute: "updated_at")
+}
+type ResponseMessageType {
+    message: String!
+    type: MessageTypeEnum!
+}
+
+type File @model(class: "Wezom\\Core\\Models\\Media") {
+    id: ID!
+    uuid: ID!
+    "File name without extension."
+    name: String!
+    mimeType: String @rename(attribute: "mime_type")
+    "File size in bytes (1МБ = 1024б)."
+    size: Int!
+    "Original file URL."
+    originalUrl: String! @method(name: "getFullUrl")
+    "Conversed file URL."
+    specialUrl(size: ImageSizeEnum): String  @method(name: "getSpecialUrl")
+    sort: Int
+    conversions: [Conversion!]! @method(name: "getConversions")
+
+    createdAt: DateTimeForFront! @rename(attribute: "created_at")
+    updatedAt: DateTimeForFront! @rename(attribute: "updated_at")
+}
+
+type Conversion {
+    size: String!
+    url: String!
+}
+
+interface AbilitiesListInterface {
+    update: Boolean!
+    delete: Boolean!
+}
+
+type AbilitiesList implements AbilitiesListInterface {
+    update: Boolean!
+    delete: Boolean!
+}
+
+type Breadcrumb {
+    id: ID!
+    parentId: ID @rename(attribute: "parent_id")
+    name: String!
+    slug: String!
+}
+
+input UpdateSortPositionInput {
+    offset: Int! = 0
+    items: [UpdateSortPositionItemInput!]!
+}
+
+input UpdateSortPositionItemInput {
+    id: ID!
+    children: [UpdateSortPositionItemInput!]
+}
+
+"""
+DESCRIPTION: Перелік елементів для побудови компонента Select
+"""
+type SelectOption {
+    id: ID!
+
+    """
+    Вказує на рівень поточного елемента в списку.
+
+    Наприклад: depth=0 означає рутовий рівень; depth=1 - перший (необхідно додати відступ до назви); depth=2 другий і тд
+    """
+    depth: Int!
+
+    hasChildren: Boolean!
+    """
+    Заблокувати вибір опції.
+    """
+    disabled: Boolean!
+    name: String!
+}

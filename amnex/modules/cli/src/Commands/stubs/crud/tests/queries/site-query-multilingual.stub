@@ -1,0 +1,117 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Support\Collection;
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\Test;
+use Wezom\Admins\Testing\TestCase;
+use Wezom\Core\Contracts\OrderColumnEnumInterface;
+use Wezom\Core\Enums\OrderDirectionEnum;
+use {{namespacedOrderColumnEnum}};
+use {{namespacedModel}};
+use {{namespacedModel}}Translation;
+use {{namespacedProjection}}\{{ProjectionName}};
+use {{namespacedProjection}}\{{ProjectionTranslatedName}};
+
+class DummyClass extends TestCase
+{
+    #[Test]
+    public function success(): void
+    {
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->disabled()->create();
+
+        $response = $this->queryRequest()
+            ->assertNoErrors()
+            ->assertJsonCount(1, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment([
+                'id' => (string)$model1->id,
+                'active' => true,
+                'createdAt' => $model1->created_at->format(config('app.datetime_format')),
+                'updatedAt' => $model1->updated_at->format(config('app.datetime_format')),
+                'translation' => [
+                    'rowId' => $model1->id,
+                    'language' => $model1->translation->language,
+                    'name' => $model1->translation->name,
+                ],
+            ])
+            ->assertJsonMissing(['id' => (string)$model2->id]);
+    }
+
+    protected function queryRequest(array $args = []): TestResponse
+    {
+        $projection = {{ProjectionName}}::root()
+            ->withTranslation()
+            ->withTranslations();
+
+        return $this->queryPaginate()
+            ->select($projection)
+            ->args($args)
+            ->executeAndReturnResponse();
+    }
+
+    #[Test]
+    public function filterByIds(): void
+    {
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->create();
+        ModelClass::factory()->create();
+
+        $this->queryRequest(['filtering' => ['ids' => [$model1->id, $model2->id]]])
+            ->assertNoErrors()
+            ->assertJsonCount(2, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment(['id' => (string)$model1->id])
+            ->assertJsonFragment(['id' => (string)$model2->id]);
+    }
+
+    #[Test]
+    public function filterByQuery(): void
+    {
+        $model1 = ModelClass::factory()->create();
+        $model1->translation->update(['name' => 'some-unique user-name']);
+
+        $model2 = ModelClass::factory()->create();
+        $model2->translation->update(['name' => 'another-unique user-name']);
+        $model3 = ModelClass::factory()->create();
+        $model3->translation->update(['name' => 'another-one user-name']);
+
+        $this->queryRequest(['filtering' => ['query' => 'unique user']])
+            ->assertNoErrors()
+            ->assertJsonCount(2, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment(['id' => (string)$model1->id])
+            ->assertJsonFragment(['id' => (string)$model2->id]);
+    }
+
+    #[Test]
+    public function orderById(): void
+    {
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->create();
+        $model3 = ModelClass::factory()->create();
+        $model4 = ModelClass::factory()->create();
+
+        $this->assertOrderedBy(
+            {{OrderColumnEnum}}::ID,
+            OrderDirectionEnum::DESC,
+            $model4,
+            $model3,
+            $model2,
+            $model1
+        );
+    }
+
+    private function assertOrderedBy(OrderColumnEnumInterface $column, OrderDirectionEnum $direction, ...$models): void
+    {
+        $ids = $this->queryPaginate()
+            ->select('id')
+            ->ordering($column, $direction)
+            ->execute()
+            ->pluck('id');
+
+        $this->assertSameOrder($ids, ...$models);
+    }
+{{methods}}
+}

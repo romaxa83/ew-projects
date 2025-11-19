@@ -1,0 +1,34 @@
+{
+    "name": "wezom/cli",
+    "type": "library",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Boreyko Vladyslav"
+        },
+        {
+            "name": "Chaplyhin Dmytrii"
+        }
+    ],
+    "require": {
+        "ext-zip": "*",
+        "wezom/core": "^1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wezom\\Cli\\": "src/"
+        }
+    },
+    "suggest": {
+        "vendor/barryvdh/laravel-ide-helper": "Required for active development"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wezom\\Cli\\CliServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

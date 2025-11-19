@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Wezom\DummyModule\GraphQL\Mutations\Back;
+
+use Wezom\Settings\BaseSettings;
+use Wezom\Settings\GraphQL\Mutations\BaseSettingMassUpdateMutation;
+
+class BackDummyClassSettingsUpdate extends BaseSettingMassUpdateMutation
+{
+    public function rules(array $args = []): array
+    {
+        return [
+            'input' => ['required', 'array'],
+            'input.adminLimit' => ['required', 'int', 'min:0', 'max:100'],
+        ];
+    }
+
+    /**
+     * @return string|class-string<BaseSettings>
+     */
+    protected function settingsGroup(): string
+    {
+        return DummyClass::class;
+    }
+}

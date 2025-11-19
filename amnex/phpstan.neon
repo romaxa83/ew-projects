@@ -1,0 +1,28 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - phpstan.includes.php
+
+parameters:
+    ignoreErrors:
+        - '#Trait Wezom\\Core\\Traits\\SlugValidationRules is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\SlugLanguageValidationRules is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\Services\\InteractsWithTranslations is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\Model\\TranslationTrait is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\Model\\SortModelTrait is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\Model\\SearchScopeTrait is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\Model\\HasTranslations is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\Model\\HasSeo is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\Media\\InteractsWithMedia is used zero times and is not analysed.#'
+        - '#Trait Wezom\\Core\\Traits\\Factory\\SortableFactoryTrait is used zero times and is not analysed.#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder<.*>::superAdmin\(\).#'
+
+
+    parallel:
+        maximumNumberOfProcesses: 8
+    checkModelProperties: true
+    paths:
+        - modules/
+
+    # Level 9 is the highest level
+    level: 5

@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Wezom\Core\Testing\Projections\TranslationProjection;
+
+class DummyClass extends TranslationProjection
+{
+    protected function fields(): array
+    {
+        return [
+            'language',
+            'name',
+        ];
+    }
+}

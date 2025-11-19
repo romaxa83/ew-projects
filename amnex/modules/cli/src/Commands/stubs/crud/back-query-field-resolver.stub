@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Builder;
+use Wezom\Core\GraphQL\BackFieldResolver;
+use Wezom\Core\GraphQL\Context;
+use Wezom\Core\Permissions\Ability;
+use {{namespacedModel}};
+
+final class DummyClass extends BackFieldResolver
+{
+    public function resolve(Context $context): Builder
+    {
+        return ModelClass::query()->filter($context->getFilteringDto());
+    }
+
+    protected function ability(): Ability
+    {
+        return Ability::toModel(ModelClass::class)->viewAction();
+    }
+}

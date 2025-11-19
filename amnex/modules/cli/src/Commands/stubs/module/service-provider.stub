@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Wezom\Core\BaseServiceProvider;
+use Wezom\Core\Permissions\PermissionsManager;
+
+class DummyClass extends BaseServiceProvider
+{
+    public function permissions(PermissionsManager $permissions): void
+    {
+        //
+    }
+}

@@ -1,0 +1,74 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\Test;
+use Wezom\Admins\Testing\TestCase;
+use Wezom\Core\Permissions\Ability;
+use {{namespacedModel}};
+use {{namespacedProjection}}\{{ProjectionName}};
+
+class DummyClass extends TestCase
+{
+    #[Test]
+    public function forbidden(): void
+    {
+        $this->loginAsAdmin();
+
+        $attrs = $this->attrs();
+        $result = $this->updateRequest(0, $attrs);
+
+        $this->assertGraphQlForbidden($result);
+    }
+
+    #[Test]
+    public function unauthorized(): void
+    {
+        $attrs = $this->attrs();
+        $result = $this->updateRequest(0, $attrs);
+
+        $this->assertGraphQlUnauthorized($result);
+    }
+
+    #[Test]
+    public function success(): void
+    {
+        $this->loginAsAdminWithAbility(Ability::toModel(ModelClass::class)->updateAction());
+
+        $attrs = $this->attrs();
+
+        $model = ModelClass::factory()->create();
+
+        $this->updateRequest($model->id, $attrs)
+            ->assertNoErrors()
+            ->assertJsonFragment(['id' => (string)$model->id]);
+
+        $this->assertDatabaseHas(
+            ModelClass::class,
+            [
+                'id' => $model->id,
+                'active' => $attrs['active'],
+            ]
+        );
+    }
+
+    protected function updateRequest(int $id, array $input): TestResponse
+    {
+        $projection = {{ProjectionName}}::root();
+
+        return $this->upload()
+            ->args(compact('id', 'input'))
+            ->select($projection)
+            ->executeAndReturnResponse();
+    }
+
+    protected function attrs(): array
+    {
+        return [
+            'active' => true,
+        ];
+    }
+}

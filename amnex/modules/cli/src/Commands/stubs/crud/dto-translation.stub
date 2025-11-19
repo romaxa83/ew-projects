@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Spatie\LaravelData\Attributes\MapOutputName;
+use Spatie\LaravelData\Attributes\Validation\Max;
+use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Mappers\SnakeCaseMapper;
+use Wezom\Core\Rules\LanguageRulesAttribute;
+
+#[MapOutputName(SnakeCaseMapper::class)]
+class DummyClass extends Data
+{
+    public function __construct(
+        #[LanguageRulesAttribute]
+        public readonly string $language,
+        #[Max(254)]
+        public readonly string $name,
+    ) {
+    }
+}

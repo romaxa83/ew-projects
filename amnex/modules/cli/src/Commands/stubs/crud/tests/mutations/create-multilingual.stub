@@ -1,0 +1,90 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\Test;
+use Wezom\Admins\Testing\TestCase;
+use Wezom\Core\Permissions\Ability;
+use {{namespacedModel}};
+use {{namespacedModel}}Translation;
+use {{namespacedProjection}}\{{ProjectionName}};
+
+class DummyClass extends TestCase
+{
+    #[Test]
+    public function forbidden(): void
+    {
+        $this->loginAsAdmin();
+
+        $attrs = $this->attrs();
+        $result = $this->createRequest($attrs);
+
+        $this->assertGraphQlForbidden($result);
+    }
+
+    #[Test]
+    public function unauthorized(): void
+    {
+        $attrs = $this->attrs();
+        $result = $this->createRequest($attrs);
+
+        $this->assertGraphQlUnauthorized($result);
+    }
+
+    #[Test]
+    public function success(): void
+    {
+        $this->loginAsAdminWithAbility(Ability::toModel(ModelClass::class)->createAction());
+
+        $attrs = $this->attrs();
+
+        $result = $this->createRequest($attrs)->assertNoErrors();
+
+        $id = $result->json('data.' . $this->operationName() . '.id');
+        $this->assertNotNull($id);
+
+        $this->assertDatabaseHas(
+            ModelClass::class,
+            [
+                'id' => $id,
+                'active' => $attrs['active'],
+            ]
+        );
+
+        foreach ($attrs['translations'] as $translation) {
+            $this->assertDatabaseHas(
+                ModelClassTranslation::class,
+                [
+                    'row_id' => $id,
+                    'name' => $translation['name'],
+                    'language' => $translation['language'],
+                ]
+            );
+        }
+    }
+
+    protected function createRequest(array $input): TestResponse
+    {
+        $projection = {{ProjectionName}}::root()
+            ->withTranslation()
+            ->withTranslations();
+
+        return $this->upload()
+            ->args(compact('input'))
+            ->select($projection)
+            ->executeAndReturnResponse();
+    }
+
+    protected function attrs(): array
+    {
+        return [
+            'active' => true,
+            'translations' => $this->makeTranslationsArg(fn (string $locale) => [
+                'name' => 'name ' . $locale,
+            ]),
+        ];
+    }
+}

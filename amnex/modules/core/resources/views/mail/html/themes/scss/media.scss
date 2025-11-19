@@ -1,0 +1,14 @@
+@import "_settings/variables";
+
+a.link {
+    &:hover {
+        color: $mail-accent !important;
+    }
+}
+
+a.button {
+    &:hover {
+        background: $mail-black !important;;
+        color: $mail-white !important;
+    }
+}

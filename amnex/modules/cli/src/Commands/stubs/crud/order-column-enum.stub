@@ -1,0 +1,12 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Wezom\Core\Contracts\OrderColumnEnumInterface;
+
+enum DummyClass: string implements OrderColumnEnumInterface
+{
+    {{cases}}
+}

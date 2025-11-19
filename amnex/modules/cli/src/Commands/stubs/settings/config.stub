@@ -1,0 +1,7 @@
+<?php
+
+use DummyNamespace\DummyClass;
+
+return [
+    DummyClass::class,
+];

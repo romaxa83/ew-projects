@@ -1,0 +1,68 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Wezom\DummyModule\Tests\Feature\Queries\Back;
+
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\Test;
+use Wezom\Admins\Testing\TestCase;
+use Wezom\DummyModule\GraphQL\Queries\Back\BackDummyClassSettings;
+use Wezom\Settings\Database\Seeders\SettingsSeeder;
+
+class BackDummyClassSettingsQueryTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        app(SettingsSeeder::class)->sync(DummyClass::class);
+    }
+
+    #[Test]
+    public function unauthorized(): void
+    {
+        $result = $this->queryRequest();
+
+        $this->assertGraphQlUnauthorized($result);
+    }
+
+    #[Test]
+    public function forbidden(): void
+    {
+        $this->loginAsAdmin();
+
+        $result = $this->queryRequest();
+
+        $this->assertGraphQlForbidden($result);
+    }
+
+    #[Test]
+    public function success(): void
+    {
+        $this->loginAsAdminWithPermissions(['{{permissions}}.edit-settings']);
+
+        $response = $this->queryRequest()
+            ->assertNoErrors();
+
+        $data = $response->json('data.' . $this->operationName());
+
+        $response->assertJsonStructure(
+            [
+                'adminLimit',
+            ],
+            $data
+        );
+    }
+
+    protected function queryRequest(): TestResponse
+    {
+        return $this->query()
+            ->select(
+                [
+                    'adminLimit',
+                ]
+            )
+            ->executeAndReturnResponse();
+    }
+}

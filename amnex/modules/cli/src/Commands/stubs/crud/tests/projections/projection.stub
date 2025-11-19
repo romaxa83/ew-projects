@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Wezom\Core\Testing\Projections\Projection;
+
+class DummyClass extends Projection
+{
+    protected function fields(): array
+    {
+        return [
+            'id',
+            'active',
+            'createdAt',
+            'updatedAt',
+        ];
+    }
+}

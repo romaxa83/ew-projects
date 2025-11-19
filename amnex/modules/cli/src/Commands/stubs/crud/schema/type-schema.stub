@@ -1,0 +1,7 @@
+type {{EntityType}} {
+    id: ID!
+    active: Boolean!
+
+    createdAt: DateTimeForFront! @rename(attribute: "created_at")
+    updatedAt: DateTimeForFront @rename(attribute: "updated_at")
+}

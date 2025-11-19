@@ -1,0 +1,188 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Illuminate\Support\Collection;
+use Illuminate\Testing\TestResponse;
+use PHPUnit\Framework\Attributes\Test;
+use Wezom\Admins\Testing\TestCase;
+use Wezom\Core\Contracts\OrderColumnEnumInterface;
+use Wezom\Core\Enums\OrderDirectionEnum;
+use Wezom\Core\Permissions\Ability;
+use {{namespacedOrderColumnEnum}};
+use {{namespacedModel}};
+use {{namespacedModel}}Translation;
+use {{namespacedProjection}}\{{ProjectionName}};
+
+class DummyClass extends TestCase
+{
+    #[Test]
+    public function forbidden(): void
+    {
+        $this->loginAsAdmin();
+
+        $result = $this->queryRequest();
+
+        $this->assertGraphQlForbidden($result);
+    }
+
+    #[Test]
+    public function unauthorized(): void
+    {
+        $result = $this->queryRequest();
+
+        $this->assertGraphQlUnauthorized($result);
+    }
+
+    #[Test]
+    public function success(): void
+    {
+        $this->loginAsAdminWithAbility(Ability::toModel(ModelClass::class)->viewAction());
+
+        $model1 = ModelClass::factory()->create();
+
+        $model2 = ModelClass::factory()->disabled()->create();
+
+        $response = $this->queryRequest()
+            ->assertNoErrors()
+            ->assertJsonCount(2, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment([
+                'id' => (string)$model1->id,
+                'active' => true,
+                'createdAt' => $model1->created_at->format(config('app.datetime_format')),
+                'updatedAt' => $model1->updated_at->format(config('app.datetime_format')),
+                'translation' => [
+                    'rowId' => $model1->id,
+                    'language' => $model1->translation->language,
+                    'name' => $model1->translation->name,
+                ],
+            ])
+            ->assertJsonFragment([
+                'id' => (string)$model2->id,
+                'active' => false,
+                'createdAt' => $model2->created_at->format(config('app.datetime_format')),
+                'updatedAt' => $model2->updated_at->format(config('app.datetime_format')),
+                'translation' => [
+                    'rowId' => $model2->id,
+                    'language' => $model2->translation->language,
+                    'name' => $model2->translation->name,
+                ],
+            ]);
+
+        $responseItems = collect($response->json('data.' . $this->operationName() . '.data'));
+        $this->assertSameTranslations($responseItems, $model1, $model2);
+    }
+
+    protected function queryRequest(array $args = []): TestResponse
+    {
+        $projection = {{ProjectionName}}::root()
+            ->withTranslation()
+            ->withTranslations();
+
+        return $this->queryPaginate()
+            ->select($projection)
+            ->args($args)
+            ->executeAndReturnResponse();
+    }
+
+    protected function assertSameTranslations(Collection $responseItems, ...$models): void
+    {
+        foreach ($models as $model) {
+            $responseTranslations = collect($responseItems->firstWhere('id', $model->id)['translations']);
+            $model->translations->each(
+                function (ModelClassTranslation $translation) use ($responseTranslations): void {
+                    $responseTranslation = $responseTranslations->firstWhere('language', $translation->language);
+                    $this->assertNotNull($responseTranslation);
+                    $this->assertEquals($translation->row_id, $responseTranslation['rowId']);
+                    $this->assertEquals($translation->name, $responseTranslation['name']);
+                }
+            );
+        }
+    }
+
+    #[Test]
+    public function filterByIds(): void
+    {
+        $this->loginAsAdminWithAbility(Ability::toModel(ModelClass::class)->viewAction());
+
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->create();
+        ModelClass::factory()->create();
+
+        $this->queryRequest(['filtering' => ['ids' => [$model1->id, $model2->id]]])
+            ->assertNoErrors()
+            ->assertJsonCount(2, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment(['id' => (string)$model1->id])
+            ->assertJsonFragment(['id' => (string)$model2->id]);
+    }
+
+    #[Test]
+    public function filterByActive(): void
+    {
+        $this->loginAsAdminWithAbility(Ability::toModel(ModelClass::class)->viewAction());
+
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->create();
+        ModelClass::factory()->disabled()->create();
+
+        $this->queryRequest(['filtering' => ['active' => true]])
+            ->assertNoErrors()
+            ->assertJsonCount(2, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment(['id' => (string)$model1->id])
+            ->assertJsonFragment(['id' => (string)$model2->id]);
+    }
+
+    #[Test]
+    public function filterByQuery(): void
+    {
+        $this->loginAsAdminWithAbility(Ability::toModel(ModelClass::class)->viewAction());
+
+        $model1 = ModelClass::factory()->create();
+        $model1->translation->update(['name' => 'some-unique user-name']);
+
+        $model2 = ModelClass::factory()->create();
+        $model2->translation->update(['name' => 'another-unique user-name']);
+        $model3 = ModelClass::factory()->create();
+        $model3->translation->update(['name' => 'another-one user-name']);
+
+        $this->queryRequest(['filtering' => ['query' => 'unique user']])
+            ->assertNoErrors()
+            ->assertJsonCount(2, 'data.' . $this->operationName() . '.data')
+            ->assertJsonFragment(['id' => (string)$model1->id])
+            ->assertJsonFragment(['id' => (string)$model2->id]);
+    }
+
+    #[Test]
+    public function orderById(): void
+    {
+        $model1 = ModelClass::factory()->create();
+        $model2 = ModelClass::factory()->create();
+        $model3 = ModelClass::factory()->create();
+        $model4 = ModelClass::factory()->create();
+
+        $this->assertOrderedBy(
+            {{OrderColumnEnum}}::ID,
+            OrderDirectionEnum::DESC,
+            $model4,
+            $model3,
+            $model2,
+            $model1
+        );
+    }
+
+    private function assertOrderedBy(OrderColumnEnumInterface $column, OrderDirectionEnum $direction, ...$models): void
+    {
+        $this->loginAsAdminWithAbility(Ability::toModel(ModelClass::class)->viewAction());
+
+        $ids = $this->queryPaginate()
+            ->select('id')
+            ->ordering($column, $direction)
+            ->execute()
+            ->pluck('id');
+
+        $this->assertSameOrder($ids, ...$models);
+    }
+{{methods}}
+}

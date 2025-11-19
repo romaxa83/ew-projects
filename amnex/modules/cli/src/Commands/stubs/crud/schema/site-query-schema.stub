@@ -1,0 +1,6 @@
+    {{SiteQueryName}}(
+        filtering: {{EntityType}}FilteringInput
+        ordering: [{{EntityType}}OrderInput!] = [{column: {{defaultOrderColumn}}, direction: {{defaultOrderDirection}}}]
+    ): [{{EntityType}}!]!
+    @paginate
+    @active

@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Wezom\Core\Enums\Images\ImageSizeEnum;
+use Wezom\Settings\BaseSettings;
+use Wezom\Settings\SettingBuilder;
+
+class DummyClass extends BaseSettings
+{
+    protected function registerFields(SettingBuilder $builder): void
+    {
+        $builder->number('adminLimit')
+            ->default(10);
+    }
+}
