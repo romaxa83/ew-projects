@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use App\Repositories\DummyFolder\DummyEntityRepository;
+use App\Services\AbstractService;
+
+final class DummyClass extends AbstractService
+{
+    public function __construct()
+    {
+        $this->repo = resolve(DummyEntityRepository::class);
+        return parent::__construct();
+    }
+}

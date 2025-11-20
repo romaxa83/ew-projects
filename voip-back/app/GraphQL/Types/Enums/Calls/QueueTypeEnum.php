@@ -1,0 +1,20 @@
+<?php
+
+namespace App\GraphQL\Types\Enums\Calls;
+
+use App\Enums;
+use App\GraphQL\Types\GenericBaseEnumType;
+use Core\GraphQL\Types\Enums\GraphQLTypeCastedEnum;
+use GraphQL\Type\Definition\Type as GraphqlType;
+
+class QueueTypeEnum extends GenericBaseEnumType
+{
+    public const NAME = 'CallQueueTypeEnumType';
+    public const ENUM_CLASS = Enums\Calls\QueueType::class;
+
+    public function toType(): GraphqlType
+    {
+        return new GraphQLTypeCastedEnum($this->toArray());
+    }
+}
+

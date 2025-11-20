@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Core\Permissions\BasePermission;
+
+class DummyClass extends BasePermission
+{
+    public const KEY = PermissionGroup::KEY . '.create';
+
+    public function getName(): string
+    {
+        return __('permissions.DummyDBName.grants.create');
+    }
+
+    public function getPosition(): int
+    {
+        return 3;
+    }
+}

@@ -1,0 +1,29 @@
+<?php
+
+use App\Models\Calls\Queue;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::table(Queue::TABLE,
+            function (Blueprint $table) {
+                $table->string('connected_num')->after('caller_name')->nullable();
+                $table->string('connected_name')->after('connected_num')->nullable();
+            });
+    }
+
+    public function down(): void
+    {
+        Schema::table(Queue::TABLE,
+            function (Blueprint $table) {
+                $table->dropColumn('connected_num');
+                $table->dropColumn('connected_name');
+            });
+    }
+};
+
+
+

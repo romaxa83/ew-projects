@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Core\Permissions\BasePermissionGroup;
+
+class DummyClass extends BasePermissionGroup
+{
+    public const KEY = 'DummyDBName';
+
+    public function getName(): string
+    {
+        return __('permissions.DummyDBName.group');
+    }
+}

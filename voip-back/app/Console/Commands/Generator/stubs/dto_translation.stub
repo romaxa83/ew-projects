@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use App\GraphQL\Types\Enums\LanguageTypeEnum;
+
+final class DummyClass
+{
+    public string|LanguageTypeEnum $language;
+
+    public static function byArgs(array $args): self
+    {
+        $self = new self();
+
+        $self->language = data_get($args, 'language');
+
+        return $self;
+    }
+}

@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Permissions\Departments;
+
+use Core\Permissions\BasePermission;
+
+class UpdatePermission extends BasePermission
+{
+    public const KEY = PermissionGroup::KEY . '.update';
+
+    public function getName(): string
+    {
+        return __('permissions.departments.grants.update');
+    }
+
+    public function getPosition(): int
+    {
+        return 3;
+    }
+}
+

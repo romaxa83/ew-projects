@@ -1,0 +1,256 @@
+1,2023-03-16 13:04:16,2023-03-16 13:25:05,admin,translations-drawer__save,Save,en
+4,2023-03-16 13:27:10,2023-03-16 13:27:10,admin,translations__create,Add Translations,en
+5,2023-03-16 13:28:10,2023-03-28 14:03:47,admin,translations__tab-translations,Translations,en
+6,2023-03-16 13:28:19,2023-03-16 13:28:19,admin,translations__tab-department,Department,en
+7,2023-03-16 13:28:30,2023-03-16 13:28:30,admin,translations__tab-sip,SIP number,en
+8,2023-03-16 13:29:18,2023-03-16 13:29:18,admin,settings__title,Settings,en
+9,2023-03-16 13:29:27,2023-03-16 13:29:27,admin,menu__settings,Settings,en
+10,2023-03-16 13:29:35,2023-03-16 13:29:35,admin,menu__users,Users,en
+11,2023-03-16 13:29:45,2023-03-16 13:29:45,admin,menu__reports,Report,en
+12,2023-03-16 13:29:53,2023-03-16 13:29:53,admin,menu__history,Call history,en
+13,2023-03-16 13:30:06,2023-03-16 13:30:06,admin,menu__queues,Call queues,en
+14,2023-03-16 13:30:14,2023-03-16 13:30:14,admin,menu__home,Home,en
+15,2023-03-16 13:52:58,2023-03-17 10:32:54,admin,translations__key,Key,en
+31,2023-03-16 15:54:23,2023-03-16 15:54:23,admin,translations__text,English,en
+32,2023-03-16 15:54:43,2023-03-16 15:54:43,admin,translations__action,Action,en
+33,2023-03-16 16:22:06,2023-03-16 16:22:06,admin,translations-page__title,Translations,en
+34,2023-03-16 16:22:36,2023-03-16 16:22:36,admin,translations__search,Search,en
+35,2023-03-16 16:22:58,2023-03-16 16:23:17,admin,logout__label,Exit,en
+37,2023-03-16 16:30:00,2023-03-16 16:30:00,admin,login-page__title,Login,en
+38,2023-03-16 16:30:26,2023-03-16 16:30:26,admin,login-form__title,Welcome to VoIP!,en
+39,2023-03-16 16:30:34,2023-03-16 16:30:34,admin,login-form__subtitle,Enter your login credentials,en
+40,2023-03-16 16:30:46,2023-03-16 16:30:46,admin,form__email-label,Email,en
+41,2023-03-16 16:30:58,2023-03-16 16:30:58,admin,form__email-placeholder,input email,en
+42,2023-03-16 16:31:10,2023-03-16 16:31:10,admin,form__password-label,Password,en
+43,2023-03-16 16:31:23,2023-03-16 16:31:23,admin,form__password-placeholder,input password,en
+44,2023-03-16 16:31:37,2023-03-16 16:31:37,admin,login-form__forgot-password,Forgot password?,en
+45,2023-03-16 16:31:51,2023-03-17 08:32:46,admin,login-form__button,sign in,en
+46,2023-03-16 16:37:46,2023-03-16 16:37:46,admin,forgot-password-page__prev,Sign in,en
+47,2023-03-16 16:38:05,2023-03-16 16:38:05,admin,forgot-password-page__title,Forgot password,en
+48,2023-03-16 16:38:15,2023-03-16 16:38:15,admin,forgot-password-form__title,Forgot password,en
+49,2023-03-16 16:38:26,2023-03-16 16:38:26,admin,forgot-password-form__text,Please provide your Login Name so we can send a password reset link to the email linked to your account.,en
+50,2023-03-16 16:39:49,2023-03-16 16:39:49,admin,forgot-password-form__button,Send,en
+51,2023-03-16 16:40:08,2023-03-16 16:40:08,admin,validation__required,Field is required,en
+52,2023-03-16 16:40:57,2023-03-16 16:40:57,admin,reset-password-form__invalid,This link has expired,en
+53,2023-03-16 16:41:41,2023-03-16 16:41:41,admin,set-password-page__title,Set password,en
+54,2023-03-16 16:41:56,2023-03-16 16:41:56,admin,reset-password-form__title,New password,en
+55,2023-03-16 16:42:13,2023-03-16 16:42:13,admin,form__password_confirm-label,Confirm new password,en
+56,2023-03-16 16:42:22,2023-03-16 16:42:22,admin,reset-password-form__button,save,en
+57,2023-03-16 16:42:51,2023-03-16 16:42:51,admin,forgot-password-form__result-title,We sent you an email,en
+58,2023-03-16 16:43:05,2023-03-16 16:43:05,admin,forgot-password-form__result-text,"A link has been sent to the specified email. To complete the password change within 1 hour, follow it. Or try again.",en
+59,2023-03-16 16:43:37,2023-03-16 16:43:37,admin,base-layout__footer,Cooper&Hunter,en
+60,2023-03-17 08:23:48,2023-03-17 08:23:48,admin,home-page__title,Home,en
+62,2023-03-17 09:23:08,2023-03-17 09:23:08,admin,form__key-label,Key,en
+63,2023-03-17 09:23:29,2023-03-17 09:23:29,admin,form__key-placeholder,input key,en
+64,2023-03-17 09:23:41,2023-03-17 09:23:41,admin,form__translate-label,English,en
+65,2023-03-17 09:23:57,2023-03-17 09:23:57,admin,form__translate-placeholder,input translate,en
+66,2023-03-17 09:24:12,2023-03-17 09:24:12,admin,translations-drawer__title,Add Translations,en
+68,2023-03-17 09:26:34,2023-03-17 09:26:34,admin,pagination__total,Total :total items,en
+69,2023-03-17 09:34:47,2023-03-17 09:34:47,admin,translations-drawer__edit-title,Edit Translations,en
+72,2023-03-17 10:56:05,2023-03-17 10:56:05,admin,delete-translations-modal__title,Are you sure you want to delete the Translations?,en
+75,2023-03-17 10:56:55,2023-03-17 11:11:54,admin,delete-translations-modal__success,You've deleted :key,en
+80,2023-03-17 11:15:13,2023-03-17 11:15:13,admin,delete-translations-modal__confirm,Yes,en
+81,2023-03-17 11:15:21,2023-03-17 11:15:21,admin,delete-translations-modal__cancel,No,en
+83,2023-03-17 11:21:07,2023-03-17 11:21:07,admin,delete-translations-modal__tooltip,Delete,en
+84,2023-03-17 12:00:53,2023-03-17 12:00:53,admin,translations__empty,No translations yet,en
+85,2023-03-17 14:51:20,2023-03-17 15:05:18,admin,profile__sip,Sip,en
+90,2023-03-17 15:14:07,2023-03-17 15:14:07,admin,error-page__prev,Back,en
+91,2023-03-18 08:11:05,2023-03-18 08:11:05,admin,error-page__title,Error,en
+92,2023-03-20 08:38:31,2023-03-20 08:38:31,admin,departments-page__title,Departments,en
+95,2023-03-20 10:01:43,2023-03-20 10:01:43,admin,departments-drawer__title,Add Departments,en
+97,2023-03-20 10:02:20,2023-03-20 10:02:20,admin,departments-drawer__save,Save,en
+98,2023-03-20 10:02:33,2023-03-20 10:02:33,admin,form__name-label,Name,en
+99,2023-03-20 10:02:44,2023-03-20 10:02:44,admin,form__name-placeholder,input name,en
+100,2023-03-20 10:15:21,2023-03-20 10:15:39,admin,tooltip__edit,Edit,en
+102,2023-03-20 10:16:31,2023-03-20 10:16:31,admin,translations__edit-tooltip,Edit,en
+103,2023-03-20 10:17:07,2023-03-20 10:17:07,admin,tooltip__delete,Delete,en
+104,2023-03-20 10:18:15,2023-03-20 10:18:15,admin,departments-table__create,Add Department,en
+105,2023-03-20 10:30:50,2023-03-20 10:30:50,admin,delete-departments-modal__title,Are you sure you want to delete the Department?,en
+106,2023-03-20 10:31:27,2023-03-20 10:31:27,admin,modal__confirm,Yes,en
+107,2023-03-20 10:31:38,2023-03-20 10:31:38,admin,modal__cancel,No,en
+108,2023-03-20 10:32:06,2023-03-20 10:32:06,admin,delete-department-modal__success,You've deleted :name,en
+109,2023-03-20 11:14:23,2023-03-20 11:14:23,admin,departments-table__empty,No department yet,en
+114,2023-03-20 19:45:22,2023-03-20 19:45:22,admin,departments-drawer__edit-title,Edit Departments,en
+116,2023-03-21 10:10:49,2023-03-21 10:10:49,admin,table__action,Action,en
+117,2023-03-21 10:12:19,2023-03-21 10:12:19,admin,sip-numbers-table__create,Add SIP number,en
+118,2023-03-21 10:12:35,2023-03-21 10:12:35,admin,sip-numbers-drawer__title,Add SIP number,en
+119,2023-03-21 10:12:44,2023-03-21 10:12:44,admin,sip-numbers-drawer__edit-title,Edit SIP number,en
+120,2023-03-21 10:13:47,2023-03-21 10:13:47,admin,drawer__save,Save,en
+121,2023-03-21 10:15:14,2023-03-21 10:15:14,admin,form__sip-label,SIP addresses,en
+122,2023-03-21 10:15:28,2023-03-21 10:15:28,admin,form__sip-placeholder,input SIP,en
+123,2023-03-21 10:15:52,2023-03-21 10:15:52,admin,sip-numbers-page__title,SIP numbers,en
+124,2023-03-21 10:27:05,2023-03-21 10:27:05,admin,delete-departments-modal__success,You've deleted :name,en
+125,2023-03-21 10:28:24,2023-03-21 10:28:24,admin,delete-sip-numbers-modal__success,You've deleted :number,en
+131,2023-03-21 11:50:37,2023-03-21 11:50:37,admin,delete-sip-numbers-modal__title,Are you sure you want to delete the SIP number?,en
+133,2023-03-22 09:33:21,2023-03-23 15:20:59,admin,form__password-description,"At least 10 characters, at least 1 number and 1 capital latin letter.",en
+134,2023-03-22 10:50:53,2023-03-22 10:50:53,admin,ui-input-password-generator__button,Create,en
+136,2023-03-23 08:53:11,2023-03-23 08:53:11,admin,users-page__title,Users,en
+137,2023-03-23 09:44:41,2023-03-27 12:24:16,admin,users__title,Users,en
+138,2023-03-23 11:25:22,2023-03-23 11:25:22,admin,table__name,Name,en
+139,2023-03-23 11:29:14,2023-03-23 11:29:14,admin,table__sip,Sip number,en
+140,2023-03-23 11:31:23,2023-03-23 11:31:23,admin,table__department,Department,en
+141,2023-03-23 11:31:32,2023-03-23 11:31:32,admin,table__email,Email,en
+142,2023-03-23 11:31:54,2023-03-23 11:31:54,admin,table__status,Status,en
+143,2023-03-23 11:33:55,2023-03-23 11:33:55,admin,table__agent,Fixed agent,en
+144,2023-03-23 11:34:20,2023-03-23 11:34:20,admin,table__status-error,Registration error,en
+145,2023-03-23 11:34:30,2023-03-23 11:34:30,admin,table__status-active,Active,en
+146,2023-03-23 11:36:17,2023-03-23 11:36:17,admin,table__employees,Employees,en
+147,2023-03-23 11:45:34,2023-03-23 11:45:34,admin,users-table__empty,No users yet,en
+148,2023-03-23 12:36:33,2023-03-23 12:36:33,admin,users-table__create,Add user,en
+149,2023-03-23 13:02:59,2023-03-23 13:02:59,admin,users-drawer__personal-info,Personal Information,en
+151,2023-03-23 13:28:13,2023-03-23 13:28:13,admin,users-drawer__sip-info,SIP account settings,en
+152,2023-03-23 13:30:49,2023-03-23 13:30:49,admin,users-drawer__title,Add user,en
+153,2023-03-23 13:31:01,2023-03-23 13:31:01,admin,users-drawer__edit-title,Edit user,en
+154,2023-03-23 13:39:26,2023-03-23 13:39:26,admin,form__first-name-label,First name,en
+155,2023-03-23 13:39:37,2023-03-23 13:39:56,admin,form__first-name-placeholder,input first name,en
+157,2023-03-23 13:40:20,2023-03-23 13:40:20,admin,form__last-name-label,Last name,en
+158,2023-03-23 13:40:29,2023-03-23 13:40:29,admin,form__last-name-placeholder,input last name,en
+160,2023-03-23 15:21:23,2023-03-23 15:21:23,admin,form__department-label,Department,en
+161,2023-03-23 15:21:37,2023-03-23 15:21:37,admin,form__department-placeholder,please select department,en
+162,2023-03-23 15:34:17,2023-03-23 15:34:17,admin,form__select-sip-label,SIP number,en
+163,2023-03-23 15:34:30,2023-03-23 15:34:30,admin,form__select-sip-placeholder,please select SIP,en
+164,2023-03-23 15:55:04,2023-03-23 15:55:04,admin,form__send-email-label,Send password to employee's email,en
+165,2023-03-24 09:07:04,2023-03-24 09:07:04,admin,delete-users-modal__title,Are you sure you want to delete the employee?,en
+166,2023-03-24 09:07:30,2023-03-24 09:07:30,admin,delete-users-modal__success,You've deleted :name,en
+167,2023-03-24 10:33:43,2023-03-24 10:33:43,admin,users-table__filter,Filter,en
+168,2023-03-24 13:47:13,2023-03-24 13:47:13,admin,users-filter__search,Name/Email,en
+169,2023-03-24 13:47:22,2023-03-24 13:47:22,admin,filter__sip,Sip number,en
+170,2023-03-24 13:47:35,2023-03-24 13:47:35,admin,filter__department,Department,en
+171,2023-03-24 13:47:44,2023-03-24 13:47:44,admin,filter__status,Status,en
+172,2023-03-24 13:57:15,2023-03-24 13:57:15,admin,filter__results,Found entries,en
+173,2023-03-24 14:04:01,2023-03-24 14:04:01,admin,filter__clear,Clear all,en
+174,2023-03-24 14:47:17,2023-03-24 14:47:17,admin,users-status__talk,Talk,en
+175,2023-03-24 14:47:30,2023-03-24 14:47:30,admin,users-status__free,Free,en
+176,2023-03-24 14:47:46,2023-03-24 14:47:46,admin,users-status__pause,Pause,en
+177,2023-03-24 14:47:54,2023-03-24 14:47:54,admin,users-status__error,Registration error,en
+178,2023-03-24 15:03:53,2023-03-24 15:03:53,admin,tooltip__toggle-pause,Toggle pause,en
+179,2023-03-24 15:19:23,2023-03-24 15:19:23,admin,header__pause,pause,en
+180,2023-03-27 10:16:36,2023-03-27 10:16:36,admin,call-history-page__title,Call history,en
+181,2023-03-27 12:09:43,2023-03-27 12:09:43,admin,call-history-table__empty,No history yet,en
+184,2023-03-27 12:27:33,2023-03-27 12:27:33,admin,call-history__title,Call history,en
+185,2023-03-27 12:29:36,2023-03-27 12:29:36,admin,table__from,From,en
+186,2023-03-27 12:29:48,2023-03-27 12:29:48,admin,table__dialed,Dialed,en
+187,2023-03-27 12:29:56,2023-03-27 12:29:56,admin,table__date,Date,en
+188,2023-03-27 12:30:07,2023-03-27 12:30:07,admin,table__duration,Duration,en
+189,2023-03-27 12:30:18,2023-03-27 12:30:18,admin,table__serial-number,Serial number,en
+190,2023-03-27 12:30:28,2023-03-27 12:30:28,admin,table__case-id,Case ID,en
+191,2023-03-27 12:30:36,2023-03-30 14:47:42,admin,table__comment,Comment,en
+192,2023-03-27 12:37:54,2023-03-27 12:37:54,admin,call-history-filter__search-label,Name/phone/comment,en
+193,2023-03-27 12:38:05,2023-03-27 12:38:05,admin,call-history-filter__search-serial-label,Serial number,en
+194,2023-03-27 12:38:18,2023-03-27 12:38:18,admin,call-history-filter__search-case-label,Case id,en
+195,2023-03-27 12:41:30,2023-03-27 12:41:30,admin,filter__search-placeholder,Search,en
+196,2023-03-27 12:44:17,2023-03-27 12:44:17,admin,filter__select-placeholder,Select,en
+197,2023-03-27 13:23:51,2023-03-27 13:23:51,admin,call-history-status__cancel,Cancel,en
+198,2023-03-27 13:24:05,2023-03-27 13:24:05,admin,call-history-status__answered,Answer,en
+199,2023-03-27 13:24:10,2023-03-27 13:24:10,admin,call-history-status__no-answer,Noanswer,en
+200,2023-03-27 13:24:19,2023-03-27 13:24:19,admin,call-history-status__busy,Busy,en
+201,2023-03-27 13:24:30,2023-03-27 13:24:30,admin,call-history-status__congestion,Congestion,en
+202,2023-03-27 13:24:37,2023-03-27 13:24:37,admin,call-history-status__chanunavail,Chanunavail,en
+203,2023-03-27 13:24:50,2023-04-05 10:52:54,admin,call-history-status__transfer,Transfered,en
+204,2023-03-27 13:43:48,2023-03-27 13:43:48,admin,filter__date-from-placeholder,From,en
+205,2023-03-27 13:43:55,2023-04-03 10:51:58,admin,filter__date-to-placeholder,To,en
+206,2023-03-27 13:44:06,2023-03-27 13:44:06,admin,filter__date-label,Date,en
+207,2023-03-28 12:28:05,2023-03-28 12:28:05,admin,call-queues-page__title,Call queues,en
+208,2023-03-28 12:43:18,2023-03-28 12:43:18,admin,call-queues__title,Call queues,en
+209,2023-03-28 13:15:14,2023-03-28 13:15:14,admin,call-queues__filter,Filter,en
+210,2023-03-28 13:30:34,2023-03-28 13:30:34,admin,call-queues__empty,No call queues yet,en
+214,2023-03-28 14:37:35,2023-03-28 14:37:35,admin,tooltip__download,Download,en
+215,2023-03-28 14:38:04,2023-03-28 14:38:04,admin,tooltip__play,Play,en
+217,2023-03-29 07:44:08,2023-03-29 07:44:08,admin,delete-users-modal__text,All his data will be permanently deleted,en
+218,2023-03-29 09:44:13,2023-03-29 09:44:13,admin,no-permissions__text,Permission denied,en
+219,2023-03-29 09:49:00,2023-03-29 09:49:00,admin,call-history__record,Call record,en
+220,2023-03-29 14:19:24,2023-03-29 14:19:24,admin,table__phone,Phone,en
+221,2023-03-30 12:20:30,2023-04-06 07:11:17,admin,table__waiting-time,Waiting,en
+222,2023-03-30 13:10:58,2023-03-31 10:00:26,admin,reports-page__title,Report,en
+223,2023-03-30 13:22:42,2023-03-31 10:00:19,admin,reports__title,Report,en
+224,2023-03-30 13:22:52,2023-03-30 13:22:52,admin,reports__download,Download report,en
+225,2023-03-30 13:29:15,2023-03-30 13:29:15,admin,reports-filter__search-label,Number/Name,en
+226,2023-03-30 13:42:42,2023-03-30 13:42:42,admin,reports__total-calls,Total number of calls,en
+227,2023-03-30 13:42:51,2023-03-30 13:42:51,admin,reports__total-time,Total time in calls,en
+228,2023-03-30 13:43:00,2023-03-30 13:43:00,admin,reports__total-waiting,Total waiting time,en
+230,2023-03-31 07:35:36,2023-03-31 07:35:36,admin,tooltip__user-redirect,Transfer to agent,en
+231,2023-03-31 08:34:23,2023-03-31 08:34:23,admin,table__total-calls,Total of calls,en
+232,2023-03-31 08:34:33,2023-03-31 08:34:33,admin,table__answered-calls,Answered of calls,en
+233,2023-03-31 08:34:44,2023-03-31 08:34:44,admin,table__dropped-calls,Dropped a calls,en
+234,2023-03-31 08:34:59,2023-03-31 08:34:59,admin,table__transferred-calls,Transfer a calls,en
+235,2023-03-31 08:35:10,2023-03-31 08:35:10,admin,table__total-time,Total time,en
+236,2023-03-31 08:38:48,2023-03-31 08:38:48,admin,tooltip__call-on,Start the call,en
+237,2023-03-31 08:42:18,2023-03-31 08:42:53,admin,table__details,Details,en
+239,2023-03-31 08:43:10,2023-03-31 08:43:10,admin,tooltip__details,View details,en
+240,2023-03-31 08:45:20,2023-03-31 08:45:20,admin,tooltip__add-description,Add description,en
+241,2023-03-31 10:00:06,2023-03-31 10:00:06,admin,reports__empty,No report yet,en
+245,2023-03-31 12:13:34,2023-03-31 12:13:34,admin,reports__dropped-calls,Dropped a calls,en
+246,2023-03-31 12:22:09,2023-03-31 12:22:09,admin,employee-report__title,Report of :name,en
+247,2023-03-31 12:23:35,2023-03-31 12:23:35,admin,reports-id-page__title,Report of :name,en
+248,2023-03-31 13:29:43,2023-03-31 13:29:43,admin,table__number,Number,en
+253,2023-04-03 06:43:43,2023-04-03 06:43:43,admin,transfer-list__search-placeholder,Name/Sip,en
+254,2023-04-03 09:16:50,2023-04-03 09:16:50,admin,transfer-to-department-list__search-placeholder,Name,en
+258,2023-04-03 11:18:44,2023-04-03 11:18:44,admin,html-head__page,Page,en
+259,2023-04-04 06:56:37,2023-04-04 06:56:37,admin,transfer-to__button,Transfer,en
+260,2023-04-04 06:57:25,2023-05-18 09:58:40,admin,transfer-to__title,Transfer to,en
+261,2023-04-04 06:58:45,2023-04-04 06:58:45,admin,transfer-to__agent-tab,Agent,en
+262,2023-04-04 06:59:04,2023-04-04 06:59:05,admin,transfer-to__department-tab,Department,en
+264,2023-04-04 06:59:51,2023-04-04 06:59:51,admin,add-description__title,Add description,en
+265,2023-04-04 07:25:21,2023-04-04 07:25:21,admin,form__input-placeholder,Input,en
+266,2023-04-04 07:25:37,2023-04-04 07:25:37,admin,form__serial-number-label,Serial number,en
+267,2023-04-04 07:26:01,2023-04-04 07:26:01,admin,form__case-id-label,Case ID,en
+268,2023-04-04 07:26:15,2023-04-04 07:26:15,admin,form__comment-label,Comment,en
+269,2023-04-04 07:39:45,2023-04-04 07:39:45,admin,call-queues-filter__name,Name/phone/comment,en
+270,2023-04-04 07:40:12,2023-04-04 07:40:12,admin,call-queues-filter__serial-number,Serial number,en
+271,2023-04-04 07:40:35,2023-04-04 07:40:35,admin,call-queues-filter__case-id,Case ID,en
+272,2023-04-05 07:31:21,2023-04-05 07:31:21,admin,call-history-status__crm-transfer,CRM transfer,en
+274,2023-04-05 12:11:53,2023-04-05 12:11:53,admin,able__connect,Connect,en
+275,2023-04-05 13:24:30,2023-04-07 09:07:06,admin,table__connect,Connection,en
+283,2023-04-10 11:00:40,2023-04-10 11:24:31,admin,report-page__title,Report,en
+287,2023-04-24 06:48:55,2023-04-24 06:48:55,admin,employee-report-status__answered,Answered,en
+288,2023-04-24 06:49:32,2023-05-30 11:42:31,admin,employee-report-status__no-answer,No answer,en
+289,2023-04-24 06:49:50,2023-04-24 06:49:50,admin,employee-report-status__transfer,Transfer,en
+290,2023-04-24 08:36:52,2023-05-10 10:04:33,admin,header__play,To work,en
+297,2023-07-13 10:01:29,2023-07-13 10:01:29,admin,translations__tab-schedules,Time frames,en
+298,2023-07-13 10:01:46,2023-07-13 10:01:46,admin,schedule-page__title-schedule,Working days of the week and time,en
+299,2023-07-13 10:02:00,2023-07-13 10:02:00,admin,schedule-page__title-additional-schedule,Days off in a year,en
+300,2023-07-13 10:02:21,2023-07-13 10:02:21,admin,schedule-page__add-additional-schedule,Add,en
+301,2023-07-13 10:03:47,2023-07-13 10:03:47,admin,schedule-page__additional-day-label,Specific dates or ranges,en
+302,2023-07-13 10:05:00,2023-07-13 10:05:00,admin,schedule-day__sunday,Sunday,en
+303,2023-07-13 10:05:11,2023-07-13 10:05:11,admin,schedule-day__monday,Monday,en
+304,2023-07-13 10:05:25,2023-07-13 10:05:25,admin,schedule-day__tuesday,Tuesday,en
+305,2023-07-13 10:05:40,2023-07-13 10:05:40,admin,schedule-day__wednesday,Wednesday,en
+306,2023-07-13 10:05:56,2023-07-13 10:05:56,admin,schedule-day__thursday,Thursday,en
+307,2023-07-13 10:06:09,2023-07-13 10:06:09,admin,schedule-day__friday,Friday,en
+308,2023-07-13 10:06:19,2023-07-13 10:06:19,admin,schedule-day__saturday,Saturday,en
+309,2023-07-13 13:44:34,2023-07-13 13:44:34,admin,table__count-pause,Pauses,en
+310,2023-07-13 13:45:27,2023-07-13 13:45:27,admin,table__time-pause,Pause time,en
+311,2023-07-13 13:46:30,2023-07-13 13:46:30,admin,reports__pause-time,Pause time,en
+312,2023-07-13 13:46:51,2023-07-13 13:46:51,admin,reports__number-pauses,Number of pauses,en
+313,2023-07-13 13:47:06,2023-07-13 13:47:06,admin,table__pause-start,Pause start,en
+314,2023-07-13 13:47:18,2023-07-13 13:47:18,admin,table__pause-end,End of pause,en
+315,2023-07-13 13:47:28,2023-07-13 13:47:28,admin,table__pause-duration,Duration,en
+316,2023-07-13 13:48:19,2023-07-13 13:48:19,admin,employee-report__tab-calls,Calls,en
+317,2023-07-13 13:48:37,2023-07-13 13:48:37,admin,employee-report__tab-pauses,Pauses,en
+318,2023-07-13 14:10:21,2023-07-13 14:10:21,admin,reports__total-dropped-calls,Dropped a calls,en
+319,2023-07-14 08:59:00,2023-07-14 08:59:00,admin,schedules-page__title,Time frames,en
+320,2023-10-02 11:42:33,2023-10-02 11:42:33,admin,music-page__title,Music On Hold,en
+321,2023-10-02 11:51:51,2023-10-04 05:46:51,admin,music-table__empty,No  music on hold yet,en
+322,2023-10-02 11:52:18,2023-10-02 11:52:18,admin,music-table__create,Add Music,en
+323,2023-10-02 12:11:09,2023-10-02 12:11:09,admin,music-drawer__title,Add Music,en
+324,2023-10-02 12:11:27,2023-10-02 12:11:27,admin,music-drawer__edit-title,Edit Music,en
+325,2023-10-02 13:01:55,2023-10-02 13:01:55,admin,music-drawer__active-label,Status,en
+326,2023-10-02 13:02:28,2023-10-02 13:02:28,admin,music-drawer__active-placeholder,Select,en
+327,2023-10-02 13:03:30,2023-10-02 13:03:30,admin,music-drawer__active-value,Active,en
+328,2023-10-02 13:03:43,2023-10-02 13:03:43,admin,music-drawer__inactive-value,Inactive,en
+329,2023-10-02 13:14:11,2023-10-05 13:15:19,admin,music-drawer__interval-label,Time interval (s),en
+330,2023-10-02 13:22:37,2023-10-02 13:22:37,admin,music-table__col-interval,Time interval,en
+331,2023-10-03 06:44:24,2023-10-03 06:44:24,admin,music-drawer__file-label,Uploaded audio file,en
+332,2023-10-03 06:44:48,2023-10-27 12:01:27,admin,music-drawer__file-description,"MP3 file format, weight up to 3M, bitrate 120-150kbps, sampling rate 12kHz",en
+334,2023-10-03 09:01:11,2023-10-03 09:01:11,admin,upload-file__text,Click or Drag file here to Upload,en
+335,2023-10-03 09:30:48,2023-10-03 09:30:48,admin,validation__max-file-size,The file size should not exceed :max MB,en
+336,2023-10-03 09:32:07,2023-10-03 09:32:07,admin,validation__file-types,Allowed file extensions: :types,en
+338,2023-10-03 12:26:36,2023-10-03 12:27:07,admin,delete-music-modal__success,You've deleted file,en
+340,2023-10-03 13:49:38,2023-10-03 13:49:38,admin,music-table__active-button,Activate,en
+341,2023-10-03 13:49:47,2023-10-03 13:49:47,admin,music-table__deactive-button,Deactivate,en
+343,2023-10-04 06:15:32,2023-10-05 17:27:31,admin,delete-music-modal__title,Are you sure you want to delete the Music On Hold?,en
+344,2023-10-04 06:31:34,2023-10-04 06:31:34,admin,table__status-inactive,Inactive,en
+345,2023-10-04 06:33:29,2023-10-04 06:33:29,admin,common__seconds,s,en
+352,2023-10-05 13:33:09,2023-10-05 13:33:09,admin,music-drawer__input-interval,time interval,en
+355,2023-10-06 05:40:29,2023-10-06 05:40:29,admin,validation__min-value,Minimum value should be :min,en
+356,2023-10-06 05:42:05,2023-10-06 05:42:05,admin,validation__max-value,Maximum value should be :max,en

@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use App\Models\DummyFolder\DummyEntity;
+use Database\Factories\BaseFactory;
+use Illuminate\Database\Eloquent\Collection;
+
+/**
+ * @method Collection|DummyEntity[]|DummyEntity create(array $attributes = [])
+ */
+class  DummyClass extends BaseFactory
+{
+    protected $model = DummyEntity::class;
+
+    public function definition(): array
+    {
+        return [];
+    }
+}

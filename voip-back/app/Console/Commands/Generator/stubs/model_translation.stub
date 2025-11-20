@@ -1,0 +1,27 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Models\BaseTranslation;
+use App\Traits\HasFactory;
+use Database\Factories\DummyFolder\DummyClassFactory;
+
+/**
+ * @property integer id
+ * @property int row_id
+ * @property string language
+ *
+ * @method static DummyClassFactory factory(...$parameters)
+ */
+
+class DummyClass extends BaseTranslation
+{
+    use HasFactory;
+
+    public const TABLE = 'DummyDBNameTranslation';
+    protected $table = self::TABLE;
+
+    public $timestamps = false;
+
+    protected $fillable = [];
+}

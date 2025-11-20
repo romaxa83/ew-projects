@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Database\Factories\DummyFolder\DummyClassFactory;
+use App\Models\BaseModel;
+use Carbon\Carbon;
+use App\Traits\HasFactory;
+use App\Traits\Model\HasTranslations;
+
+/**
+ * @property int id
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ *
+ * @method static DummyClassFactory factory(int $number = null)
+ */
+class DummyClass extends BaseModel
+{
+    use HasFactory;
+    use HasTranslations;
+
+    protected $table = self::TABLE;
+    public const TABLE = 'DummyDBName';
+
+    protected $fillable = [];
+    protected $casts = [];
+    protected $dates = [];
+}

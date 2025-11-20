@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+final class DummyClass
+{
+    /** @var array<DummyEntityTranslationDto> */
+    private array $translations = [];
+
+    public static function byArgs(array $args): self
+    {
+        $self = new self();
+
+        foreach ($args['translations'] ?? [] as $translation) {
+            $self->translations[] = DummyEntityTranslationDto::byArgs($translation);
+        }
+
+        return $self;
+    }
+
+    /**
+     * @return DummyEntityTranslationDto[]
+     */
+    public function getTranslations(): array
+    {
+        return $this->translations;
+    }
+}

@@ -1,0 +1,24 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Models\DummyFolder\DummyEntity;
+use App\Models\DummyFolder\DummyEntityTranslation;
+use Database\Factories\BaseTranslationFactory;
+use Illuminate\Database\Eloquent\Collection;
+
+/**
+ * @method Collection|DummyClass[]|DummyClass create(array $attributes = [])
+ */
+class DummyClass extends BaseTranslationFactory
+{
+    protected $model = DummyEntityTranslation::class;
+
+    public function definition(): array
+    {
+        return [
+            'row_id' => DummyEntity::factory(),
+            'language' => 'en',
+        ];
+    }
+}

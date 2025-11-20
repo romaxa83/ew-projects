@@ -1,0 +1,36 @@
+{
+    "steps": [
+    ],
+    "master": [
+        "php artisan optimize:clear",
+        "git checkout HEAD -- composer.lock",
+        "git pull origin master",
+        "composer install",
+        "php artisan migrate --force",
+        "php artisan db:seed --force",
+        "php artisan l5-swagger:generate",
+        "php artisan cache:clear",
+        "php artisan optimize",
+        "php artisan queue:restart",
+        "php artisan octane:stop",
+        "sudo supervisorctl restart back-voip-cooperandhunter-us-ari",
+        "sudo supervisorctl restart back-voip-cooperandhunter-us-pami"
+    ],
+    "develop": [
+        "php artisan optimize:clear",
+        "git checkout HEAD -- composer.lock",
+        "git reset --hard HEAD",
+        "git pull origin develop",
+        "composer install",
+        "php artisan migrate",
+        "php artisan db:seed",
+        "php artisan l5-swagger:generate",
+        "php artisan cache:clear",
+        "php artisan optimize",
+        "php artisan queue:restart",
+        "php artisan octane:stop",
+        "sudo supervisorctl restart voip-cooperandhunter-wezom-agency-websockets",
+        "sudo supervisorctl restart voip-cooperandhunter-wezom-agency-pami",
+        "sudo supervisorctl restart voip-cooperandhunter-wezom-agency-ari"
+    ]
+}
