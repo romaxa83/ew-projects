@@ -1,0 +1,99 @@
+@startuml
+
+title
+Регистрация/автризация
+с использованием sms-кода
+end title
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+participant Sms_service
+
+== Registry ==
+
+Mobile -> Backend: api/register
+rnote over Backend
+создаю пользователя
+статус не верифицирован тел.
+endrnote
+
+rnote over Backend
+генер. sms-код
+endrnote
+
+Backend -> Sms_service: request {'phone', 'sms_code'}
+
+Sms_service -> Mobile: sms {'sms_code'}
+
+Mobile -> Backend: api/sms-verify {'phone', 'sms_code'}
+rnote over Backend
+проверяю sms_code
+endrnote
+
+rnote over Backend
+SUCCESS
+endrnote
+Backend -> Mobile: response {'access_token', 'refresh_token'}
+
+rnote over Backend
+ERROR
+endrnote
+Backend -> Mobile: response {'error_code'}
+
+note left of Backend
+error_code:
+1 - некорректный sms-код (три попытки)
+2 - sms-код стух
+3 - пользователь не найден
+end note
+
+note right of Mobile
+запрос на повторную
+генерцию sms-кода
+end note
+
+Mobile -> Backend: api/sms-verify-request {'phone'}
+
+Backend -> Sms_service: request {'phone', 'sms_code'}
+
+Sms_service -> Mobile: sms {'sms_code'}
+
+== Login ==
+
+Mobile -> Backend: api/sms-verify-request {'phone'}
+
+rnote over Backend
+ищу пользователя по телефону
+endrnote
+
+rnote over Backend
+Если не найден
+endrnote
+Backend -> Mobile: response {'error_code'}
+
+rnote over Backend
+генер. sms-код
+endrnote
+
+Backend -> Sms_service: request {'phone', 'sms_code'}
+
+Sms_service -> Mobile: sms {'sms_code'}
+
+Mobile -> Backend: api/sms-verify {'phone', 'sms_code'}
+rnote over Backend
+проверяю sms_code
+endrnote
+
+rnote over Backend
+SUCCESS
+endrnote
+Backend -> Mobile: response {'access_token', 'refresh_token'}
+
+title
+Регистрация/автризация
+с использованием sms-кода
+end title
+
+@enduml

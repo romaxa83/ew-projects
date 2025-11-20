@@ -1,0 +1,22 @@
+{
+    "name": "wezom-cms/telegram-bot",
+    "description": "Wezom CMS telegram-bot for develop",
+    "type": "library",
+    "version": "7.0.0",
+    "require": {
+        "wezom-cms/core": "^7.0",
+        "telegram-bot/api": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\TelegramBot\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\TelegramBot\\TelegramBotServiceProvider"
+            ]
+        }
+    }
+}

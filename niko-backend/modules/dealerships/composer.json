@@ -1,0 +1,21 @@
+{
+    "name": "wezom-cms/dealerships",
+    "description": "Wezom CMS dealerships module",
+    "type": "library",
+    "version": "7.0.0",
+    "require": {
+        "wezom-cms/core": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Dealerships\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Dealerships\\DealershipsServiceProvider"
+            ]
+        }
+    }
+}

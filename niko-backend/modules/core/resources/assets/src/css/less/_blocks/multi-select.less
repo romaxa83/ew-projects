@@ -1,0 +1,71 @@
+.ms-container {
+    .ms-list.ui-sortable {
+        overflow-x: hidden;
+
+        li.ms-optgroup-label,
+        li.ms-elem-selection {
+            position: relative;
+            padding-left: 35px;
+
+            &::after {
+                content: '';
+                background-color: #eee;
+                position: absolute;
+                top: 0;
+                left: 24px;
+                height: 100%;
+                width: 1px;
+            }
+
+            i {
+                color: #6c757d;
+                font-size: 12px;
+                height: 11px;
+                position: absolute;
+                left: 7px;
+                top: 0;
+                bottom: 0;
+                margin: auto 0;
+            }
+
+            &.ms-hover {
+                background-color: @info;
+
+                &::after {
+                    background-color: @white;
+                }
+
+                i {
+                    color: @white;
+                }
+            }
+        }
+
+        li.ms-optgroup-label {
+            border-bottom: 1px solid #eee;
+            border-top: 1px solid #eee;
+            padding-bottom: 4px;
+            margin-top: -1px;
+
+            &:hover {
+                cursor: move;
+                color: @info;
+
+                i {
+                    color: @info;
+                }
+            }
+        }
+
+        .ms-optgroup {
+            li.ms-elem-selection {
+                padding-left: 11px;
+                margin-left: 24px;
+
+                &::after {
+                    left: 0;
+                }
+            }
+        }
+    }
+}

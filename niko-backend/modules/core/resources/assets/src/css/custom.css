@@ -1,0 +1,192 @@
+form label.required:not(.custom-control-label):after,
+form legend.required:after {
+    content: " *";
+    color: #ef5350;
+}
+
+.header .profile-icon {
+    font-size: 28px;
+    vertical-align: middle;
+}
+
+.left-sidebar {
+    padding-top: 56px;
+}
+
+form.list_control_form_btn {
+    padding: 0;
+    border: none;
+    margin: 0 0 0 -1px;
+    flex: 0 0 auto !important;
+}
+
+.list-control-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+.btn-group > form.list_control_form_btn.btn:last-child:not(:first-child) .btn,
+.btn-group > form.list_control_form_btn.dropdown-toggle:not(:first-child) .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.btn-group > form.list_control_form_btn.btn:first-child:not(:last-child):not(.dropdown-toggle) .btn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.btn-group > form.list_control_form_btn.btn:not(:first-child):not(:last-child):not(.dropdown-toggle) .btn {
+    border-radius: 0;
+}
+
+.file-uploader .__controls {
+    margin: 5px 0;
+}
+
+.datepicker-dropdown {
+    z-index: 51 !important;
+}
+
+.dropdown-menu tbody tr td {
+    color: #212529;
+}
+
+.toggle > .toggle-group {
+    background: white;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+    color: #666;
+}
+
+.toggle.off {
+    border-color: rgba(0, 0, 0, .25);
+}
+
+.toggle-handle {
+    background-color: white;
+    border: thin rgba(0, 0, 0, .25) solid;
+}
+
+.toggle-on.btn-primary {
+    border: 1px solid transparent;
+    padding: 0.25rem 0.5rem 0.25rem 0.2rem;
+}
+
+.toggle-off.btn-default {
+    padding: 0.3rem 0.2rem 0.3rem 0.5rem;
+}
+
+.error-block .form-control {
+    border-color: #ef5350;
+}
+
+.error-block .control-label {
+    color: #ef5350;
+}
+
+.filter-card .card-title {
+    cursor: pointer;
+}
+
+.filter-card .card-title.collapsed .btn .fa {
+    transform: rotate(180deg);
+    will-change: transform;
+}
+
+.filter-control-buttons {
+    margin-bottom: .875rem;
+}
+
+.filter-expander {
+    cursor: pointer;
+}
+
+.filter-expander.collapsed i.fa-arrow-up:before {
+    content: "\F063";
+}
+
+.text-light {
+    color: #fff;
+}
+
+/* Multiple inputs */
+.multiple-inputs .drag-cursor {
+    cursor: move;
+}
+
+/* Sortable */
+.sortable-column {
+    width: 50px;
+}
+
+.sortable-handle {
+    width: 40px;
+    text-align: center;
+    padding: 2px;
+    cursor: move;
+    border: 1px dotted rgba(0, 0, 0, .125);
+    -moz-transition: color .3s;
+    transition: color .3s;
+}
+
+.sortable-handle:hover {
+    color: #455a64;
+}
+
+/* List items style */
+th.small-column,
+td.small-column {
+    width: 1%;
+    white-space: normal;
+}
+
+span.btn[disabled] {
+    cursor: not-allowed !important;
+}
+
+/* Bootstrap datepicker */
+.datepicker table tr td.range-start {
+    border-radius: 4px 0 0 4px;
+}
+
+.datepicker table tr td.range-end {
+    border-radius: 0 4px 4px 0;
+}
+
+.datepicker table tr td.range-start.range-end {
+    border-radius: 4px;
+}
+
+/* Notifications block */
+.mailbox .message-center {
+    height: auto;
+    max-height: 250px;
+}
+
+.dataTables_wrapper .dataTables_paginate .ellipsis {
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    color: #67757c;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0.5em 1em;
+    text-align: center;
+}
+
+a.card:hover {
+    text-decoration: none;
+}
+
+a.card:hover p {
+    text-decoration: underline;
+}
+
+.ui-sortable-placeholder > td {
+    border-top: none;
+}
+
+.card-header {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}

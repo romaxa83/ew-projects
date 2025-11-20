@@ -1,0 +1,100 @@
+version: "3.7"
+services:
+
+  nginx:
+    build:
+      context: docker
+      dockerfile: dev/nginx/Dockerfile
+    container_name: ${APP_NAME}__nginx
+    hostname: ${APP_NAME}__nginx
+    volumes:
+      - ./:/app
+      - ./storage/logs:/var/log/nginx
+    ports:
+      - ${DOCKER_BRIDGE}:80:80
+    restart: always
+
+  php-fpm:
+    build:
+      context: docker
+      dockerfile: dev/php-fpm/Dockerfile
+    container_name: ${APP_NAME}__php-fpm
+    hostname: ${APP_NAME}__php-fpm
+    environment:
+      TERM: xterm-256color
+    volumes:
+      - ./:/app
+      - ./docker/dev/php/.bashrc:/root/.bashrc
+
+  db:
+    image: mysql:8
+    container_name: ${APP_NAME}__db
+    hostname: ${APP_NAME}__db
+    restart: always
+    environment:
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_USER: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    ports:
+      - ${DOCKER_BRIDGE}:3306:3306
+
+    volumes:
+      - ./storage/db/:/var/lib/mysql
+
+#  db_test:
+#    image: mysql:8
+#    container_name: ${APP_NAME}__db_test
+#    hostname: ${APP_NAME}__db_test
+#    restart: always
+#    environment:
+#      MYSQL_USER: test
+#      MYSQL_PASSWORD: test
+#      MYSQL_ROOT_USER: test
+#      MYSQL_ROOT_PASSWORD: test
+#      MYSQL_DATABASE: ${DB_DATABASE}
+#    ports:
+#      - ${DOCKER_BRIDGE}:33061:3306
+#
+#    tmpfs:
+#      - /var/lib/mysql
+
+#  node:
+#    build:
+#      context: docker
+#      dockerfile: dev/node/Dockerfile
+#    container_name: ${APP_NAME}__node
+#    hostname: ${APP_NAME}__node
+#    volumes:
+#      - ./:/app
+#    tty: true
+
+#  redis:
+#    image: redis:5.0-alpine
+#    container_name: ${APP_NAME}__redis
+#    hostname: ${APP_NAME}__redis
+#    ports:
+#      - ${DOCKER_BRIDGE}:6379:6379
+#    command:
+#      - 'redis-server'
+#      - '--databases 2'
+#      - '--save 900 1'
+#      - '--save 300 10'
+#      - '--save 60 10000'
+#      - '--requirepass secret'
+
+#  mailer:
+#    image: mailhog/mailhog
+#    container_name: ${APP_NAME}__mailer
+#    hostname: ${APP_NAME}__mailer
+#    ports:
+#      - ${DOCKER_BRIDGE}:8025:8025
+#      - ${DOCKER_BRIDGE}:1025:1025
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${DOCKER_NETWORK}

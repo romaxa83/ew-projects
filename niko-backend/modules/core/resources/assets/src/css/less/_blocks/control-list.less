@@ -1,0 +1,103 @@
+.control-actions {
+    box-shadow: 0 0 0 1px #b5b5b5;
+    display: flex;
+    position: absolute;
+    background-color: white;
+    border-radius: .2rem;
+    padding: 2px;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition-property: transform, visibility, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    z-index: 1;
+
+    &::before {
+        content: '';
+        background: white;
+        box-shadow: 0 0 0 1px #b5b5b5;
+        bottom: 0;
+        margin: auto 0;
+        position: absolute;
+        left: -4px;
+        top: 0;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        height: 8px;
+        width: 8px;
+        z-index: -1;
+    }
+
+    &::after {
+        content: '';
+        border-radius: 0.25rem;
+        background: white;
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+    }
+
+    &.is-shown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+    }
+
+    button + button {
+        margin-left: 5px;
+    }
+}
+
+// For nestable styles
+[data-control-list] {
+    .list-control-pane {
+        padding: 8px;
+    }
+}
+
+.dd-control-item {
+    .list-item-check {
+        position: absolute;
+        top: 16px;
+        left: 8px;
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .dd-handle {
+        left: 36px;
+    }
+
+    &.dd-item {
+        > .dd-handle + .dd-content {
+            padding-left: 73px;
+        }
+
+        > button.dd-collapse,
+        > button.dd-expand {
+            ~ .list-item-check {
+                left: 38px;
+            }
+
+            ~ .dd-handle {
+                left: 66px;
+            }
+
+            ~ .dd-content {
+                padding-left: 103px;
+            }
+        }
+    }
+}
+
+.control-list-empty {
+    .list-control-pane {
+        display: none !important;
+    }
+}

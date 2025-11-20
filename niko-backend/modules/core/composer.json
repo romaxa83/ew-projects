@@ -1,0 +1,66 @@
+{
+    "name": "wezom-cms/core",
+    "description": "Wezom CMS Core",
+    "type": "library",
+    "version": "7.0.0",
+    "authors": [
+        {
+            "name": "Protsiv Andrey",
+            "email": "protsiv.a@wezom.com.ua"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "ext-json": "*",
+        "proengsoft/laravel-jsvalidation": ">2.2.0",
+        "p-andrey/tentacles": "^1.0",
+        "laravelcollective/html": "^6.1",
+        "laracasts/flash": "^3.1",
+        "laravel/framework": "^7.0",
+        "laravel/helpers": "^1.2",
+        "cviebrock/eloquent-sluggable": "^7.0",
+        "tightenco/ziggy": "^0.9",
+        "unisharp/laravel-filemanager": "^2.1",
+        "tucker-eric/eloquentfilter": "^2.3",
+        "intervention/image": "^2.5",
+        "johannebert/laravel-spam-protector": "^4.0",
+        "jaybizzle/laravel-crawler-detect": "^1.2",
+        "spatie/schema-org": "^2.14",
+        "cyrildewit/eloquent-viewable": "^5.2",
+        "artesaos/seotools": "^0.18",
+        "mcamara/laravel-localization": "^1.3",
+        "bensampo/laravel-enum": "^1.38",
+        "astrotomic/laravel-translatable": "^11.8",
+        "lavary/laravel-menu": "^1.7",
+        "genealabs/laravel-caffeine": "^7.0"
+    },
+    "suggest": {
+        "google/cloud-translate": "Required to use google translator."
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Core\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WezomCms\\Core\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Core\\CoreServiceProvider"
+            ],
+            "aliases": {
+                "Flash": "WezomCms\\Core\\Facades\\Flash",
+                "NotifyMessage": "WezomCms\\Core\\Facades\\NotifyMessage",
+                "SidebarMenu": "WezomCms\\Core\\Facades\\SidebarMenu",
+                "RouteRegistrar": "WezomCms\\Core\\Facades\\RouteRegistrar"
+            }
+        }
+    }
+}

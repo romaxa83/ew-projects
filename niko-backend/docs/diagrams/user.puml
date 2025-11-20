@@ -1,0 +1,119 @@
+@startuml
+
+    package User <<Frame>> {
+        class User {
+            TABLE "users"
+            __const__
+            CREATED_NOT_VERIFY  = 0
+            CREATED_VERIFY      = 1
+            __field__
+            * id : Int
+            * first_name : Str
+            * last_name : Str
+            * salesman_name : Str
+            * patronymic : Str
+            * phone : Str
+            * password : Str
+            * status : Int
+            * lang : Str
+            * fcm_token : Str
+            * phone_verified : Bool
+            * phone_verify_token : Str
+            * phone_verify_token_expire : Datetime
+            * created_at : Datetime
+            * updated_at : Datetime
+            * fill_table_date : Datetime
+            __relation__
+            * cars()
+            * carsFromOrder()   // созд. для отчеты
+            * carsDeleted()     // удаленые
+            * loyalty()
+            * promotions()
+
+        }
+
+        class UserLoyalty {
+            TABLE "user_loyalty"
+            __const__
+            + level
+            NONE = 0
+            WHITE = 1
+            BLACK = 2
+            SILVER = 3
+            GOLD = 4
+            PLATINUM = 5
+            + type
+            NONE = 0
+            INDIVIDUAL = 1
+            FAMILY = 2
+
+            __field__
+            * id : Int
+            * loyalty_type : Int
+            * loyalty_level : Int
+            * level_up_amount : Int
+            * buy_cars : Int
+            * created_at : Datetime
+            * updated_at : Datetime
+            __relation__
+            * levelInfo()
+        }
+        class LoyaltyLevel {
+            TABLE "loyalties"
+
+            __field__
+            * id : Int
+            * segment : Int
+            * level : Int
+            * count_auto : Int
+            * sum_services : Int
+            * discount_sto : Int
+            * discount_spares : Int
+        }
+    }
+
+
+
+
+
+'class PivotReportClient
+'note top: связь с клиентами JD1
+'
+'class PivotReportReportClient
+'note top: связь с клиентами \nсозданными для данного отчета
+'
+User -left-> UserLoyalty
+'
+'Report -left-> Location
+'Report -left-> Video
+'Report -up-> Image
+'Report -up-> Comment
+'
+'Report -down-> PivotReportClient
+'PivotReportClient -down-> Client
+'PivotReportClient -down-> Client
+'PivotReportClient -down-> Client
+'
+'Report -down-> PivotReportReportClient
+'PivotReportReportClient -down-> ReportClient
+'
+'ReportMachine -down-> EquipmentGroup
+'ReportMachine -down-> Manufacturer
+'ReportMachine -down-> ModelDescription
+'
+'User -down-> Dealer
+'
+'User -down-> PivotUserDealer
+'PivotUserDealer -down-> Dealer
+'
+'Report -left-> ReportFeatureValue
+'ReportFeatureValue -right-> Feature
+'ReportFeatureValue -right-> ReportValue
+'ReportValue -down-> ModelDescription
+'ReportValue -right-> FeatureValue
+'
+'EquipmentGroup <-up-> FeatureEGPivot
+'FeatureEGPivot <-right-> Feature
+
+@enduml
+

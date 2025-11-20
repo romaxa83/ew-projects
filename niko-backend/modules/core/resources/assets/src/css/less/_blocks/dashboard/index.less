@@ -1,0 +1,38 @@
+
+@dashboard-item: dashboard-item;
+
+.@{dashboard-item} {
+    align-items: flex-start;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: .25rem;
+    background-color: @white;
+    background-clip: border-box;
+    display: flex;
+    min-width: 0;
+    height: 100%;
+
+    &__info {
+        flex: 1;
+    }
+
+    &__title {
+        display: block;
+        color: @text;
+        font-size: 1rem;
+        line-height: 1.15;
+        margin-bottom: 0.75rem;
+    }
+
+    &__count {
+        display: block;
+        color: @text-light;
+        font-size: 1.25rem;
+        line-height: 1;
+    }
+
+    &:hover {
+        .@{dashboard-item}__title {
+            text-decoration: underline;
+        }
+    }
+}

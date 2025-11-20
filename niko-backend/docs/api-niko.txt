@@ -1,0 +1,91 @@
+url для виклику функції Order: https://api.its-group.kiev.ua/TestMobileAppProxy/hs/ApiV1/Order
+Зразок тіла POST-запиту для виклику функції Order:
+{
+  "AccountID": 1,
+  "ServiceTypeID": 1,
+  "VIN": "VF10SRCL456440865",
+  "LicensePlate": "AB0001CD",
+  "DealerID": 1,
+  "ApplicationID": 1,
+  "Email": "some@email.com",
+  "YearOfCarManufacture": 2008,
+  "ApplicationDateTime": "2020-12-14T17:42:47",
+  "DesiredDateTime": "2020-12-15T18:42:47",
+  "BrandID": 1,
+  "TransmissionTypeID": 1,
+  "ModelID": 1,
+  "FirstName": "Иван",
+  "PhoneNumber": 380679999999,
+  "EngineCapacity": 1,
+  "MiddleName": "Иванович",
+  "FamilyName": "Иванов",
+  "CarMileage": 1,
+  "EngineTypeID": 1
+}
+На такий запит має бути відповідь:
+{
+  "Data": {
+    "ApplicationID": 1,
+    "ApplicationStatusID": 1
+  }
+}
+У випадку відсутності одного з обов'язкових полів AccountID, ServiceTypeID, LicensePlate,
+DealerID, ApplicationID, CarMileage має бути відповідь такого виду:
+{
+  "Errors": {
+    "Message": "The value of DealerID property not found;",
+    "Code": 1
+  }
+}
+-------------------------------------------------------------------------------------------------------
+url для виклику функції VerifyByCar: https://api.its-group.kiev.ua/TestMobileAppProxy/hs/ApiV1/VerifyByCar
+Зразок тіла POST-запиту для виклику функції VerifyByCar:
+{
+  "AccountID": 1,
+  "FamilyName": "Иванов",
+  "BrandID": 1,
+  "TransmissionTypeID": 1,
+  "VIN": "VF10SRCL456440865",
+  "YearOfCarManufacture": 2008,
+  "FirstName": "Иван",
+  "ModelID": 1,
+  "LicensePlate": "AB0001CD",
+  "EngineCapacity": 1,
+  "MiddleName": "Иванович",
+  "PhoneNumber": 380679999999,
+  "Email": "some@email.com",
+}
+
+На такий запит має бути відповідь:
+{
+  "Data": {
+    "AccountID": 1,
+    "AccountStatusID": 1,
+    "VehicleStatusID": 1,
+    "DescriptionExceptions": ""
+  }
+}
+Якщо змінити значення одного з полів FamilyName, LicensePlate чи PhoneNumber, то у відповіді
+зміниться значення полів AccountStatusID, VehicleStatusID з 1 на 0.
+{
+  "Data": {
+    "AccountID": 1,
+    "AccountStatusID": 0,
+    "VehicleStatusID": 0,
+    "DescriptionExceptions": ""
+  }
+}
+
+У випадку відсутності одного з обов'язкових полів AccountID, FamilyName, LicensePlate, PhoneNumber має бути відповідь такого виду:
+{
+  "Errors": {
+    "Message": "The value of AccountID property not found;",
+    "Code": 1
+  }
+}
+З повагою,
+Журило Михайло
+
+Старший інженер-програміст
+ТОВ "АЙ.ТІ.ЕС.-ГРУП"
+(група компаній "НІКО")

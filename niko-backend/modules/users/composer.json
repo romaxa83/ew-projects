@@ -1,0 +1,32 @@
+{
+    "name": "wezom-cms/users",
+    "description": "Wezom CMS users module",
+    "type": "library",
+    "version": "7.0.0",
+    "authors": [
+        {
+            "name": "Protsiv Andrey",
+            "email": "protsiv.a@wezom.com.ua"
+        }
+    ],
+    "require": {
+        "wezom-cms/core": "^7.0"
+    },
+    "suggest": {
+        "ext-soap": "Required to use turbosms notification channel",
+        "yakimka/laravel-notification-channel-turbosms": "Required to use turbosms notification channel",
+        "guzzlehttp/guzzle": "Required to use eSputnik notification channel"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Users\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Users\\UsersServiceProvider"
+            ]
+        }
+    }
+}

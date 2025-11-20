@@ -1,0 +1,35 @@
+{
+    "name": "wezom-cms/articles",
+    "description": "Wezom CMS articles module",
+    "type": "library",
+    "version": "7.0.0",
+    "authors": [
+        {
+            "name": "Protsiv Andrey",
+            "email": "protsiv.a@wezom.com.ua"
+        },
+        {
+            "name": "Chaplygin Dmitriy",
+            "email": "chaplygin.d@wezom.com.ua"
+        },
+        {
+            "name": "Stankevich Andrey",
+            "email": "stankevich.a.wezom@gmail.com"
+        }
+    ],
+    "require": {
+        "wezom-cms/core": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Articles\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Articles\\ArticlesServiceProvider"
+            ]
+        }
+    }
+}

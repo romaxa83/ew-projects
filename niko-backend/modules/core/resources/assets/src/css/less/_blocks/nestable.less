@@ -1,0 +1,209 @@
+@nestable-root-class: dd;
+@nestable-list-class: dd-list;
+@nestable-content-class: dd-content;
+@nestable-item-class: dd-item;
+@nestable-drag-class: dd-dragel;
+@nestable-handle-class: dd-handle;
+@nestable-collapse-class: dd-collapse;
+@nestable-expand-class: dd-expand;
+@nestable-collapsed-class: dd-collapsed;
+@nestable-placeholder-class: dd-placeholder;
+@nestable-no-children-class: dd-nochildren;
+@nestable-empty-class: dd-empty;
+
+.@{nestable-list-class} {
+	box-sizing: border-box;
+	display: block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+
+	.@{nestable-list-class} {
+		padding-left: 30px;
+		width: 100%;
+	}
+}
+
+.@{nestable-item-class},
+.@{nestable-empty-class},
+.@{nestable-placeholder-class} {
+	display: flex;
+	flex-flow: row wrap;
+	font-size: 13px;
+	line-height: 16px;
+	position: relative;
+
+	> .@{nestable-handle-class} + .@{nestable-content-class} {
+		padding-left: 43px;
+	}
+
+	> button + .@{nestable-handle-class} + .@{nestable-content-class} {
+		padding-left: 80px;
+	}
+
+	.@{nestable-item-class} {
+		padding-right: 0;
+
+		.@{nestable-handle-class} + .@{nestable-content-class} {
+			padding-left: 43px;
+		}
+
+		button + .@{nestable-handle-class}  + .@{nestable-content-class} {
+			padding-left: 80px;
+		}
+	}
+}
+
+.@{nestable-content-class} {
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.03);
+	border: 1px solid #d8d8d8;
+	flex: 1 1 auto;
+	padding: 0 0 0 80px;
+	transition: background 0.2s;
+	margin-bottom: 5px;
+
+	&:hover {
+		background: none repeat scroll 0 0 #fff;
+	}
+}
+
+.@{nestable-handle-class} {
+	align-items: center;
+	background: rgb(247, 247, 247);
+	border: 1px dotted rgba(0,0,0,.125);
+	color: #99abb4;
+	cursor: move;
+	display: inline-flex;
+	font-size: 1rem;
+	height: 30px;
+	justify-content: center;
+	margin: 0;
+	text-decoration: none;
+	transition: color .3s;
+	width: 30px;
+	position: absolute;
+	left: 9px;
+	top: 12px;
+	z-index: 1;
+
+	&:hover {
+		color: #616c71;
+	}
+}
+
+.@{nestable-item-class} > button {
+	background: rgb(247, 247, 247);
+	border: 1px dotted rgba(0,0,0,.125);
+	cursor: pointer;
+	height: 30px;
+	line-height: 1;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	left: 6px;
+	top: 12px;
+	text-indent: 100%;
+	white-space: nowrap;
+	width: 30px;
+	z-index: 1;
+
+	&:before {
+		display: inline-flex;
+		position: absolute;
+		top: 0;
+		left: 0;
+		font: normal normal normal 14px/1 FontAwesome;
+		text-indent: 0;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		width: 100%;
+	}
+
+	&.dd-expand:before {
+		content: "\F067";
+	}
+
+	&.dd-collapse:before {
+		content: "\F068";
+	}
+
+	+ .@{nestable-handle-class} {
+		left: 39px;
+	}
+
+	&:hover {
+		color: #455a64;
+	}
+}
+
+.@{nestable-item-class} > button.@{nestable-collapse-class},
+.@{nestable-item-class} > button.@{nestable-expand-class} {
+	border: none;
+	background: none;
+	width: 20px;
+}
+
+.dd-expand {
+	display: none;
+}
+
+.@{nestable-collapsed-class} .@{nestable-list-class},
+.@{nestable-collapsed-class} .dd-collapse {
+	display: none;
+}
+
+.@{nestable-collapsed-class} .dd-expand {
+	display: block;
+}
+
+.@{nestable-empty-class},
+.@{nestable-placeholder-class} {
+	padding: 0;
+	margin-bottom: 5px;
+	min-height: 30px;
+	border: 1px dashed #b6bcbf;
+	background: #f2fbff;
+	box-sizing: border-box;
+}
+
+.@{nestable-empty-class} {
+	border: 1px dashed #bbb;
+	min-height: 100px;
+	background-color: #f2fbff;
+	background-size: 60px 60px;
+	background-position: 0 0, 30px 30px;
+}
+
+.@{nestable-drag-class} {
+	position: absolute;
+	pointer-events: none;
+	z-index: 9999;
+
+	> .@{nestable-item-class} > .@{nestable-handle-class} {
+		background-color: #1976d2;
+		box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, 0.1);
+
+		&:before {
+			color: #fff;
+		}
+	}
+
+	.@{nestable-item-class} .@{nestable-content-class} {
+		background-color: white;
+	}
+
+	.@{nestable-content-class} {
+		margin-top: 1.5px;
+		margin-left: 1.5px;
+	}
+}
+
+.@{nestable-no-children-class} .@{nestable-placeholder-class} {
+	display: none;
+}

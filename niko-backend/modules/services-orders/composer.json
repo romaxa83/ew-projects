@@ -1,0 +1,28 @@
+{
+    "name": "wezom-cms/services-orders",
+    "description": "Wezom CMS services orders module",
+    "type": "library",
+    "version": "7.0.0",
+    "authors": [
+        {
+            "name": "Chaplygin Dmitriy",
+            "email": "chaplygin.d@wezom.com.ua"
+        }
+    ],
+    "require": {
+        "wezom-cms/core": "^7.0",
+        "wezom-cms/services": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\ServicesOrders\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\ServicesOrders\\ServicesOrdersServiceProvider"
+            ]
+        }
+    }
+}

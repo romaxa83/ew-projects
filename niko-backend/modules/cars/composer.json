@@ -1,0 +1,21 @@
+{
+    "name": "wezom-cms/cars",
+    "description": "Wezom CMS cars module",
+    "type": "library",
+    "version": "7.0.0",
+    "require": {
+        "wezom-cms/core": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Cars\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Cars\\CarsServiceProvider"
+            ]
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "wezom-cms/requests",
+    "description": "Wezom CMS requests for other services",
+    "type": "library",
+    "version": "7.0.0",
+    "require": {
+        "wezom-cms/core": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Requests\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Requests\\RequestsServiceProvider"
+            ]
+        }
+    }
+}

@@ -1,0 +1,46 @@
+<?php
+
+namespace WezomCms\Cars\Http\Requests\Admin;
+use Illuminate\Foundation\Http\FormRequest;
+use WezomCms\Core\Http\Requests\ChangeStatus\RequiredIfMessageTrait;
+use WezomCms\Core\Rules\PhoneMask;
+use WezomCms\Core\Traits\LocalizedRequestTrait;
+
+class BrandRequest extends FormRequest
+{
+    use LocalizedRequestTrait;
+    use RequiredIfMessageTrait;
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return $this->localizeRules(
+            [],
+            [
+                'name' => 'required|string',
+                'published' => 'required',
+            ]
+        );
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return $this->localizeAttributes(
+            [],
+            [
+                'name' => __('cms-cars::admin.Name'),
+                'published' => __('cms-core::admin.layout.Published'),
+            ]
+        );
+    }
+}
+
