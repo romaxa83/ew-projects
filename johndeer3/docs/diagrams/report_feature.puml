@@ -1,0 +1,121 @@
+@startuml
+
+    package TableData <<Frame>> {
+        class Feature {
+            TABLE "reports_features"
+            __const__
+            TYPE_GROUND = 1 // для поля
+            TYPE_MACHINE = 2 // для техники
+
+            // какое поля для приложения
+            TYPE_FIELD_STRING = 'string';
+            TYPE_FIELD_INT = 'integer';
+            TYPE_FIELD_BOOL = 'boolean';
+            TYPE_FIELD_SELECT = 'select';
+            // в бд храниться string
+            __field__
+            * id : Int
+            * type : Int
+            * type_field : Str
+            * name : Str (выступает как алиас)
+            * unit : Str
+            * has_value : Bool
+            * active : Bool
+            * position : Int
+
+            __relation__
+            * egs()
+            * values()
+            * translations() //все переводы
+            * current() // перевод по локали
+        }
+
+        class FeatureTranslation {
+            TABLE "feature_translations"
+
+            __field__
+            * id : Int
+            * lang : Str (ru, ua, en)
+            * name : Str
+            * unit : Str|null
+            * feature_id : Int
+        }
+
+        Feature -up-> FeatureTranslation
+
+        class FeatureValue {
+            TABLE "feature_values"
+            значения характеристик
+            __field__
+            * id : Int
+            __relation__
+            * feature_id : FK ->feature(id)
+            * translates()
+            * current()
+        }
+        class FeatureValueTranslates {
+            TABLE "feature_value_translates"
+
+            __field__
+            * id : Int
+            * lang : Str (ru, ua, en)
+            * name : Str
+            __relation__
+            * value_id : FK ->featureValue(id)
+        }
+        FeatureValue -up-> FeatureValueTranslates
+        Feature -left-> FeatureValue :values()
+
+
+        class FeatureEGPivot {
+            TABLE "report_features_eg_pivot"
+
+            __relation__
+            * feature_id : FK ->feature(id)
+            * eg_id : FK ->equipmentGroup(id)
+        }
+
+        class FeatureSubEGPivot {
+            TABLE "report_features_sub_eg_pivot"
+
+            __relation__
+            * feature_id : FK ->feature(id)
+            * eg_id : FK ->equipmentGroup(id)
+        }
+
+        Feature -right-> FeatureValue :values()
+
+        class ReportValue {
+            TABLE "report_feature_values"
+
+            __field__
+            * id: Int
+            * value: Str
+            * model_description_name: Str
+            __relation__
+            * value_id : FK ->featureValues(id)
+            * model_description_id : FK ->modelDescription(id)
+        }
+
+        class ReportFeatureValue {
+            TABLE "report_feature_value_relation"
+
+            __relation__
+            * value()
+            * feature()
+            * report_id : FK ->featureValue(id)
+            * feature_id : FK ->reportFeature(id)
+            * value_id : FK ->featureValue(id)
+        }
+
+    }
+Report -left-> ReportFeatureValue
+ReportFeatureValue -right-> Feature
+ReportFeatureValue -right-> ReportValue
+ReportValue -down-> ModelDescription
+ReportValue -right-> FeatureValue
+
+EquipmentGroup <-up-> FeatureEGPivot
+FeatureEGPivot <-right-> Feature
+
+@enduml

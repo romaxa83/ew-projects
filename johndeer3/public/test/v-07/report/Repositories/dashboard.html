@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /app/app/Repositories</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../_css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="../_css/nv.d3.min.css" rel="stylesheet" type="text/css">
+  <link href="../_css/style.css" rel="stylesheet" type="text/css">
+  <link href="../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../index.html">/app/app</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Repositories</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="JD/ModelDescriptionRepository.php.html#10">App\Repositories\JD\ModelDescriptionRepository</a></td><td class="text-right">44%</td></tr>
+       <tr><td><a href="JD/ClientRepository.php.html#12">App\Repositories\JD\ClientRepository</a></td><td class="text-right">61%</td></tr>
+       <tr><td><a href="JD/EquipmentGroupRepository.php.html#9">App\Repositories\JD\EquipmentGroupRepository</a></td><td class="text-right">83%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="JD/EquipmentGroupRepository.php.html#9">App\Repositories\JD\EquipmentGroupRepository</a></td><td class="text-right">5</td></tr>
+       <tr><td><a href="JD/ClientRepository.php.html#12">App\Repositories\JD\ClientRepository</a></td><td class="text-right">4</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="JD/ClientRepository.php.html#27"><abbr title="App\Repositories\JD\ClientRepository::getAllActive">getAllActive</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="JD/EquipmentGroupRepository.php.html#95"><abbr title="App\Repositories\JD\EquipmentGroupRepository::getAllForName">getAllForName</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="JD/ModelDescriptionRepository.php.html#56"><abbr title="App\Repositories\JD\ModelDescriptionRepository::getForStatistic">getForStatistic</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="TranslationRepository.php.html#28"><abbr title="App\Repositories\TranslationRepository::getByModel">getByModel</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="JD/EquipmentGroupRepository.php.html#84"><abbr title="App\Repositories\JD\EquipmentGroupRepository::getByForStatistic">getByForStatistic</abbr></a></td><td class="text-right">75%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="JD/ClientRepository.php.html#27"><abbr title="App\Repositories\JD\ClientRepository::getAllActive">getAllActive</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="JD/EquipmentGroupRepository.php.html#84"><abbr title="App\Repositories\JD\EquipmentGroupRepository::getByForStatistic">getByForStatistic</abbr></a></td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 9.2.15</a> using <a href="https://secure.php.net/" target="_top">PHP 8.0.0</a> and <a href="https://phpunit.de/">PHPUnit 9.5.20</a> at Sun Jun 12 18:05:19 EEST 2022.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../_js/jquery.min.js" type="text/javascript"></script>
+  <script src="../_js/d3.min.js" type="text/javascript"></script>
+  <script src="../_js/nv.d3.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([0,0,0,0,0,1,0,1,0,1,2,19], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([4,0,0,0,0,0,0,0,1,0,2,68], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[100,2,"<a href=\"Auth\/PassportClientRepository.php.html#7\">App\\Repositories\\Auth\\PassportClientRepository<\/a>"],[100,3,"<a href=\"FcmNotification\/FcmNotificationRepository.php.html#9\">App\\Repositories\\FcmNotification\\FcmNotificationRepository<\/a>"],[100,5,"<a href=\"Feature\/FeatureRepository.php.html#9\">App\\Repositories\\Feature\\FeatureRepository<\/a>"],[100,1,"<a href=\"Import\/IosLinkImportRepository.php.html#7\">App\\Repositories\\Import\\IosLinkImportRepository<\/a>"],[100,1,"<a href=\"IosLinkRepository.php.html#9\">App\\Repositories\\IosLinkRepository<\/a>"],[61.53846153846154,4,"<a href=\"JD\/ClientRepository.php.html#12\">App\\Repositories\\JD\\ClientRepository<\/a>"],[100,1,"<a href=\"JD\/CountryRepository.php.html#9\">App\\Repositories\\JD\\CountryRepository<\/a>"],[100,9,"<a href=\"JD\/DealersRepository.php.html#9\">App\\Repositories\\JD\\DealersRepository<\/a>"],[83.33333333333334,5,"<a href=\"JD\/EquipmentGroupRepository.php.html#9\">App\\Repositories\\JD\\EquipmentGroupRepository<\/a>"],[100,2,"<a href=\"JD\/ManufacturerRepository.php.html#10\">App\\Repositories\\JD\\ManufacturerRepository<\/a>"],[44.44444444444444,3,"<a href=\"JD\/ModelDescriptionRepository.php.html#10\">App\\Repositories\\JD\\ModelDescriptionRepository<\/a>"],[100,2,"<a href=\"JD\/ProductRepository.php.html#9\">App\\Repositories\\JD\\ProductRepository<\/a>"],[100,1,"<a href=\"JD\/RegionsRepository.php.html#10\">App\\Repositories\\JD\\RegionsRepository<\/a>"],[100,1,"<a href=\"JD\/SizeParameterRepository.php.html#9\">App\\Repositories\\JD\\SizeParameterRepository<\/a>"],[100,3,"<a href=\"LanguageRepository.php.html#9\">App\\Repositories\\LanguageRepository<\/a>"],[100,2,"<a href=\"NationalityRepository.php.html#9\">App\\Repositories\\NationalityRepository<\/a>"],[100,3,"<a href=\"PageRepository.php.html#11\">App\\Repositories\\PageRepository<\/a>"],[100,4,"<a href=\"Report\/LocationRepository.php.html#10\">App\\Repositories\\Report\\LocationRepository<\/a>"],[100,1,"<a href=\"Report\/ReportFeatureValueRepository.php.html#9\">App\\Repositories\\Report\\ReportFeatureValueRepository<\/a>"],[98.76543209876543,19,"<a href=\"Report\/ReportRepository.php.html#16\">App\\Repositories\\Report\\ReportRepository<\/a>"],[100,8,"<a href=\"ReportRepository.php.html#14\">App\\Repositories\\ReportRepository<\/a>"],[93.05555555555556,21,"<a href=\"TranslationRepository.php.html#10\">App\\Repositories\\TranslationRepository<\/a>"],[100,2,"<a href=\"User\/RoleRepository.php.html#9\">App\\Repositories\\User\\RoleRepository<\/a>"],[100,7,"<a href=\"User\/UserRepository.php.html#12\">App\\Repositories\\User\\UserRepository<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[100,1,"<a href=\"Auth\/PassportClientRepository.php.html#9\">App\\Repositories\\Auth\\PassportClientRepository::query<\/a>"],[100,1,"<a href=\"Auth\/PassportClientRepository.php.html#14\">App\\Repositories\\Auth\\PassportClientRepository::find<\/a>"],[100,1,"<a href=\"FcmNotification\/FcmNotificationRepository.php.html#11\">App\\Repositories\\FcmNotification\\FcmNotificationRepository::query<\/a>"],[100,1,"<a href=\"FcmNotification\/FcmNotificationRepository.php.html#16\">App\\Repositories\\FcmNotification\\FcmNotificationRepository::getOneByType<\/a>"],[100,1,"<a href=\"FcmNotification\/FcmNotificationRepository.php.html#24\">App\\Repositories\\FcmNotification\\FcmNotificationRepository::getByID<\/a>"],[100,1,"<a href=\"Feature\/FeatureRepository.php.html#11\">App\\Repositories\\Feature\\FeatureRepository::query<\/a>"],[100,3,"<a href=\"Feature\/FeatureRepository.php.html#16\">App\\Repositories\\Feature\\FeatureRepository::getAllByType<\/a>"],[100,1,"<a href=\"Feature\/FeatureRepository.php.html#38\">App\\Repositories\\Feature\\FeatureRepository::activeFeature<\/a>"],[100,1,"<a href=\"Import\/IosLinkImportRepository.php.html#9\">App\\Repositories\\Import\\IosLinkImportRepository::getLastRow<\/a>"],[100,1,"<a href=\"IosLinkRepository.php.html#11\">App\\Repositories\\IosLinkRepository::query<\/a>"],[100,1,"<a href=\"JD\/ClientRepository.php.html#14\">App\\Repositories\\JD\\ClientRepository::query<\/a>"],[0,2,"<a href=\"JD\/ClientRepository.php.html#27\">App\\Repositories\\JD\\ClientRepository::getAllActive<\/a>"],[100,1,"<a href=\"JD\/ClientRepository.php.html#40\">App\\Repositories\\JD\\ClientRepository::getForHash<\/a>"],[100,1,"<a href=\"JD\/CountryRepository.php.html#11\">App\\Repositories\\JD\\CountryRepository::query<\/a>"],[100,1,"<a href=\"JD\/DealersRepository.php.html#11\">App\\Repositories\\JD\\DealersRepository::query<\/a>"],[100,7,"<a href=\"JD\/DealersRepository.php.html#21\">App\\Repositories\\JD\\DealersRepository::getAllActive<\/a>"],[100,1,"<a href=\"JD\/DealersRepository.php.html#42\">App\\Repositories\\JD\\DealersRepository::getForHash<\/a>"],[100,1,"<a href=\"JD\/EquipmentGroupRepository.php.html#11\">App\\Repositories\\JD\\EquipmentGroupRepository::query<\/a>"],[100,1,"<a href=\"JD\/EquipmentGroupRepository.php.html#21\">App\\Repositories\\JD\\EquipmentGroupRepository::getAllForHash<\/a>"],[75,2,"<a href=\"JD\/EquipmentGroupRepository.php.html#84\">App\\Repositories\\JD\\EquipmentGroupRepository::getByForStatistic<\/a>"],[0,1,"<a href=\"JD\/EquipmentGroupRepository.php.html#95\">App\\Repositories\\JD\\EquipmentGroupRepository::getAllForName<\/a>"],[100,1,"<a href=\"JD\/ManufacturerRepository.php.html#12\">App\\Repositories\\JD\\ManufacturerRepository::query<\/a>"],[100,1,"<a href=\"JD\/ManufacturerRepository.php.html#17\">App\\Repositories\\JD\\ManufacturerRepository::getForHash<\/a>"],[100,1,"<a href=\"JD\/ModelDescriptionRepository.php.html#12\">App\\Repositories\\JD\\ModelDescriptionRepository::query<\/a>"],[100,1,"<a href=\"JD\/ModelDescriptionRepository.php.html#22\">App\\Repositories\\JD\\ModelDescriptionRepository::getForHash<\/a>"],[0,1,"<a href=\"JD\/ModelDescriptionRepository.php.html#56\">App\\Repositories\\JD\\ModelDescriptionRepository::getForStatistic<\/a>"],[100,1,"<a href=\"JD\/ProductRepository.php.html#11\">App\\Repositories\\JD\\ProductRepository::query<\/a>"],[100,1,"<a href=\"JD\/ProductRepository.php.html#16\">App\\Repositories\\JD\\ProductRepository::getSizeForSelect<\/a>"],[100,1,"<a href=\"JD\/RegionsRepository.php.html#12\">App\\Repositories\\JD\\RegionsRepository::query<\/a>"],[100,1,"<a href=\"JD\/SizeParameterRepository.php.html#11\">App\\Repositories\\JD\\SizeParameterRepository::query<\/a>"],[100,1,"<a href=\"LanguageRepository.php.html#11\">App\\Repositories\\LanguageRepository::query<\/a>"],[100,1,"<a href=\"LanguageRepository.php.html#16\">App\\Repositories\\LanguageRepository::getForSelect<\/a>"],[100,1,"<a href=\"LanguageRepository.php.html#27\">App\\Repositories\\LanguageRepository::getDefault<\/a>"],[100,1,"<a href=\"NationalityRepository.php.html#11\">App\\Repositories\\NationalityRepository::query<\/a>"],[100,1,"<a href=\"NationalityRepository.php.html#30\">App\\Repositories\\NationalityRepository::getFoSelect<\/a>"],[100,1,"<a href=\"PageRepository.php.html#13\">App\\Repositories\\PageRepository::query<\/a>"],[100,1,"<a href=\"PageRepository.php.html#18\">App\\Repositories\\PageRepository::getForHash<\/a>"],[100,1,"<a href=\"PageRepository.php.html#32\">App\\Repositories\\PageRepository::disclaimerCurrentLocale<\/a>"],[100,1,"<a href=\"Report\/LocationRepository.php.html#12\">App\\Repositories\\Report\\LocationRepository::query<\/a>"],[100,2,"<a href=\"Report\/LocationRepository.php.html#17\">App\\Repositories\\Report\\LocationRepository::getListByFilter<\/a>"],[100,1,"<a href=\"Report\/LocationRepository.php.html#31\">App\\Repositories\\Report\\LocationRepository::countReportByCountryAndYear<\/a>"],[100,1,"<a href=\"Report\/ReportFeatureValueRepository.php.html#11\">App\\Repositories\\Report\\ReportFeatureValueRepository::query<\/a>"],[100,1,"<a href=\"Report\/ReportRepository.php.html#18\">App\\Repositories\\Report\\ReportRepository::query<\/a>"],[100,3,"<a href=\"Report\/ReportRepository.php.html#23\">App\\Repositories\\Report\\ReportRepository::getAllReport<\/a>"],[100,3,"<a href=\"Report\/ReportRepository.php.html#48\">App\\Repositories\\Report\\ReportRepository::getAllReportForExcel<\/a>"],[95,4,"<a href=\"Report\/ReportRepository.php.html#73\">App\\Repositories\\Report\\ReportRepository::forMachineStats<\/a>"],[100,1,"<a href=\"Report\/ReportRepository.php.html#116\">App\\Repositories\\Report\\ReportRepository::getReportByFeatureAndStatus<\/a>"],[100,1,"<a href=\"Report\/ReportRepository.php.html#127\">App\\Repositories\\Report\\ReportRepository::getAllForSearch<\/a>"],[100,2,"<a href=\"Report\/ReportRepository.php.html#171\">App\\Repositories\\Report\\ReportRepository::getPushForWeek<\/a>"],[100,2,"<a href=\"Report\/ReportRepository.php.html#192\">App\\Repositories\\Report\\ReportRepository::getPushStartDay<\/a>"],[100,2,"<a href=\"Report\/ReportRepository.php.html#212\">App\\Repositories\\Report\\ReportRepository::getPushEndDay<\/a>"],[100,1,"<a href=\"ReportRepository.php.html#16\">App\\Repositories\\ReportRepository::query<\/a>"],[100,1,"<a href=\"ReportRepository.php.html#198\">App\\Repositories\\ReportRepository::getForStatistic<\/a>"],[100,1,"<a href=\"ReportRepository.php.html#436\">App\\Repositories\\ReportRepository::filterCountries<\/a>"],[100,1,"<a href=\"ReportRepository.php.html#460\">App\\Repositories\\ReportRepository::filterDealerIds<\/a>"],[100,1,"<a href=\"ReportRepository.php.html#495\">App\\Repositories\\ReportRepository::filterEquipmentGroupId<\/a>"],[100,1,"<a href=\"ReportRepository.php.html#513\">App\\Repositories\\ReportRepository::filterModelDescriptionIds<\/a>"],[100,1,"<a href=\"ReportRepository.php.html#546\">App\\Repositories\\ReportRepository::filterYear<\/a>"],[100,1,"<a href=\"ReportRepository.php.html#569\">App\\Repositories\\ReportRepository::parseDateForArray<\/a>"],[100,1,"<a href=\"TranslationRepository.php.html#12\">App\\Repositories\\TranslationRepository::query<\/a>"],[100,1,"<a href=\"TranslationRepository.php.html#17\">App\\Repositories\\TranslationRepository::getByAliasAndLang<\/a>"],[0,1,"<a href=\"TranslationRepository.php.html#28\">App\\Repositories\\TranslationRepository::getByModel<\/a>"],[100,1,"<a href=\"TranslationRepository.php.html#36\">App\\Repositories\\TranslationRepository::existByAliasAndLang<\/a>"],[100,2,"<a href=\"TranslationRepository.php.html#47\">App\\Repositories\\TranslationRepository::listByAliases<\/a>"],[100,1,"<a href=\"TranslationRepository.php.html#62\">App\\Repositories\\TranslationRepository::existRoleByEntityId<\/a>"],[100,1,"<a href=\"TranslationRepository.php.html#74\">App\\Repositories\\TranslationRepository::getTranslationForExcel<\/a>"],[100,1,"<a href=\"TranslationRepository.php.html#84\">App\\Repositories\\TranslationRepository::getObjByIDs<\/a>"],[100,1,"<a href=\"TranslationRepository.php.html#92\">App\\Repositories\\TranslationRepository::existByGroupAliasLang<\/a>"],[100,6,"<a href=\"TranslationRepository.php.html#107\">App\\Repositories\\TranslationRepository::existForCopy<\/a>"],[92.3076923076923,5,"<a href=\"TranslationRepository.php.html#129\">App\\Repositories\\TranslationRepository::getAllAsArray<\/a>"],[100,1,"<a href=\"User\/RoleRepository.php.html#11\">App\\Repositories\\User\\RoleRepository::query<\/a>"],[100,1,"<a href=\"User\/RoleRepository.php.html#16\">App\\Repositories\\User\\RoleRepository::getRoles<\/a>"],[100,1,"<a href=\"User\/UserRepository.php.html#14\">App\\Repositories\\User\\UserRepository::query<\/a>"],[100,5,"<a href=\"User\/UserRepository.php.html#19\">App\\Repositories\\User\\UserRepository::getAllForAdmin<\/a>"],[100,1,"<a href=\"User\/UserRepository.php.html#50\">App\\Repositories\\User\\UserRepository::getAdmins<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

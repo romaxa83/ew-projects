@@ -1,0 +1,45 @@
+сделать dump бд
+
+после накатывания миграции проставить характеристики crop данный тип
+изменить версии хешей
+    product => products
+    manufacturer => manufacturers
+    equipment_group => equipment_groups
+    model_description => model_descriptions
+
+pa cmd:dev
+pa cmd:set-translations
+
+переход
+rm composer.lock
+php80 artisan cache:clear
+rm -r vendor
+
+composer80 install
+php80 artisan migrate
+
+в таблице 'notification_template_translations', поправить переменные
+(Dealer -> dealer, date, time -> date_time)
+
+если в корне есть .htaccess - удалить (перед эти уточнить у  devops)
+
+X cp $PWD/public/pdf/logo.svg $PWD/storage/app/public/logo.svg
+X cp $PWD/public/static/logo.png $PWD/storage/app/public/logo.png
+===============================
+
+-- изменить типы хешей в МП
+model-descriptions => model_descriptions
+equipment-groups => equipment_groups
+
+
+--
+
+улучшить по PAGE
+1) дисклеймер перевести в страницы
+2) сделать роут для получения всех страниц (закешировать)
+    на фронте различать по алиасу
+--
+во всех сервисах убрать из аргументов request и заменить dto
+
+при редактирования отчета, если какието данные не приходят, а они были ранее
+у отчета, то обнуляються, подумать над тем , чтиоб оставлять прежнее значение

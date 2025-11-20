@@ -1,0 +1,74 @@
+@startuml
+
+title
+Cхема связей user
+end title
+
+header
+John Deere DEMO
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+'ПОЛЬЗОВАТЕЛЬ'
+package User #7ad378 {
+
+    class User <<(M,#7ad378)>> #tomato {
+        .. users ..
+        __
+        profile(): HasOne
+        roles(): BelongsToMany
+        country(): BelongsTo
+
+        dealers(): BelongsToMany
+        dealer(): BelongsTo
+    }
+
+    class Profile <<(E,#7ad378)>> {
+        .. users_profile ..
+    }
+
+    class Role <<(E,#7ad378)>> {
+        .. users_roles..
+    }
+    class UserRolePivot <<(P,#7ad378)>> #a9abae {
+        .. role_user..
+    }
+
+    class Nationality <<(E,#7ad378)>> {
+        .. nationalities ..
+    }
+}
+
+class DealerUserPivot <<(P,#7ad378)>> #a9abae {
+    .. dealer_user ..
+}
+
+package JD_Data #7ad378 {
+    class Dealer <<(E,#7ad378)>> {
+        .. jd_dealers ..
+    }
+}
+
+User -left[#black]-> Profile
+
+User -up[#black]-> Dealer : dealer()
+User -up[#black]-> DealerUserPivot : dealers()
+DealerUserPivot -up[#black]-> Dealer
+
+User -right[#black]-> UserRolePivot : roles()
+UserRolePivot -right[#black]-> Role
+
+User -down[#black]-> Nationality : country()
+
+right footer
+<#lightblue,#red>|= Version |= Name |= Status|= Created_at |= Updated_at |
+<#lightgreen>| 1.0 | Rodomanov R. | dev | 12.11.2021 | 12.11.2021 |
+endfooter
+
+@enduml

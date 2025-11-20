@@ -1,0 +1,61 @@
+@startuml
+
+title
+СТАТИСТИКА
+получение данных для фильтров
+end title
+
+[-> Filter : /admin/report-list-filter?type=country&forStatistic=true
+rnote over Filter
+Countries
+res:
+ "data": {
+         "Poland": "Poland",
+         "UK": "UK",
+         ....
+    }
+endrnote
+
+[-> Filter : /dealers?forStatistic=true
+rnote over Filter
+Dealers
+res:
+ "data": {
+        "1": "Agristar",
+        "2": "Agrosem",
+        ...
+    }
+endrnote
+
+[-> Filter : /equipment-groups?forStatistic=true
+rnote over Filter
+EG
+res:
+    "data": {
+        "4": "Combines",
+        "13": "SPFHs",
+        "14": "Self-Prop. Sprayers",
+        "17": "Large Tractors (7, 8, 9 Series)",
+        "18": "Mid Tractors (6 Series)"
+    }
+endrnote
+
+[-> Filter : /model-descriptions?eg_id=4&forStatistic=true
+rnote over Filter
+MD
+res:
+    "data": {
+        "19": "VB 2190",
+        "80": "VECTOR 410",
+        "1409": "6170M",
+        ....
+    }
+endrnote
+
+== Запро на получение данных ==
+
+[<- Filter : /statistic/machines?year=2021&country=UK&dealerId=5&eg=4&md=1409,1433
+hnote over Filter : or for all
+[<- Filter : /statistic/machines?year=2021&country=UK,Poland,...&dealerId=5,6,7...&eg=4&md=1409,1433
+
+@enduml

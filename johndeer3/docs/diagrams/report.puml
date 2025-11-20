@@ -1,0 +1,473 @@
+@startuml
+
+    package Report <<Frame>> {
+        class Report {
+            TABLE "reports"
+            __const__
+            CREATED    = 1;    // отчет создан
+            OPEN_EDIT  = 2;    // отчет открыт для редактирования
+            EDITED     = 3;    // отчет отредактирования
+            IN_PROCESS = 4;    // отчет в процессе создания
+            __field__
+            * id : Int
+            * title : Str
+            * salesman_name : Str
+            * assignment : Str
+            * result : Str
+            * status : Str
+            * verify : Bool
+            * client_comment : Str
+            * client_email : Str
+            * created_at : Datetime
+            * updated_at : Datetime
+            * fill_table_date : Datetime
+            __relation__
+            * user_id : FK ->users(id)
+            * user() - ps role only
+            * location() : ->location(report_id)
+            * video() : ->video(report_id)
+            * images() : ->->image(entity_type, entity_id)
+            * clients() : ->client()
+            * reportClients(): ->reportClient()
+        }
+
+        class Location {
+            TABLE "reports_locations"
+
+            __field__
+            * id : Int
+            * lat : Str
+            * long : Str
+            * country : Str
+            * city : Str
+            * region : Str
+            * zipcode : Str
+            * street : Str
+            * district : Str
+            __relation__
+            * report_id : FK ->reports(id)
+            * report()
+        }
+
+        class Video {
+            TABLE "reports_videos"
+
+            __field__
+            * id : Int
+            * name : Str
+            * url : Str
+            * created_at : Datetime
+            * updated_at : Datetime
+            __relation__
+            * report_id : FK ->reports(id)
+            * report()
+        }
+        class ReportClient {
+            TABLE "reports_clients"
+            клиент созданные для
+            отчета
+
+            __const__
+            * TYPE_POTENTIAL = 1
+            * TYPE_COMPETITOR = 0 (конкурент)
+            __field__
+            * id : Int
+            * customer_id : Str
+            * customer_first_name : Str
+            * customer_last_name : Str
+            * company_name : Str
+            * phone : Str
+            * comment : Str
+            __relation__
+            * report_id : FK ->reports(id)
+            * report()
+        }
+        class ReportMachine {
+            TABLE "reports_machines"
+
+            __field__
+            * id : Int
+            * railed_equipment_type : Str
+            * header_brand : Str
+            * header_model : Str
+            * serial_number_header : Str
+            * machine_serial_number : Str
+            __relation__
+            * manufacturer_id : FK ->manufacturer(id)
+            * equipment_group_id : FK ->equipmentGroup(id)
+            * model_description_id : FK ->modelDescription(id)
+            * equipmentGroup()
+            * modelDescription()
+            * manufacturer()
+        }
+        class PivotReportMachine {
+            TABLE "report_report_machine"
+
+            __relation__
+            * report_id : FK ->report(id)
+            * report_machine_id : ->reportMachine(id)
+        }
+        class PivotReportClient {
+            TABLE "client_report"
+            связуещая таблица между отчетом
+            и клиентами jd
+             __const__
+            * TYPE_POTENTIAL = 1
+            * TYPE_COMPETITOR = 0 (конкурент)
+            __field__
+            * quantity_machine : Int
+            __relation__
+            * report_id : FK ->report(id)
+            * client_id : FK ->clientJd(id)
+            * model_description_id : FK ->modelDescription(id)
+        }
+
+        class PivotReportReportClient {
+            TABLE "client_report"
+            связуещая таблица между отчетом
+            и клиентами созданым для отчета
+            __const__
+            * TYPE_POTENTIAL = 1
+            * TYPE_COMPETITOR = 0 (конкурент)
+            __field__
+            * quantity_machine : Int
+            __relation__
+            * report_id : FK ->report(id)
+            * client_id : FK ->reportClient(id)
+            * model_description_id : FK ->modelDescription(id)
+        }
+
+        Report -right-> PivotReportMachine
+        PivotReportMachine -right-> ReportMachine
+        PivotReportMachine -right-> ReportMachine
+        PivotReportMachine -right-> ReportMachine
+
+    }
+
+    package JD1-Data <<Frame>> {
+        class Client {
+            TABLE "jd_clients"
+
+            __const__
+            * TYPE_POTENTIAL = 1
+            * TYPE_COMPETITOR = 0 (конкурент)
+            __field__
+            * id : Int
+            * jd_id : Int
+            * customer_id : Str
+            * company_name : Str
+            * customer_first_name : Str
+            * customer_last_name : Str
+            * customer_second_name : Str
+            * phone : Str
+            * status : Bool
+            * created_at : Datetime
+            * updated_at : Datetime
+            __relation__
+            * region_id : FK ->region(jd_id)
+            * region()
+        }
+        class Region {
+            TABLE "jd_regions"
+
+            __field__
+            * id : Int
+            * jd_id : Int
+            * name : Str
+            * status : Bool
+            * created_at : Datetime
+            * updated_at : Datetime
+        }
+        class EquipmentGroup {
+            TABLE "jd_equipment_groups"
+            группа техник (трактор,
+            комбайн и т.д.)
+
+            __field__
+            * id : Int
+            * jd_id : Int
+            * name : Str
+            * status : Bool
+            * for_statistic : Bool
+            * created_at : Datetime
+            * updated_at : Datetime
+            __relation__
+            * modelDescription()
+        }
+        class ModelDescription {
+            TABLE "jd_model_descriptions"
+            модели групп техник
+
+            __field__
+            * id : Int
+            * jd_id : Int
+            * name : Str
+            * status : Bool
+            * created_at : Datetime
+            * updated_at : Datetime
+            __relation__
+            * eg_jd_id: FK ->EquipmentGroup(jd_id)
+            * equipmentGroup()
+         }
+
+        class Manufacturer {
+            TABLE "jd_manufacturers"
+            производитель техники
+
+            __const__
+            * PARTNER_JD = 1
+            * NOT_PARTNER_JD = 2
+            __field__
+            * id : Int
+            * jd_id : Int
+            * name : Str
+            * status : Bool
+            * is_partner_jd : Int
+            * position : Int
+            * created_at : Datetime
+            * updated_at : Datetime
+        }
+        class Dealer {
+            TABLE "jd_dealers"
+
+            __field__
+            * id : Int
+            * jd_id : Int
+            * jd_jd_id : Str
+            * name : Str
+            * country : Str
+            * status : Bool
+            * created_at : Datetime
+            * updated_at : Datetime
+        }
+    }
+
+    EquipmentGroup <-right-> ModelDescription
+    Client -left-> Region
+
+    package User <<Frame>> {
+        class User {
+            TABLE "users"
+
+            __field__
+            * id : Int
+            * login : Str
+            * email : Str
+            * phone : Str
+            * password : Str
+            * status : Int
+            * jd_id : Int|null
+            * remember_token : Str
+            * lang : Str
+            * created_at : Datetime
+            * updated_at : Datetime
+            __relation__
+            * profile()
+            * dealer_id : FK ->jd_dealer(jd_id)
+            * dealer()
+            * dealers()
+        }
+        class Profile {
+            TABLE "users_profile"
+
+            __field__
+            * id : Int
+            * first_name : Str
+            * last_name : Str
+            * country : Str|null
+            * created_at : Datetime
+            * updated_at : Datetime
+            __relation__
+            * user_id: FK ->user(id)
+        }
+
+        class Role {
+            TABLE "users_profile"
+
+            __field__
+            * id : Int
+            * role : Str
+        }
+
+        class UserRole {
+            TABLE "users_roles"
+
+            __relation__
+            * role_id : FK ->role(id)
+            * user_id : FK ->user(id)
+        }
+
+            class PivotUserDealer {
+                TABLE "users_roles"
+
+                __relation__
+                * dealer_id : FK ->dealer(id)
+                * user_id : FK ->user(id)
+            }
+
+        User -left-> Profile
+        User -right-> UserRole
+        UserRole -right-> Role
+        UserRole -right-> Role
+        UserRole -right-> Role
+    }
+
+    package TableData <<Frame>> {
+        class Feature {
+            TABLE "reports_features"
+            __const__
+            TYPE_GROUND = 1 // для поля
+            TYPE_MACHINE = 2 // для техники
+
+            // какое поля для приложения
+            TYPE_FIELD_STRING = 'string';
+            TYPE_FIELD_INT = 'integer';
+            TYPE_FIELD_BOOL = 'boolean';
+            TYPE_FIELD_SELECT = 'select';
+
+            __field__
+            * id : Int
+            * type : Int
+            * type_field : Str
+            * name : Str
+            * unit : Str
+            * has_value : Bool
+            __relation__
+            * egs()
+            * values()
+        }
+        class FeatureEGPivot {
+            TABLE "report_features_eg_pivot"
+
+            __relation__
+            * feature_id : FK ->feature(id)
+            * eg_id : FK ->equipmentGroup(id)
+        }
+
+        class FeatureValue {
+            TABLE "feature_values"
+
+            __field__
+            * id : Int
+            __relation__
+            * feature_id : FK ->feature(id)
+            * translates()
+            * current()
+        }
+        class FeatureValueTranslates {
+            TABLE "feature_value_translates"
+
+            __field__
+            * id : Int
+            * lang : Str
+            * name : Str
+            __relation__
+            * value_id : FK ->featureValue(id)
+        }
+        class ReportValue {
+            TABLE "report_feature_values"
+
+            __field__
+            * id: Int
+            * value: Str
+            * model_description_name: Str
+            __relation__
+            * value_id : FK ->featureValues(id)
+            * model_description_id : FK ->modelDescription(id)
+        }
+
+        class ReportFeatureValue {
+            TABLE "report_feature_value_relation"
+
+            __relation__
+            * value()
+            * feature()
+            * report_id : FK ->featureValue(id)
+            * feature_id : FK ->reportFeature(id)
+            * value_id : FK ->featureValue(id)
+        }
+
+
+        FeatureValue -down-> FeatureValueTranslates
+    }
+
+
+
+    class Image {
+        TABLE "images"
+
+        __field__
+        * id : Int
+        * model : Str
+        * entity_type : Str
+        * entity_id : Int
+        * url : Str
+        * basename : Str
+        * lat : Str
+        * lon : Str
+        * metadata : Json
+        * created_at : Datetime
+        * updated_at : Datetime
+        * photo_created : Datetime
+        __relation__
+        * entity()
+    }
+
+    class Comment {
+        TABLE "comments"
+
+        __field__
+        * id : Int
+        * model : Str
+        * entity_type : Str
+        * entity_id : Int
+        * text : Str
+        * status : Bool
+        * created_at : Datetime
+        * updated_at : Datetime
+        __relation__
+        * author_id : FK ->users(id)
+        * parent_id : FK ->self(id)
+        * entity()
+    }
+
+class PivotReportClient
+note top: связь с клиентами JD1
+
+class PivotReportReportClient
+note top: связь с клиентами \nсозданными для данного отчета
+
+Report -up-> User
+
+Report -left-> Location
+Report -left-> Video
+Report -up-> Image
+Report -up-> Comment
+
+Report -down-> PivotReportClient
+PivotReportClient -down-> Client
+PivotReportClient -down-> Client
+PivotReportClient -down-> Client
+
+Report -down-> PivotReportReportClient
+PivotReportReportClient -down-> ReportClient
+
+ReportMachine -down-> EquipmentGroup
+ReportMachine -down-> Manufacturer
+ReportMachine -down-> ModelDescription
+
+User -down-> Dealer
+
+User -down-> PivotUserDealer
+PivotUserDealer -down-> Dealer
+
+Report -left-> ReportFeatureValue
+ReportFeatureValue -right-> Feature
+ReportFeatureValue -right-> ReportValue
+ReportValue -down-> ModelDescription
+ReportValue -right-> FeatureValue
+
+EquipmentGroup <-up-> FeatureEGPivot
+FeatureEGPivot <-right-> Feature
+
+@enduml
