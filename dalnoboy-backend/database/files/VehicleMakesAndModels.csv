@@ -1,0 +1,110 @@
+;;1
+Основний ТЗ;FORD;CARGO 3542 D
+Основний ТЗ;FORD;CARGO 4135 DDC
+Основний ТЗ;FORD;CARGO 4142 D
+Основний ТЗ;MAN;TGA 01
+Основний ТЗ;MAN;TGA 18.400
+Основний ТЗ;MAN;TGA 19.414
+Основний ТЗ;DAF;CF 85
+Основний ТЗ;DAF;CF 85.430
+Основний ТЗ;DAF;CF 85.480
+Основний ТЗ;SCANIA;G 400
+Основний ТЗ;SCANIA;G 410
+Основний ТЗ;SCANIA;G 420 LA
+Основний ТЗ;VOLVO;FH 12 420
+Основний ТЗ;VOLVO;FH 12.460
+Основний ТЗ;VOLVO;FH 13.420
+Основний ТЗ;MERCEDES-BENZ;ACTROS 1845
+Основний ТЗ;MERCEDES-BENZ;ACTROS 1841
+Основний ТЗ;MERCEDES-BENZ;ACTROS 1843
+Причіпний ТЗ;SCHMITZ;SKO 24
+Причіпний ТЗ;SCHMITZ;SKO 24L
+Причіпний ТЗ;SCHMITZ;SKO 24S
+Причіпний ТЗ;KRONE;ADP 24
+Причіпний ТЗ;KRONE;ADP 27
+Причіпний ТЗ;KRONE;ADW 27
+Причіпний ТЗ;KOGEL;SN 24
+Причіпний ТЗ;KOGEL;SP 24
+Причіпний ТЗ;KOGEL;SW 24
+Основний ТЗ;IVECO;MAGIRUS
+Основний ТЗ;IVECO;STRALIS AS440
+Основний ТЗ;RENAULT;MAGNUM 440
+Основний ТЗ;RENAULT;MAGNUM 460
+Основний ТЗ;RENAULT;MAGNUM 480
+Причіпний ТЗ;NARKO;23-PP3
+Причіпний ТЗ;NARKO;S3MP23A11
+Причіпний ТЗ;DINKEL;DAP 18000
+Причіпний ТЗ;PACTON;T3001
+Причіпний ТЗ;PACTON;TXD 339
+Причіпний ТЗ;KLEYN TRAILERS;TFSH 10TR PLY
+Причіпний ТЗ;FLIEGL;ASW 256
+Причіпний ТЗ;SPITZER;SF-2445-3
+Причіпний ТЗ;SPITZER;SF-2455
+Причіпний ТЗ;SPITZER;SF-2462
+Причіпний ТЗ;CARNEHL;CCS-GF
+Причіпний ТЗ;CARNEHL;CHKSH
+Причіпний ТЗ;CARNEHL;CSKK-A
+Причіпний ТЗ;GROENEWEGEN;DRO 1227
+Причіпний ТЗ;NOOTEBOOM;OVB
+Причіпний ТЗ;ONBEKEND;STEHMANN
+Причіпний ТЗ;ROJO;KT3 ST
+Причіпний ТЗ;KNAPEN;K200
+Причіпний ТЗ;L.A.G.;0-3-34DT
+Причіпний ТЗ;L.A.G.;0-3-39CL
+Причіпний ТЗ;L.A.G.;0-3-42CT
+Причіпний ТЗ;LECI TRAILER;3E20BDS0P
+Причіпний ТЗ;BENALU;TX34CC2E
+Причіпний ТЗ;HTF;HTF HZO 39
+Причіпний ТЗ;HUFFERMANN;HAR 18.70 LS
+Причіпний ТЗ;IS TRAIL;PK 182
+Причіпний ТЗ;MOL;A68
+Причіпний ТЗ;RENDERS;EURO 500
+Причіпний ТЗ;SCHEUERLE;EURO COMBI
+Причіпний ТЗ;TRAX;T111WOR
+Причіпний ТЗ;VAN HOOL;FS 3106
+Причіпний ТЗ;VAN HOOL;FS 3108
+Причіпний ТЗ;ATM;SK 34
+Причіпний ТЗ;BURG;BPO 12-24 Z
+Причіпний ТЗ;BURG;BPO 12-27
+Причіпний ТЗ;BURG;BPO 12-27 Z
+Причіпний ТЗ;DE BUF;SEPARAATMOTOR
+Причіпний ТЗ;FLOOR;FLA-10-188 
+Причіпний ТЗ;FOTON AUMAN;ETX
+Причіпний ТЗ;GS;O-120-2700 C
+Причіпний ТЗ;LAMBERET;LVFS-3
+Причіпний ТЗ;LAMBERET;LVFS-3F1R
+Причіпний ТЗ;M EN V;EURO 902
+Причіпний ТЗ;MAGYAR;SR34EBNA
+Причіпний ТЗ;MAGYAR;SR34F21RA
+Причіпний ТЗ;MAGYAR;SR34F22RA
+Причіпний ТЗ;SAMRO;ST 39MHPE
+Причіпний ТЗ;SAMRO;ST 39WG
+Причіпний ТЗ;SAMRO;ST 39WGPE
+Причіпний ТЗ;ACKERMANN FRUEHAUF;PA-F 
+Причіпний ТЗ;AKERMAN;VSF18X
+Причіпний ТЗ;AWB;OAWN 12.27 BPW PALLET BOX
+Причіпний ТЗ;CHEREAU;CD-381J
+Причіпний ТЗ;CHEREAU;CD-382G
+Причіпний ТЗ;DAPA;P24
+Причіпний ТЗ;DENNISON;TREILERS
+Причіпний ТЗ;DESOT;OPL-3AT
+Причіпний ТЗ;FAYMONVILLE;MODELSTBZ-4VA
+Причіпний ТЗ;GOLDHOFER;THP/ET 5
+Причіпний ТЗ;GROENEWOLD;TSPH LK
+Причіпний ТЗ;HERMANNS;EUT SSA
+Причіпний ТЗ;KASSBOHRER;DL
+Причіпний ТЗ;KAISER;R2102 F1C
+Причіпний ТЗ;KELBERG;SKBT
+Причіпний ТЗ;LIEBHERR;LTM1200-5.1 
+Причіпний ТЗ;MAISONNEUVE;Food 27000 Liter
+Причіпний ТЗ;MEIERLING;MSK
+Причіпний ТЗ;MEILLER;MZDA 18.23 B
+Причіпний ТЗ;MEUSBURGER;MPA 2
+Причіпний ТЗ;ROBUSTE;DIEPLADER AANHANGER
+Причіпний ТЗ;TERBERG;BC 182
+Причіпний ТЗ;TRACON;TA0909
+Причіпний ТЗ;VAN ECK;PT-3LNN
+Причіпний ТЗ;VOGELZANG;VA 18
+Причіпний ТЗ;WECON;TRANSPORTATION TRAILER LOW LOADER
+Причіпний ТЗ;WELGRO;97WSL43-32 Mengvoeder
+Причіпний ТЗ;MOFFET MOUNTY;M5

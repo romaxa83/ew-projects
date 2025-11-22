@@ -1,0 +1,44 @@
+<?php
+
+
+namespace App\GraphQL\Queries\BackOffice\Users;
+
+
+use App\GraphQL\Types\DownloadType;
+use App\Permissions\Users\UserShowPermission;
+use App\Services\Users\UserService;
+use Core\GraphQL\Queries\BaseQuery;
+use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\SelectFields;
+
+class UsersExportQuery extends BaseQuery
+{
+    public const NAME = 'usersExport';
+    public const PERMISSION = UserShowPermission::KEY;
+
+    public function __construct(private UserService $service)
+    {
+        $this->setAdminGuard();
+    }
+
+    public function args(): array
+    {
+        return [];
+    }
+
+    public function type(): Type
+    {
+        return DownloadType::nonNullType();
+    }
+
+    public function doResolve(
+        mixed $root,
+        array $args,
+        mixed $context,
+        ResolveInfo $info,
+        SelectFields $fields
+    ): array {
+        return $this->service->export();
+    }
+}
