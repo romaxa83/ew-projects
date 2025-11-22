@@ -1,0 +1,17 @@
+{
+    "data": [
+        {
+            "id": "int",
+            "guid": "string|null",
+            "active": "bool",
+            "need_description": "bool",
+            "translations": [
+                {
+                    "title": "string",
+                    "description": "string",
+                    "language": "language"
+                }
+            ]
+        }
+    ]
+}

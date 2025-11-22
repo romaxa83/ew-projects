@@ -1,0 +1,22 @@
+{
+    "data": {
+        "id": 1,
+        "guid": "uuid4-uuid4-uuid4-uuid4",
+        "active": true,
+        "parent_id": null,
+        "translations": [
+            {
+                "id": 1,
+                "title": "Residential",
+                "description": null,
+                "language": "en"
+            },
+            {
+                "id": 2,
+                "title": "Residential __(Translates into Español)",
+                "description": null,
+                "language": "es"
+            }
+        ]
+    }
+}

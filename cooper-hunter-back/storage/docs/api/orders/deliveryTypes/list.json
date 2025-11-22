@@ -1,0 +1,64 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "created_at": 1647000714,
+            "updated_at": 1647000714,
+            "active": true,
+            "translations": [
+                {
+                    "slug": "ground",
+                    "title": "Ground",
+                    "description": null,
+                    "language": "en"
+                },
+                {
+                    "slug": "terrestre",
+                    "title": "Terrestre",
+                    "description": null,
+                    "language": "es"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "created_at": 1647000714,
+            "updated_at": 1647000714,
+            "active": true,
+            "translations": [
+                {
+                    "slug": "overnight",
+                    "title": "Overnight",
+                    "description": null,
+                    "language": "en"
+                },
+                {
+                    "slug": "nocturna",
+                    "title": "Nocturna",
+                    "description": null,
+                    "language": "es"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "created_at": 1647000714,
+            "updated_at": 1647000714,
+            "active": true,
+            "translations": [
+                {
+                    "slug": "next-day",
+                    "title": "Next day",
+                    "description": null,
+                    "language": "en"
+                },
+                {
+                    "slug": "al-dia-siguiente",
+                    "title": "Al día siguiente",
+                    "description": null,
+                    "language": "es"
+                }
+            ]
+        }
+    ]
+}

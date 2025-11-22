@@ -1,0 +1,36 @@
+<?php
+
+namespace Tests\Builders\Orders\Dealer;
+
+use App\Models\Catalog\Products\Product;
+use App\Models\Orders\Dealer\Order;
+use App\Models\Orders\Dealer\PackingSlip;
+use App\Models\Orders\Dealer\PackingSlipSerialNumber;
+use App\Models\Orders\Dealer\SerialNumber;
+use Tests\Builders\BaseBuilder;
+
+class PackingSlipSerialNumberBuilder extends BaseBuilder
+{
+    function modelClass(): string
+    {
+        return PackingSlipSerialNumber::class;
+    }
+
+    public function setPackingSlip(PackingSlip $model): self
+    {
+        $this->data['packing_slip_id'] = $model->id;
+        return $this;
+    }
+
+    public function setSerialNumber(string $value): self
+    {
+        $this->data['serial_number'] = $value;
+        return $this;
+    }
+
+    public function setProduct(Product $model): self
+    {
+        $this->data['product_id'] = $model->id;
+        return $this;
+    }
+}

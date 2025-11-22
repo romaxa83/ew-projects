@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::create(
+            'warranty_info_translations',
+            static function (Blueprint $table) {
+                $table->id();
+
+                $table->text('description');
+                $table->text('notice');
+
+                $table->foreignId('row_id')
+                    ->constrained('warranty_infos')
+                    ->cascadeOnDelete()
+                    ->cascadeOnUpdate();
+
+                $table->string('language');
+                $table->foreign('language')
+                    ->on('languages')
+                    ->references('slug')
+                    ->cascadeOnDelete()
+                    ->cascadeOnUpdate();
+            }
+        );
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('warranty_info_translations');
+    }
+};

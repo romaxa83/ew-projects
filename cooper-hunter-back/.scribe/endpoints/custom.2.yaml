@@ -1,0 +1,182 @@
+- httpMethods:
+    - POST
+  uri: /developer/hs/commercialProjects/add
+  metadata:
+    groupName: Onec
+    groupDescription: Requests belong to the onec service.
+    title: 'Create commercial project'
+    description: 'Data that goes into the onec service when creating a commercial project'
+    authenticated: true
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+    Authorization: Bearer {token}
+  urlParameters: []
+  queryParameters: []
+  bodyParameters:
+    id:
+      name: id
+      description: Commercial project ID in app
+      required: true
+      example: 1
+      type: integer
+    guid:
+      name: guid
+      description: Guid from the onec service (missing in create request)
+      required: false
+      example: 'null'
+      type: 'string'
+    name:
+      name: name
+      description: Name of a commercial project
+      required: true
+      example: Bank of USA
+      type: 'string'
+    status:
+      name: status
+      description: Commercial project status (only <b>'created'</b> in create request)
+      required: true
+      example: 'created'
+      type: 'string'
+    type:
+      name: type
+      description: Commercial project type, only <b>'commercial'</b> type
+      required: true
+      example: 'commercial'
+      type: 'string'
+    country:
+      name: country
+      description: Country (short name)
+      required: true
+      example: 'US'
+      type: 'string'
+    state:
+      name: state
+      description: State (short name)
+      required: true
+      example: 'CA'
+      type: 'string'
+    city:
+      name: city
+      description: City
+      required: true
+      example: 'Los Angeles'
+      type: 'string'
+    address_line_1:
+      name: address_line_1
+      description: Address
+      required: true
+      example: '22121 Clarendon Street'
+      type: 'string'
+    address_line_2:
+      name: address_line_2
+      description: Address
+      required: false
+      example: '22121 Clarendon Street'
+      type: 'string'
+    zip:
+      name: zip
+      description: Zip
+      required: true
+      example: '72079'
+      type: 'string'
+    first_name:
+      name: first_name
+      description: First name
+      required: true
+      example: John
+      type: 'string'
+    last_name:
+      name: last_name
+      description: Last name
+      required: true
+      example: Doe
+      type: 'string'
+    email:
+      name: email
+      description: Email
+      required: true
+      example: 'test@gmail.com'
+      type: 'string'
+    phone:
+      name: phone
+      description: Phone
+      required: true
+      example: '28295990901'
+      type: 'string'
+    company_name:
+      name: company_name
+      description: ''
+      required: true
+      example: 'Sony'
+      type: 'string'
+    company_address:
+      name: company_address
+      description: ''
+      required: true
+      example: '22121 Clarendon Street'
+      type: 'string'
+    description:
+      name: description
+      description: ''
+      required: false
+      example: 'some description'
+      type: 'string'
+    estimate_start_date:
+      name: estimate_start_date
+      description: ''
+      required: false
+      example: 2022-12-01 09:04:53
+      type: 'string'
+    estimate_end_date:
+      name: estimate_end_date
+      description: ''
+      required: false
+      example: 2022-12-01 09:04:53
+      type: 'string'
+    created_at:
+      name: created_at
+      description: ''
+      required:  true
+      example: 2022-12-01 09:04:53
+      type: 'string'
+    request_until:
+      name: request_until
+      description: ''
+      required: false
+      example: 2022-12-01 09:04:53
+      type: 'string'
+    technician:
+      name: technician
+      description: ''
+      required: true
+      type: 'object[]'
+    'technician.guid':
+      name: 'technician.guid'
+      description: ''
+      required: true
+      example: 7d1b18d3-70b8-11ed-90f1-d05099fbe267
+      type: string
+    'technician.name':
+      name: 'technician.name'
+      description: ''
+      required: true
+      example: John Doe
+      type: string
+    'technician.email':
+      name: 'technician.email'
+      description: ''
+      required: true
+      example: test@gmail.com
+      type: string
+
+  responses:
+    - status: 200
+      description: 'Response from the onec service'
+      content:
+        {"guid": "7d1b18d3-70b8-11ed-90f1-d05099fbe267", "error": "", "success": true}
+  responseFields:
+    guid:
+      name: guid
+      description: Guid a commercial project belongs to the onec service
+      type: string

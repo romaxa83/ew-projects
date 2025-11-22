@@ -1,0 +1,14 @@
+{
+    "data": [
+        {
+            "serialNumber": "serial-A",
+            "productId": "1",
+            "productTitle": "productTitle1"
+        },
+        {
+            "serialNumber": "serial-B",
+            "productId": "2",
+            "productTitle": "productTitle2"
+        }
+    ]
+}

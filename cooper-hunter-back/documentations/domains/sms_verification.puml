@@ -1,0 +1,30 @@
+@startuml
+
+title
+Запрос на смс верификацию
+end title
+
+start
+:При запросе, по данному телефону, запись уже есть;
+if (проверяем наличие actionToken) then (true)
+    if (проверяем \n протух ли он) then (true)
+    :удаляем и создаем \nновую запись;
+    else (false)
+    :кидаем исключение \nчто активен actionToken;
+    endif
+else (false)
+:переходим к smsToken;
+ if (проверяем \n протух ли он) then (true)
+    :удаляем и создаем \nновую запись;
+    else (false)
+    :кидаем исключение \nчто активен smsToken;
+    endif
+endif
+stop
+
+right footer
+<#lightblue,#red>|= Version |= Name |= Status|= Created_at |= Updated_at |
+<#lightgreen>| 1.0 | Rodomanov R. | dev | 08.12.2021 | 10.01.2022 |
+endfooter
+
+@enduml

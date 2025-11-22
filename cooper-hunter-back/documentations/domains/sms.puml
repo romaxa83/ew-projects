@@ -1,0 +1,84 @@
+@startuml
+
+title
+Запрос на смс
+end title
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+participant SmsService
+
+
+Mobile -> Backend: request/sms-verify
+
+rnote over Mobile
+data {
+    "phone"
+    OR
+    "accessToken"
+}
+endrnote
+
+
+rnote over Backend
+save phone
+generate and save smsCode
+generate and save smsToken (expired ~ 5min)
+endrnote
+
+Backend -> SmsService: send {"smsCode"}
+Backend -> Mobile: response {"smsToken"}
+
+SmsService -> Mobile: response {"smsCode"}
+
+Mobile -> Backend: request/sms-check
+rnote over Mobile
+data {
+    "smsCode"
+    "smsToken"
+}
+endrnote
+
+rnote over Backend
+find row into db by "smsToken"
+check "smsCode"
+endrnote
+
+rnote over Backend
+generate "actionToken" (expired ~ 60min)
+endrnote
+
+group #7ad378 SUCCESS
+Backend -> Mobile: response {"actionToken"}
+end
+
+group  #FFBBBB ERROR
+Backend -> Mobile: response {"errorCode", "message"}
+end
+
+... **some time for response** ...
+
+Mobile -> Backend:  some request
+
+rnote over Mobile
+data {
+    ....
+    "actionToken"
+    .......
+}
+endrnote
+
+rnote over Backend
+if find row by "actionToken"
+I perceive the data as verified
+them remove "actionToken"
+endrnote
+
+right footer
+<#lightblue,#red>|= Version |= Name |= Status|= Created_at |= Updated_at |
+<#lightgreen>| 1.0 | Rodomanov R. | dev | 08.12.2021 | 10.01.2022 |
+endfooter
+
+@enduml

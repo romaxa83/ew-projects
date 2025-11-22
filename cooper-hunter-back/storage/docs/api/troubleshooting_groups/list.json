@@ -1,0 +1,15 @@
+{
+    "data": [
+        {
+            "id": "int",
+            "translation": {
+                "title": "string",
+                "description": "string",
+                "language": "string"
+            }
+        }
+    ],
+    "links": {},
+    "meta": {}
+}
+

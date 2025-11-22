@@ -1,0 +1,39 @@
+{
+    "data": [
+        "object_1",
+        "object_2",
+        "object_n"
+    ],
+    "links": {
+        "first": "{BASE_URL}/{URI}?page=1",
+        "last": "{BASE_URL}/{URI}?page=100",
+        "prev": "{BASE_URL}/{URI}?page=5",
+        "next": "{BASE_URL}/{URI}?page=7"
+    },
+    "meta": {
+        "current_page": "int",
+        "from": "int",
+        "last_page": "int",
+        "links": [
+            {
+                "url": "{BASE_URL}/{URI}?page=1",
+                "label": "&laquo; Previous",
+                "active": "bool"
+            },
+            {
+                "url": "{BASE_URL}/{URI}?page=2",
+                "label": "1",
+                "active": "bool"
+            },
+            {
+                "url": "{BASE_URL}/{URI}?page=3",
+                "label": "Next &raquo;",
+                "active": "bool"
+            }
+        ],
+        "path": "{BASE_URL}/{URI}",
+        "per_page": "int",
+        "to": "int",
+        "total": "int"
+    }
+}

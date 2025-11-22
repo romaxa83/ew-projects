@@ -1,0 +1,51 @@
+@startuml
+title
+Cхема связей для "Projects"
+end title
+
+left header
+Cooper&Hunter
+endheader
+
+package Projects {
+    class Project {
+        int id
+        string member_type
+        int member_id
+    }
+
+    class System {
+        int id
+        int project_id
+    }
+
+    class SystemUnit {
+        int system_id
+        int product_id
+        string serial_number
+    }
+}
+
+package Catalog {
+    class Product {
+    }
+
+    class ProductSerialNumber {
+    }
+}
+
+package Member {
+    class User {
+    }
+
+    class Technician {
+    }
+}
+
+System --> Project
+SystemUnit --> System
+SystemUnit ---> Product
+
+Project --> User
+Project --> Technician
+@enduml

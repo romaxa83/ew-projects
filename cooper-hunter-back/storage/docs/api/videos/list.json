@@ -1,0 +1,26 @@
+{
+    "data": [
+        {
+            "id": "int",
+            "active": "bool",
+            "link": "string",
+            "translation": {
+                "title": "string",
+                "description": "string",
+                "language": "string"
+            },
+            "group": {
+                "id": "int",
+                "active": "bool",
+                "translation": {
+                    "title": "string",
+                    "description": "string",
+                    "language": "string"
+                }
+            }
+        }
+    ],
+    "links": {},
+    "meta": {}
+}
+

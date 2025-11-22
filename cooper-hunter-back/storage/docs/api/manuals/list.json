@@ -1,0 +1,17 @@
+{
+    "data": [
+        {
+            "id": "int",
+            "group": {
+                "id": "int",
+                "active": "bool",
+                "translation": {
+                    "title": "string",
+                    "language": "string"
+                }
+            }
+        }
+    ],
+    "links": {},
+    "meta": {}
+}

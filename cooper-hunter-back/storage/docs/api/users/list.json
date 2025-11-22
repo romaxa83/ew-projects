@@ -1,0 +1,19 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "email": "email1@gmail.com",
+            "phone": "380978889901"
+        },
+        {
+            "id": 2,
+            "email": "email2@gmail.com",
+            "phone": "380978889902"
+        },
+        {
+            "id": 3,
+            "email": "email3@gmail.com",
+            "phone": "380978889903"
+        }
+    ]
+}

@@ -1,0 +1,52 @@
+@startuml
+
+title
+Cхема связей для "Catalog"
+end title
+
+left header
+Cooper&Hunter
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+'ПОЛЬЗОВАТЕЛЬ'
+package Catalog #7ad378 {
+
+    class Quote <<(M,#7ad378)>> #tomato {
+        .. commercial_quotes ..
+
+        *commercialProject(): BelongsTo
+        *items():HasMany
+        *histories(): HasMany
+        __
+    }
+
+    class Item <<(E,#7ad378)>> {
+        .. commercial_quote_items ..
+
+        *product()
+        *quote()
+        __
+    }
+
+    class History <<(E,#7ad378)>> {
+        .. commercial_quote_histories ..
+
+        *admin()
+        __
+    }
+}
+
+right footer
+<#lightblue,#red>|= Version |= Name |= Status|= Created_at |= Updated_at |
+<#lightgreen>| 1.0 | Rodomanov R. | dev | 08.12.2021 | 12.01.2022 |
+endfooter
+
+@enduml
+

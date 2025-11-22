@@ -1,0 +1,381 @@
+- httpMethods:
+    - POST
+  uri: /developer/hs/dealers/addNew
+  metadata:
+    groupName: Onec
+    groupDescription: Requests belong to the onec service.
+    title: 'Update company'
+    description: 'Data that goes into the onec service when updating a company'
+    authenticated: true
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+    Authorization: Bearer {token}
+  urlParameters: []
+  queryParameters: []
+  bodyParameters:
+    id:
+      name: id
+      description: Company ID in app
+      required: true
+      example: 1
+      type: integer
+    guid:
+      name: guid
+      description: Guid from the onec service
+      required: true
+      example: 7d1b18d3-70b8-11ed-90f1-d05099fbe267
+      type: 'string'
+    authorization_code:
+      name: authorization_code
+      description: Authorization code from the onec service
+      required: false
+      example: '3432532543'
+      type: 'string'
+    status:
+      name: status
+      description: Company status, must be one of <b>'draft'</b>, <b>'approve'</b>, or <b>'register'</b>
+      required: true
+      example: 'draft'
+      type: 'string'
+    type:
+      name: type
+      description: Company type, must be one of <b>'corporation'</b>, <b>'sole_proprietorship'</b>, <b>'partnership'</b> or <b>'other'</b>
+      required: true
+      example: 'corporation'
+      type: 'string'
+    terms:
+      name: terms
+      description: Terms from the onec service
+      required: true
+      example:
+        - [ ]
+      type: 'object[]'
+    'terms[].guid':
+      name: 'terms[].guid'
+      description: ''
+      required: true
+      example: d2c56339-5560-11ed-90f0-d05099fbe267
+      type: string
+    'terms[].name':
+      name: 'terms[].name'
+      description: ''
+      required: true
+      example: some name
+      type: string
+    business_name:
+      name: business_name
+      description: Company name
+      required: true
+      example: 'Walve and Sons'
+      type: 'string'
+    email:
+      name: email
+      description: Company email
+      required: true
+      example: 'test@gmail.com'
+      type: 'string'
+    phone:
+      name: phone
+      description: Company phone
+      required: true
+      example: '28295990901'
+      type: 'string'
+    country:
+      name: country
+      description: Country (short name)
+      required: true
+      example: 'US'
+      type: 'string'
+    state:
+      name: state
+      description: State (short name)
+      required: true
+      example: 'CA'
+      type: 'string'
+    city:
+      name: city
+      description: City
+      required: true
+      example: 'Los Angeles'
+      type: 'string'
+    address_line_1:
+      name: address_line_1
+      description: Address
+      required: true
+      example: '22121 Clarendon Street'
+      type: 'string'
+    address_line_2:
+      name: address_line_2
+      description: Address
+      required: false
+      example: '22121 Clarendon Street'
+      type: 'string'
+    po_box:
+      name: po_box
+      description: PO box
+      required: false
+      example: '72079-0077'
+      type: 'string'
+    zip:
+      name: zip
+      description: Zip
+      required: true
+      example: '72079'
+      type: 'string'
+    taxpayer_id:
+      name: taxpayer_id
+      description: Taxpayer ID
+      required: true
+      example: '2539326525072666'
+      type: 'string'
+    tax:
+      name: tax
+      description: Tax
+      required: false
+      example: '519'
+      type: 'string'
+    websites:
+      name: websites
+      description: Websites
+      required: false
+      example:
+        - http://pfeffer.com/ea-aut-adipisci-mollitia-velit.html
+        - http://paucek.com/impedit-fugiat-dolorem-facere-doloribus-et
+        - http://www.hudson.comlaboriosam-maiores-amet-veniam-molestiae-sit
+      type: 'string[]'
+    marketplaces:
+      name: marketplaces
+      description: Marketplaces
+      required: false
+      example:
+        - http://www.hane.com/
+      type: 'string[]'
+    trade_names:
+      name: trade_names
+      description: Trade names
+      required: false
+      example:
+        - Bednar-Oberbrunner
+        - Durgan, Gottlieb and Stracke
+      type: 'string[]'
+    created_at:
+      name: created_at
+      description: Date of establishment of the company
+      required: true
+      example: 2022-12-01 09:04:53
+      type: 'string'
+    contact_account:
+      name: contact_account
+      description: ''
+      required: true
+      type: 'object[]'
+    'contact_account.name':
+      name: 'contact_account.name'
+      description: ''
+      required: true
+      example: Rem vitae fugit recusandae ut.
+      type: string
+    'contact_account.phone':
+      name: 'contact_account.phone'
+      description: ''
+      required: true
+      example: 18099990904
+      type: string
+    'contact_account.email':
+      name: 'contact_account.email'
+      description: ''
+      required: true
+      example: test@gmail.com
+      type: string
+    'contact_account.country':
+      name: 'contact_account.country'
+      description: ''
+      required: true
+      example: US
+      type: string
+    'contact_account.state':
+      name: 'contact_account.state'
+      description: ''
+      required: true
+      example: CA
+      type: string
+    'contact_account.city':
+      name: 'contact_account.city'
+      description: ''
+      required: true
+      example: Los Angeles
+      type: string
+    'contact_account.address_line_1':
+      name: 'contact_account.address_line_1'
+      description: ''
+      required: true
+      example: 22121 Clarendon Street
+      type: string
+    'contact_account.address_line_2':
+      name: 'contact_account.address_line_2'
+      description: ''
+      required: true
+      example: 22121 Clarendon Street
+      type: string
+    'contact_account.po_box':
+      name: 'contact_account.po_box'
+      description: ''
+      required: true
+      example: 89546-937
+      type: string
+    'contact_account.zip':
+      name: 'contact_account.zip'
+      description: ''
+      required: true
+      example: 99546
+      type: string
+    contact_order:
+      name: contact_order
+      description: ''
+      required: true
+      type: 'object[]'
+    'contact_order.name':
+      name: 'contact_order.name'
+      description: ''
+      required: true
+      example: Rem vitae fugit recusandae ut.
+      type: string
+    'contact_order.phone':
+      name: 'contact_order.phone'
+      description: ''
+      required: true
+      example: 18099990904
+      type: string
+    'contact_order.email':
+      name: 'contact_order.email'
+      description: ''
+      required: true
+      example: test@gmail.com
+      type: string
+    'contact_order.country':
+      name: 'contact_order.country'
+      description: ''
+      required: true
+      example: US
+      type: string
+    'contact_order.state':
+      name: 'contact_order.state'
+      description: ''
+      required: true
+      example: CA
+      type: string
+    'contact_order.city':
+      name: 'contact_order.city'
+      description: ''
+      required: true
+      example: Los Angeles
+      type: string
+    'contact_order.address_line_1':
+      name: 'contact_order.address_line_1'
+      description: ''
+      required: true
+      example: 22121 Clarendon Street
+      type: string
+    'contact_order.address_line_2':
+      name: 'contact_order.address_line_2'
+      description: ''
+      required: true
+      example: 22121 Clarendon Street
+      type: string
+    'contact_order.po_box':
+      name: 'contact_order.po_box'
+      description: ''
+      required: true
+      example: 89546-937
+      type: string
+    'contact_order.zip':
+      name: 'contact_order.zip'
+      description: ''
+      required: true
+      example: 99546
+      type: string
+    locations:
+      name: locations
+      description: ''
+      required: true
+      example:
+        - [ ]
+      type: 'object[]'
+    'locations[].name':
+      name: 'locations[].name'
+      description: ''
+      required: true
+      example: Rem vitae fugit recusandae ut.
+      type: string
+    'locations[].phone':
+      name: 'locations[].phone'
+      description: ''
+      required: true
+      example: 18099990903
+      type: string
+    'locations[].fax':
+      name: 'locations[].fax'
+      description: ''
+      required: true
+      example: 18099990904
+      type: string
+    'locations[].email':
+      name: 'locations[].email'
+      description: ''
+      required: true
+      example: test@gmail.com
+      type: string
+    'locations[].receiving_persona':
+      name: 'locations[].receiving_persona'
+      description: ''
+      required: true
+      example: John Doe
+      type: string
+    'locations[].country':
+      name: 'locations[].country'
+      description: ''
+      required: true
+      example: US
+      type: string
+    'locations[].state':
+      name: 'locations[].state'
+      description: ''
+      required: true
+      example: CA
+      type: string
+    'locations[].city':
+      name: 'locations[].city'
+      description: ''
+      required: true
+      example: Los Angeles
+      type: string
+    'locations[].address_line_1':
+      name: 'locations[].address_line_1'
+      description: ''
+      required: true
+      example: 22121 Clarendon Street
+      type: string
+    'locations[].address_line_2':
+      name: 'locations[].address_line_2'
+      description: ''
+      required: false
+      example: 22121 Clarendon Street
+      type: string
+    'locations[].zip':
+      name: 'locations[].zip'
+      description: ''
+      required: true
+      example: 72079
+      type: string
+
+  responses:
+    - status: 200
+      description: 'Response from the onec service'
+      content:
+        {"guid": "7d1b18d3-70b8-11ed-90f1-d05099fbe267", "error": "", "success": true}
+  responseFields:
+    guid:
+      name: guid
+      description: Guid a company belongs to the onec service
+      type: string

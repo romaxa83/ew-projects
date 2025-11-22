@@ -1,0 +1,16 @@
+<?php
+
+namespace {{ namespace }};
+
+use Core\Dto\BaseGraphQLDto;
+use Core\GraphQL\Helpers\GraphQLTypeName;
+
+class {{ class }}
+{
+    public static function byArgs(array $args): self
+    {
+        $self = new self();
+
+        return $self;
+    }
+}

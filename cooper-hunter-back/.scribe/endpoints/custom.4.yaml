@@ -1,0 +1,120 @@
+- httpMethods:
+    - POST
+  uri: ' '
+  metadata:
+    groupName: Onec
+    groupDescription: Requests belong to the onec service.
+    title: 'Add payment card'
+    description: 'Add payment card to member (company)'
+    authenticated: true
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+    Authorization: Bearer {token}
+  urlParameters: []
+  queryParameters: []
+  bodyParameters:
+    member:
+      name: member
+      description: 'The entity to which the card is attached (user, technician, dealer, ...)'
+      required: true
+      type: 'object[]'
+    'member.type':
+      name: 'member.type'
+      description: Member type, support only <b>'dealer'</b>
+      required: true
+      example: dealer
+      type: string
+    'member.guid':
+      name: 'member.guid'
+      description: Member guid, (a dealer guid)
+      required: true
+      example: '7d1b18d3-70b8-11ed-90f1-d05099fbe267'
+      type: string
+    payment_card:
+      name: payment_card
+      description: Data of a payment card
+      required: true
+      type: 'object[]'
+    'payment_card.type':
+      name: 'payment_card.type'
+      description: ''
+      required: true
+      example: Visa
+      type: string
+    'payment_card.name':
+      name: 'payment_card.name'
+      description: ''
+      required: true
+      example: Dr. Winnifred Trantow V
+      type: string
+    'payment_card.number':
+      name: 'payment_card.number'
+      description: ''
+      required: true
+      example: 4485100135006682
+      type: string
+    'payment_card.cvc':
+      name: 'payment_card.cvc'
+      description: ''
+      required: true
+      example: 381
+      type: string
+    'payment_card.expiration_date':
+      name: 'payment_card.expiration_date'
+      description: ''
+      required: true
+      example: 12/24
+      type: string
+    billing_address:
+      name: billing_address
+      description: Data of a billing address
+      required: true
+      type: 'object[]'
+    'billing_address.country_code':
+      name: 'billing_address.country_code'
+      description: ''
+      required: true
+      example: US
+      type: string
+    'billing_address.state_id':
+      name: 'billing_address.state_id'
+      description: ''
+      required: true
+      example: 1
+      type: string
+    'billing_address.city':
+      name: 'billing_address.city'
+      description: ''
+      required: true
+      example: Violethaven
+      type: string
+    'billing_address.address_line_1':
+      name: 'billing_address.address_line_1'
+      description: ''
+      required: true
+      example: 22121 Clarendon Street
+      type: string
+    'billing_address.address_line_2':
+      name: 'billing_address.address_line_2'
+      description: ''
+      required: true
+      example: Kutch Hill
+      type: string
+    'billing_address.zip':
+      name: 'billing_address.zip'
+      description: ''
+      required: true
+      example: 77230
+      type: string
+
+  responses:
+    - status: 200
+      description: 'Response from the onec service'
+      content:
+        {"guid": "7d1b18d3-70b8-11ed-90f1-d05099fbe267", "error": "", "success": true}
+  responseFields:
+    guid:
+      name: guid
+      description: Guid a payment card belongs to the onec service
+      type: string

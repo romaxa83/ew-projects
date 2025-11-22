@@ -1,0 +1,64 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "guid": "uuid4-uuid4-uuid4-uuid4",
+            "active": true,
+            "parent_id": null,
+            "translations": [
+                {
+                    "id": 1,
+                    "title": "Residential",
+                    "description": null,
+                    "language": "en"
+                },
+                {
+                    "id": 2,
+                    "title": "Residential __(Translates into Español)",
+                    "description": null,
+                    "language": "es"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "guid": "uuid4-uuid4-uuid4-uuid4",
+            "active": true,
+            "parent_id": 1,
+            "translations": [
+                {
+                    "id": 3,
+                    "title": "Single Zone",
+                    "description": null,
+                    "language": "en"
+                },
+                {
+                    "id": 4,
+                    "title": "Single Zone __(Translates into Español)",
+                    "description": null,
+                    "language": "es"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "guid": "uuid4-uuid4-uuid4-uuid4",
+            "active": true,
+            "parent_id": 2,
+            "translations": [
+                {
+                    "id": 5,
+                    "title": "Entry level",
+                    "description": null,
+                    "language": "en"
+                },
+                {
+                    "id": 6,
+                    "title": "Entry level __(Translates into Español)",
+                    "description": null,
+                    "language": "es"
+                }
+            ]
+        }
+    ]
+}

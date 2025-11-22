@@ -1,0 +1,426 @@
+после заливки на прод удалить
+
+добавить переменую - FRONTEND_URL (если ее нету)
+добавить настройки для бд OLMO
+
+- удалить App\Console\Commands\FixDB\SetSortToProjectProtocol
+- удалить App\Console\Commands\FixDB\SetSlugToState
+- удалить App\Console\Commands\FixDB\ChangeOrderStatus
+- удалить App\Console\Commands\FixDB\RemoveWarehouseRecords
+- удалить App\Console\Commands\FixDB\SetOrderItemToPackingSlipItem
+- удалить App\Console\Commands\FixDB\SetPage
+
+перезапустить воркеры
+
+проверить наличие у всех компаний - корпораций
+
+удалить все куски с todo deprecated, а также данные таблицы и поля в таблицах
+- таблица dealer_order_serial_numbers
+- таблица dealer_orders поле files?, tracking_number, tracking_company , shipped_date
+
+добавить в .env
+ONE_C_DEALER_ORDER_CREATE=
+ONE_C_DEALER_ORDER_UPDATE=
+
+раскоментировать удоление картинок при обновлении слипа, увеличить тайм-аут до 20 сек
+----------------------------------------------------
+при заливки перезапустить воркеры
+(второая команда для каждого окружения своя, смотреть в step.json)
+- composer server-restart
+- sudo supervisorctl restart cooperhunter-websocket
+
+-------------------------------------------------------
+{"query": "mutation ($file: Upload!) {commissioningProtocolCreate (protocol: {type: commissioning, translations: [{language: en, title: \"title protocol en\", description: \"desc protcol en\"},{language: es, title: \"title protocol es\", description: \"desc protcol es\"}], file: $file}) {id} }"}
+
+----
+обновить warranty
+php artisan warranty:update
+--------------------------------------------------
+Лицензии у штатов
+
+epa - обычная
+hvac - продвинутая
+--------------------------------------------------
+Если нужно поправить данные в бд, то создаем файл со скриптом в папке - App\Console\Commands\FixDB
+при заливки, он автоматически будет запущен
+--------------------------------------------------
+добавление сортировки
+TLDR:
+1. добавить в модель поле sort, добавить его в fillable
+2. подключить в модель трейт SetSortAfterCreate
+3. добавить модель в енам SortingModelsEnum
+
+// сортировка происходит тут
+App\GraphQL\Mutations\BackOffice\Utilities\Sorting\SortModelsMutation
+----------------------------------------------------
+Переводы
+
+throw new TranslatedException(__('exceptions.commercial.quote.incorrect switching status'), 502);
+
+// так отправляем сообщение  для сайта (можно редактировать с админки)
+_t(
+    Translate::SITE_PLACE,
+    'commercial_commissioning__answer_with_options'
+);
+
+где
+'commercial_commissioning__answer_with_options' - это
+commercial_commissioning - раздел
+__ - разделитель
+answer_with_options - перевод
+----------------------------------------------------
+Создание Alert
+
+- в AlertModelEnum в константе прописываем модель для алертов
+- создаем Enum для алерта
+- в файл alert добавить переводы
+- алерты запускаем через event (создаем event и listener)
+----------------------------------------------------
+commercial_project
+{
+	"id": int,
+	"name": string,
+	"status": string
+	"type": string (commercial|residential)
+	"guid": null|string,
+	"address_line_1": string,
+	"address_line_2": null|string,
+	"city": string,
+	"country": string,
+	"state": string,
+	"zip": string,
+	"first_name": string,
+	"last_name": string,
+	"phone": string,
+	"email": string,
+	"company_name": string
+	"company_address": string
+	"description": null|string
+	"estimate_start_date": string (format- Y-m-d H:i:s)
+	"estimate_end_date": string (format- Y-m-d H:i:s)
+	"created_at": string (format- Y-m-d H:i:s)
+	"request_until": string (format- Y-m-d H:i:s)
+	"technician" : {
+	    "guid": string,
+	    "name": string,
+	    "email": string,
+	}
+}
+предварительная структура по коммерческому проекту,
+после создания возвращают guid, и если в данных будет guid - то надо будет обновить данные.удаление тоже по guid
+
+dealer
+
+{
+	"id": int,
+	"guid": null|string,
+	"authorization_code": null|string,
+	"status": string (draft|approve|register)
+	"type": string (corporation|sole_proprietorship|partnership|other)
+	"terms": null|[
+	    {
+	        'name': "string",
+	        'guid': "string",
+	    }
+	],
+	"business_name": string,
+	"email": string,
+	"phone": string,
+	"country": string,
+	"state": string,
+	"city": string,
+	"address_line_1": string,
+	"address_line_2": null|string,
+	"po_box": string,
+	"zip": string,
+	"taxpayer_id": string,
+	"tax": null|string,
+	"websites": array[empty|string]
+	"marketplaces": array[empty|string]
+	"trade_names": array[empty|string]
+	"created_at": string (format- Y-m-d H:i:s)
+	"media": array[empty|string] (массив ссылок на файлы)
+	"contact_account" : {
+	    "name": string,
+	    "phone": string,
+	    "email": string,
+	    "country": string,
+        "state": string,
+        "city": string,
+        "address_line_1": string,
+        "address_line_2": null|string,
+        "po_box": string,
+        "zip": string,
+	},
+	"contact_order" : {
+        "name": string,
+    	"phone": string,
+    	"email": string,
+    	"country": string,
+        "state": string,
+        "city": string,
+        "address_line_1": string,
+        "address_line_2": null|string,
+        "po_box": string,
+        "zip": string,
+    },
+    "contact_warehouse" : {
+        "name": string,
+        "phone": string,
+        "email": string,
+        "country": string,
+        "state": string,
+        "city": string,
+        "address_line_1": string,
+        "address_line_2": null|string,
+        "po_box": string,
+        "zip": string,
+    }
+    "locations": [
+        {
+            "name": string,
+            "phone": string,
+            "fax": string,
+            "country": string,
+            "state": string,
+            "city": string,
+            "address_line_1": string,
+            "address_line_2": null|string,
+            "zip": string,
+        }
+    ]
+}
+предварительная структура данных дилера для передачи в 1с, если guid = null - создается дилер, и возвращается guid,
+если guid есть - данные нужно обновить
+
+уточнить у заказчика передовать ли документы (или они их буду просматривать в админке), и если да,
+то в каком формате?
+
+обновил данные которые можно редактировать в заказе для 1с, все поля пожно
+редактировать по отдельности, кроме products и files, если они передаются (могут и не передаватся),
+то там все поля обязательный, по serial_number - нужно уточнение
+{
+    "status": "string",
+    "term": "string",
+    "tracking_number": "string",
+    "tracking_company": "string",
+    "shipped_date": "string",
+    "invoice": string,
+    "invoice_date": "string",
+    "tax": numeric,
+    "shipping_price": numeric,
+    "total": numeric,
+    "total_discount": numeric,
+    "total_with_discount": numeric,
+    "files": [
+        {
+            "name": "string",
+            "url": "string",
+        }
+    ],
+    "products": [
+        {
+            "guid": "string", - guid товара
+            "discount": "numeric,
+            "qty": "numeric",
+            "total": "numeric",
+            "price": "numeric",
+        }
+    ]
+}
+
+по возвращаемой ошибки
+
+{
+}
+
+dealer_order
+
+{
+	"id": int,
+	"guid": null|string,
+	"delivery_type": string (ltl|pickUp|train|truck),
+	"payment_type": string (card|paypal|wiredTransfer|check),
+    "po": string,
+    "comment": string,
+    "payment_card_guid": null|string,
+    "created_at": string (format- Y-m-d H:i:s),
+    "media": array[empty|string] (массив ссылок на файлы),
+    "error": string|null
+    "company": {
+        "guid": string
+    }
+    "locations": {
+        "name": string,
+        "phone": string,
+        "fax": string,
+        "country": string,
+        "state": string,
+        "city": string,
+        "address_line_1": string,
+        "address_line_2": null|string,
+        "po_box": null|string,
+        "zip": string,
+    },
+    "products": [
+        {
+            "guid": string (guid - товара),
+            "price": float,
+            "qty": int,
+        }
+    ]
+}
+
+add payment card
+
+{
+    "member": {
+        "type": string (dealer)
+        "guid": string
+    },
+    "payment_card": {
+        "type": string (visa|mastercard)
+        "name": string
+        "number": string
+        "cvc": string
+        "expiration_date": string (format - "12/24")
+    },
+    "billing_address": {
+        "country": string,
+        "state": string,
+        "city": string,
+        "address_line_1": string,
+        "address_line_2": null|string,
+        "zip": string,
+    }
+}
+
+предварительная структура данных для передачи в 1с платежных карт,
+в ответ приходит guid данной карты, внутри системы выбрана реализация универсальной логики,
+т.е. привязывать карты можно будет к разным сущностям (дилер, пользователь, техник), поэтому
+есть секция member - где type - это тип пользователя (на данном этапе только дилер) и его
+guid - для привязки карточки
+
+{
+    "guid" : string
+}
+удалени , guid - которую нужно удалить
+
+----------------------------------------------------
+Логика Commissioning - (Процесс введения в эксплуатацию)
+
+В админке создаются протоколы (с переводом), и указывается тип для протокола, commissioning или pre-commissioning.
+Новый протоколы (созданные в админке) добавляються только тем проектам,в которые еще не закрыт
+commissioning (если тип протокола commissioning) или не закрыт pre-commissioning (если тип протокола pre-commissioning)
+
+К созданому протоколу создаются вопросы (с переводами), а также у вопроса есть:
+    - тип ответ -
+        - checkbox - может быть несколько ответов, из нескольких вариантов
+        - radio - может один ответ, из нескольких вариантов (зачастую "да" или "нет")
+        - text - ответ должен быть введеный текст
+    - тип фотографии (наличие фото в ответе)
+        - required - обязательно
+        - not_required - не обязательно (не выводить загрузчик на фронте)
+        - not_needed - не обязательно, но можно загрузить
+    - статус (для проектных протоколов - т.е. протоколы которые присвоенны к проекту)
+        - draft - вопрос создан, его можно редактировать, не присваивается текущим
+                проектным протоколам (которые не закрыта), и новым проектным протоколам
+        - active - вопрос ативирован, закрыт для редактирования, присваивается всем текущим, не
+                закрытым, проектным протоколам, или новым проектным протоколам при старте commissioning
+        - inactive - вопрос деактивирован, закрыт для редактирования, удаляется у текущих ,не закрытых,
+                проектных протоколов, если на данный вопрос нет ответа, потвержденным админом (status - accept),
+                в потивном случае остается, также остается у все старых закрытах протоколов, не добавляется к
+                новым проектным протоколам
+
+К вопросов с типом - "checkbox" и "radio", создаются варианты ответов
+Все это является как бы каталогом, т.к. все протоколы и их ответы есть общии для все проектов.
+
+У проекта есть четыри даты, (когда проект создается они - null) -
+    start_pre_commissioning_date
+    end_pre_commissioning_date
+    start_commissioning_date
+    end_commissioning_date
+по ним удобно опредеять, стартанул ли для проекта commissioning, на каком он этапе, и закрыт ли.
+Когда стартует commissioning (его запускает админ или 1с), проекту проставляется дата - start_pre_commissioning_date,
+все проекты и их вопроса (в статусе - active), привязываются к проекту, т.е. у проекта появляются записи -
+"проектный протокол" и "проектный вопрос" которые связываю данный проект с протоколом и его вопросами. Сначала
+доступны для ответов протоколы со статусом - pre-commissioning, когда все протоколы по данному типу будут закрыть -
+проставляються даты end_pre_commissioning_date и start_commissioning_date, и доступны все протоколы с типом -
+commissioning, когда и они будут все закрыты, проставляется дата - end_commissioning_date и для данного
+проекта commissioning - закрывается и считается пройденым.
+
+Проектный протокол - хранит информаци о прохождени протококола, а также имеет выход на его
+проектные вопросы, у него есть:
+    - статус :
+        - draft - проектный протокол создан и привязан  к проекту, но по протоколу
+                еще нет активности
+        - pending - у протокола есть ответ (от техника), хотя бы по одному вопросу
+        - issue - у протокола один или более вопросов откланен админом
+        - done - все вопросы принятый админом, протокол закрыт, и больше не подвержен манипуляциям
+Проектный вопрос - хранит информацию о прохождение вопроса, а также он хранит ответ от техника,
+у него есть:
+    - статус:
+        - none - у вопроса нет ответа
+        - draft - у вопроса есть ответ
+        - accept - ответ принят админом
+        - reject - ответ откланен админом
+
+Техник может отвечать как на все вопросы сразу в протоколе, так и на один вопрос, отвечать можно
+сначала только на протокола с типом - pre_commissioning, когда данные протоколы будут закрыта и
+стартует commissioning - можно ответчать на вопроса из протоколов с типом - commissioning,нельзя
+ответить на вопрос если протокол уже закрыт.Когда админ принимает ответ - на него уже нельзя больше ответить,
+если админ отклоняет, то техник должен изменить ответ.
+После каждого изменения статуса вопроса админом (accept/reject), если вопрос отклонен - протокол переходит
+в статус - issue, у будет в этом статусе пока в протоколе не будет ни одного отклоненого вопроса.Если
+вопрос принят, проверяется может ли протокол быть закрыт (все вопросы в нем должны быть приняты), если да -
+то закрывается. Если закрытый протокл был с типом - pre_commissioning , то проверям можно ли закрыть
+pre_commissioning (все протоколы данного типа должны быть закрыты) и стартануть commissioning, если
+закрытый протокл был с типом commissioning, то проверям можно ли закрыть в целом commissioning (все
+протоклы должны быть закрыты), и если да - то закрываем, и на это commissioning заканчивается.
+----------------------------------------------------
+Заказ дилера
+
+- ОТВЕТ ОТ 1С ПРИ СОЗДАНИИ ЗАЯВКИ
+    после создания заказа, он отправляется в 1с, если все норм, возвращаеться такая структура:
+        $res = [
+            "success" => true,
+            "guid" => "70751f6f-9b0d-3c5a-99fc-307d043641d5",
+            "error" => ""
+        ];
+    заявка переходит в статус sent
+
+    если при проверке, на стороне 1с, возникает оишибка (лимит, отсрочка, оплата и остатки товара на складе),
+    то возвращаеться такая структура:
+        $res = [
+            "success" => true,
+            "guid" => "70751f6f-9b0d-3c5a-99fc-307d043641d5",
+            "error" => "text error"
+        ];
+    где в error - описываеться ошибка (возникшая при проверке заявки), которая выводиться на фронте, статус
+    заявки остается draft, даже если прийдет guid заказа он не будет сохранен,
+
+    если возникает системная ошибка, возвращается такая стуктура:
+        $res = [
+            "success" => false,
+            "guid" => "",
+            "error" => "some error"
+        ];
+    заявка остается в статусе draft
+
+    для понимания где есть системная ошибка и ошибка при формирования заказа, т.к. текст ошибки приходит в поле - error,
+    success - в первом случае должен быть false, а во втором - true
+----------------------------------------------------
+По инвойсам
+
+появилось поле has_invoice у заказа (default=false), его нужно передовать чтоб понимать что инфойс формируеться только у заказа,
+если оно будет false, инвойc у заказа не сфорируется (будет кинуто исключение), даже если буду переданны все остальные данные
+
+при добавлении данных по packingSlip, у него сразу генерится инвойс, в том случае если переданы поля invoice, invoice_at и
+у заказ поле has_invoice стоит в false, в противном случае инвойс для packingSlip не сгенерится
+
+если для packingSlip нужно формировать инвойс, 1с также должна передовать и цены для данного инвойса
+(tax, total, total_discount, total_with_discount, shipping_price)
+
+даже если инвойс формируется только для packingSlip, цены и редактировать items (товары в заказе) нужно не
+только в packingSlip но и для заказа в целом, чтоб корректно формировалось письмо для сравнения товаров и
+правильно отображались данные в эстимайте и в админке

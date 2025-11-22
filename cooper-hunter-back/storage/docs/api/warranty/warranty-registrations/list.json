@@ -1,0 +1,67 @@
+{
+    "data": [
+        {
+            "id": "int",
+            "technician_verified": "bool",
+            "notice": "string|null",
+            "warranty_status": "Enum: WarrantyStatus",
+            "type": "Enum: WarrantyType",
+            "user_info": {
+                "is_user": "bool",
+                "first_name": "string",
+                "last_name": "string",
+                "email": "string",
+                "company_name": "null or string",
+                "company_address": "null or string"
+            },
+            "address_info": {
+                "country": "string",
+                "street": "string",
+                "state": "string",
+                "city": "string",
+                "zip": "string"
+            },
+            "product_info": {
+                "purchase_date": "timestamp",
+                "installation_date": "timestamp",
+                "installer_license_number": "string",
+                "purchase_place": "string (address)"
+            },
+            "created_at": "timestamp",
+            "units": [
+                {
+                    "product_id": "int",
+                    "product_guid": "uuid-4",
+                    "product_title": "string",
+                    "serial_number": "string"
+                }
+            ],
+            "technician": {
+                "id": "int",
+                "email": "string",
+                "phone": "string",
+                "guid": "string"
+            },
+            "system": {
+                "id": "int",
+                "warranty_status": "int",
+                "name": "string",
+                "description": "string",
+                "created_at": "timestamp",
+                "project": {
+                    "id": "int",
+                    "name": "string",
+                    "created_at": "timestamp",
+                    "technician": {
+                        "id": "int",
+                        "email": "string",
+                        "phone": "string",
+                        "guid": "string"
+                    }
+                }
+            }
+        }
+    ],
+    "links": {},
+    "meta": {}
+}

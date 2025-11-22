@@ -1,0 +1,105 @@
+1,,Residential
+2,1,Single Zone
+3,2,Entry level
+4,3,Mia NG
+5,4,Outdoors
+6,4,Indoors
+7,6,Wall mounts
+8,3,Mia NY
+9,8,Outdoors
+10,8,Indoors
+11,2,Energy star
+12,11,Outdoors
+13,11,SPH
+14,13,Wall mounts
+15,13,Ceiling Cassette
+16,13,Slim Duct
+17,13,UFC
+18,13,MC
+20,11,OLV
+21,20,Wall mounts
+22,2,Hyper heat
+23,22,Outdoors
+24,22,Sophia hyper
+25,24,Wall mounts
+26,24,Ceiling Cassette
+27,24,Slim Duct
+28,24,UFC
+29,24,MC
+30,22,Astoria
+31,30,Wall mounts
+32,1,Multi Zone
+33,32,Outdoors
+34,33,Energy star
+35,33,Hyper heat
+36,32,Indoors
+37,36,Wall mounts
+38,37,SPH
+39,37,OLV
+40,37,Astoria
+41,36,Ceiling Cassette
+42,36,Slim Duct
+43,36,UFC
+44,36,MC
+45,,Room AC
+46,45,PTAC
+47,45,Portable
+48,45,Dehumidifier
+49,45,Air handler units
+50,,Light commercial
+51,50,Outdoors
+52,51,Energy
+53,51,Hyper
+54,50,Indoors
+55,54,Ceiling Cassette
+56,54,Slim duct
+57,54,UFC
+58,,Commercial
+59,58,VRF
+60,58,Air heat pump
+61,,Accessories
+62,61,Mini-split
+63,62,Installation kit
+64,62,Wall mount bracket
+65,61,PTAC
+66,65,Grille
+67,65,Wall sleeve
+68,61,WIFi
+69,68,Sophia
+70,68,Mia
+71,68,Smart port
+72,61,Remotes
+73,,Discontinued
+74,73,Entry level
+75,74,Outdoors
+76,74,Indoors
+77,76,Wall mounts
+78,73,Viktoria
+79,78,Outdoors
+80,78,Indoors
+81,73,Energy star
+82,81,Outdoors
+83,81,SPH
+84,83,Wall mounts
+85,83,Ceiling Cassette
+86,83,Slim Duct
+87,83,UFC
+88,83,MC
+89,81,OLV
+90,89,Wall mounts
+91,73,Hyper heat
+92,91,Outdoors
+93,91,Dakota
+94,93,Wall mounts
+95,73,Outdoors
+96,95,Energy star
+97,95,Hyper heat
+98,73,Indoors
+99,98,Wall mounts
+100,99,SPH
+101,99,OLV
+102,99,Astoria
+103,98,Ceiling Cassette
+104,98,Slim Duct
+105,98,UFC
+106,98,MC

@@ -1,0 +1,110 @@
+<?php
+
+use Core\Chat\Enums\MessageTypeEnum;
+use Core\Chat\Facades\Chat;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        $conversation = Chat::getConversationTable();
+        $participation = Chat::getParticipationTable();
+        $message = Chat::getMessageTable();
+        $messageNotification = Chat::getMessageNotificationTable();
+
+        Schema::create(
+            $conversation,
+            static function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->boolean('direct_message')->default(false);
+                $table->string('title')->nullable();
+                $table->string('description')->nullable();
+                $table->timestamps();
+            }
+        );
+
+        Schema::create(
+            $participation,
+            static function (Blueprint $table) use ($conversation) {
+                $table->bigIncrements('id');
+                $table->bigInteger('conversation_id')->unsigned();
+                $table->bigInteger('messageable_id')->unsigned();
+                $table->string('messageable_type');
+                $table->timestamps();
+
+                $table->unique(['conversation_id', 'messageable_id', 'messageable_type'], 'participation_index');
+
+                $table->foreign('conversation_id')
+                    ->references('id')
+                    ->on($conversation)
+                    ->onDelete('cascade');
+            }
+        );
+
+        Schema::create(
+            $message,
+            static function (Blueprint $table) use ($conversation, $participation) {
+                $table->bigIncrements('id');
+                $table->text('body')->nullable();
+                $table->bigInteger('conversation_id')->unsigned();
+                $table->bigInteger('participation_id')->unsigned()->nullable();
+                $table->enum('type', MessageTypeEnum::getValues())->default(MessageTypeEnum::TEXT);
+                $table->json('meta')->nullable();
+                $table->timestamps();
+
+                $table->foreign('participation_id')
+                    ->references('id')
+                    ->on($participation)
+                    ->onDelete('set null');
+
+                $table->foreign('conversation_id')
+                    ->references('id')
+                    ->on($conversation)
+                    ->onDelete('cascade');
+            }
+        );
+
+        Schema::create(
+            $messageNotification,
+            static function (Blueprint $table) use ($message, $conversation, $participation) {
+                $table->bigIncrements('id');
+                $table->bigInteger('message_id')->unsigned();
+                $table->bigInteger('messageable_id')->unsigned();
+                $table->string('messageable_type');
+                $table->bigInteger('conversation_id')->unsigned();
+                $table->bigInteger('participation_id')->unsigned();
+                $table->boolean('is_seen')->default(false);
+                $table->boolean('is_sender')->default(false);
+                $table->timestamps();
+                $table->softDeletes();
+
+                $table->index(['participation_id', 'message_id'], 'participation_message_index');
+
+                $table->foreign('message_id')
+                    ->references('id')
+                    ->on($message)
+                    ->onDelete('cascade');
+
+                $table->foreign('conversation_id')
+                    ->references('id')
+                    ->on($conversation)
+                    ->onDelete('cascade');
+
+                $table->foreign('participation_id')
+                    ->references('id')
+                    ->on($participation)
+                    ->onDelete('cascade');
+            }
+        );
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists(Chat::getMessageNotificationTable());
+        Schema::dropIfExists(Chat::getMessageTable());
+        Schema::dropIfExists(Chat::getParticipationTable());
+        Schema::dropIfExists(Chat::getConversationTable());
+    }
+};

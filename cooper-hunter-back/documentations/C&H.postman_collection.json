@@ -1,0 +1,6075 @@
+{
+	"info": {
+		"_postman_id": "ecf02d40-0b9d-4c1d-bfd3-ba9166564e40",
+		"name": "C&H",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9364618"
+	},
+	"item": [
+		{
+			"name": "BackOffice",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Q Login as super admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody).data;",
+											"if (jsonData.adminLogin.token_type && jsonData.adminLogin.access_token) {",
+											"    postman.setEnvironmentVariable(\"token\", jsonData.adminLogin.token_type + \" \" + jsonData.adminLogin.access_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"token\", \"\");",
+											"}",
+											"if (jsonData.adminLogin.refresh_token) {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", jsonData.adminLogin.refresh_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", \"\");",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    adminLogin (\n        username: \"admin@admin.com\",\n        password: \"password1\"\n    ){\n        token_type\n        access_token\n        access_expires_in\n        refresh_token\n        refresh_expires_in\n        member_guard\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q Profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query {\n    adminProfile {\n        id\n        permission\n        email\n        name\n        language {\n            slug\n        }\n        roles {\n            name\n        }\n        permissions {\n            name\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Q Admins paginator",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    admins {\n        data {\n            id\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q Admin available grants",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    adminAvailableGrants {\n        name\n        # permissions {\n        #     name\n        # }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Catalog",
+					"item": [
+						{
+							"name": "Product",
+							"item": [
+								{
+									"name": "Q Product paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    products\n    (\n        # ids: [1674]\n        # category_id: 5\n        unit_type: accessory\n    ) \n    {\n        data {\n            id\n            owner_type\n            img\n            # relations {\n            #     id\n            # }\n            # category {\n            #     id\n            #     translation {\n            #         title\n            #     }\n            # }\n            # translations {\n            #     language\n            #     title\n            #     description\n            # }\n        }\n        meta {\n            total\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q Product ONE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    product\n    (\n        id: 2035\n    ) \n    {\n        id\n        guid\n        unitType {\n            id\n            name\n        }\n        labels {\n            id\n            color_type\n            background_color\n        }\n        category {\n            id\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M Product UPDATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   productUpdate (id:2007, product:{\n        slug: \"product_slug_1\"\n        title: \"product_title_1\"\n        category_id: 5,\n    #    relations: [191, 192]\n    #    troubleshoot_ids: [63,73,67]\n        translations: [\n            {\n                language: en,\n                seo_title: \"seo title\",\n                seo_description: \"seo description\"\n                seo_h1: \"seo h1\"\n            },\n            {\n                language: es,\n                seo_title: \"seo title\",\n                seo_description: \"seo description\"\n                seo_h1: \"seo h1\"\n            }\n       ]\n   }) {\n      id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M Product CREATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   productCreate (product:{\n        slug: \"product_slug_7\"\n        title: \"product_title_1\"\n        category_id: 1\n        unit_type_id: 2\n        label_ids: [1, 2]\n        translations: [\n             {\n                language: en,\n                seo_title: \"Quos aut animi nulla\",\n                seo_description: \"Queen had ordered. They very soon found an opportunity of saying to herself that perhaps it was good practice to say when I got up in great disgust, and walked two and two, as the hall was very glad.\"\n                seo_h1: \"h1\"\n            },\n             {\n                language: es,\n                seo_title: \"Quos aut animi nulla\",\n                seo_description: \"Queen had ordered. They very soon found an opportunity of saying to herself that perhaps it was good practice to say when I got up in great disgust, and walked two and two, as the hall was very glad.\"\n                seo_h1: \"h1\"\n            }\n        ]\n   }) {\n      id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Category",
+							"item": [
+								{
+									"name": "Q Category paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    categories\n    # (\n        # with_olmo: false\n    # ) \n    {\n        id\n        slug\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q Category List as Tree",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    categoriesListAsTree\n    (with_olmo: true) \n    {\n        id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q Category For Select",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    categoriesForSelect\n    # (with_olmo: true) \n    {\n        id\n        name\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Troubleshoot",
+							"item": [
+								{
+									"name": "Group",
+									"item": [
+										{
+											"name": "Get paginator",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "{{token}}",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    troubleshootGroup {\n        data {\n            id\n            # troubleshoots {\n            #     id\n            # }\n            translation {\n                title\n            }\n        }\n        meta {\n            total\n        }\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Get paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    troubleshoots {\n        data {\n            id\n            name\n\n        }\n        meta {\n            total\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "UnitType",
+							"item": [
+								{
+									"name": "Q Unit type list",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    unitTypes \n    {\n       id\n       name\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Pdf",
+							"item": [
+								{
+									"name": "M Upload",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-type",
+												"value": "multipart/form-data",
+												"description": "Multipart",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "operations",
+													"value": "{\"query\": \"mutation ($pdf: Upload!) {pdfUpload (pdf: $pdf) {id} }\"}",
+													"type": "text"
+												},
+												{
+													"key": "map",
+													"value": "{ \"pdf\": [\"variables.pdf\"] }",
+													"type": "text"
+												},
+												{
+													"key": "pdf",
+													"type": "file",
+													"src": "/home/romaxa/Документы/3.10 Опасный os.exit.pdf"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M ReUpload",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-type",
+												"value": "multipart/form-data",
+												"description": "Multipart",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "operations",
+													"value": "{\"query\": \"mutation ($pdf: Upload!) {pdfReUpload (id:29, pdf: $pdf) {id} }\"}",
+													"type": "text"
+												},
+												{
+													"key": "map",
+													"value": "{ \"pdf\": [\"variables.pdf\"] }",
+													"type": "text"
+												},
+												{
+													"key": "pdf",
+													"type": "file",
+													"src": "/home/romaxa/Документы/3.11 Непопулярный runtime.Goexit.pdf"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M DELETE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   pdfDelete (id: 2)\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q Paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    pdfs \n    {\n       data {\n           id\n           pdf {\n               id\n               url\n           }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q ONE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    pdfs (id:29)\n    {\n       data {\n           id\n           pdf {\n               id\n               url\n           }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Manual",
+							"item": [
+								{
+									"name": "GROUP",
+									"item": [
+										{
+											"name": "Q Paginator",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    manualGroups\n    (\n        per_page:100\n    ) \n    {\n       data {\n           id\n           show_commercial_certified\n       }\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M Create",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "Multipart",
+														"key": "Content-type",
+														"type": "text",
+														"value": "multipart/form-data",
+														"disabled": true
+													},
+													{
+														"key": "Authorization",
+														"value": "{{token}}",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   manualGroupCreate (manual_group:{\n        show_commercial_certified: true\n        translations: [\n             {\n                language: \"en\",\n                title: \"Quos aut animi nulla\"\n            },\n            {\n                language: \"es\",\n                title: \"Quos aut animi nulla\",\n            }\n        ]\n   }) {\n        id\n        show_commercial_certified\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M Update",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "Multipart",
+														"key": "Content-type",
+														"type": "text",
+														"value": "multipart/form-data",
+														"disabled": true
+													},
+													{
+														"key": "Authorization",
+														"value": "{{token}}",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   manualGroupUpdate (manual_group:{\n        id: 7\n        show_commercial_certified: false\n        translations: [\n             {\n                language: \"en\",\n                title: \"Quos aut animi nulla\"\n            },\n            {\n                language: \"es\",\n                title: \"Quos aut animi nulla\",\n            }\n        ]\n   }) {\n        id\n        show_commercial_certified\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "M Create",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data"
+											},
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "operations",
+													"value": "{\"query\": \"mutation ($pdf: Upload!) {manualCreate (manuals: [{manual_group_id: 1, pdf: $pdf}]) {id} }\"}",
+													"type": "text"
+												},
+												{
+													"key": "map",
+													"value": "{ \"pdf\": [\"variables.pdf\"] }",
+													"type": "text"
+												},
+												{
+													"key": "pdf",
+													"type": "file",
+													"src": "/home/roman/Загрузки/Информация.pdf"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Labels",
+							"item": [
+								{
+									"name": "Q paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    labels\n    {\n        data {\n            id\n            color_type\n        }\n        meta {\n            total\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M CREATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   labelCreate (input:{\n        color_type: pink\n        translations: [\n             {\n                language: en,\n                title: \"Label pink\",\n            },\n             {\n                language: es,\n                title: \"Label pink\",\n            }\n        ]\n   }) {\n      id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Commercial",
+					"item": [
+						{
+							"name": "Quotes",
+							"item": [
+								{
+									"name": "Q Paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialQuotes\n    (\n        # id: 1\n        status: done\n        date_from: \"2022-07-06\"\n        date_to: \"2022-07-08\"\n        # technician_name: \"Technician \"\n    ) \n    {\n       data {\n           id\n           status\n           created_at\n           shipping_address\n           commercial_project {\n               name\n               member {\n                   name\n               }\n           }\n           file {\n               id\n               url\n           }\n           email\n           send_detail_data\n           closed_at\n           shipping_price\n           tax\n           sub_total\n           discount_percent\n           discount_sum\n           discount\n           tax_sum\n           items {\n               id\n               name\n               qty\n               price\n               total\n           }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q Paginator HISTORY",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialQuoteHistories\n    (\n        quote_id: 1\n        # id:1\n    ) \n    {\n       data {\n           id\n           estimate\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET QUOTE HISTORY PDF",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialQuoteHistoryPdf\n    (\n        id:1\n    ) \n    {\n       message\n       type\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET QUOTE PDF PREVIEW",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialQuotePdf\n    (\n        id:47\n    ) \n    {\n       message\n       type\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q COUNTER",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialQuoteCounter \n    {\n        pending\n        done\n        final\n        total\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M UPDATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   commercialQuoteUpdate (\n       id:1\n       input: {\n           status: done\n           send_detail_data: true\n           shipping_price: 19\n           tax: 15\n           discount_percent: 11\n        #    discount_sum: 67\n            items: [\n                # {\n                #     name: \"test\"\n                #     qty: 2\n                #     price: 9\n                # },\n                # {\n                #     product_id: 33\n                #     qty: 23\n                #     price: 9\n                # }\n            ]\n       }   \n    ){\n      id\n      status\n      shipping_price\n      tax\n      discount_percent\n      discount_sum\n      items {\n          id\n      }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M SEND EMAIL",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   commercialQuoteSendEmail (\n       id:1\n    ) {\n        message\n        type\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Project",
+							"item": [
+								{
+									"name": "Units",
+									"item": [
+										{
+											"name": "Q Paginator",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    commercialProjectUnits\n    (commercial_project_id: 60) \n    {\n       data {\n           id\n       }\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Q EXCEL LINK",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    commercialProjectUnitsExcel\n    (commercial_project_id: 39) \n    {\n       message\n       type\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Q Paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialProjects\n    (\n        # per_page:100\n        # page: 5\n        id: 60\n    ) \n    {\n       data {\n           id\n        #    member {\n        #        id\n        #    }\n        #    name\n        #    address_line_1\n        #    address_line_2\n        #    city\n        #    state {\n        #        id\n        #    }\n        #    zip\n        #    first_name\n        #    last_name\n        #    phone\n        #    email\n        #    company_name\n        #    company_address\n        #    description\n        #    estimate_start_date\n        #    estimate_end_date\n        #    request_until\n        #    quotes {\n        #        id\n        #    }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M UPDATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   commercialProjectUpdate (\n       id:3\n       input: {\n            name: \"test\"\n            address_line_1: \"addr 1\"\n            address_line_2: \"addr 2\"\n            city: \"city\"\n            country_code: \"US\"\n            state_id: 1\n            zip: \"78000\"\n            first_name: \"first\"\n            last_name: \"first\"\n            phone: \"18899985876\"\n            email: \"first@test.com\"\n            company_name: \"first\"\n            company_address: \"first\"\n            description: \"first\"\n            estimate_start_date: \"2022-06-02\"\n            estimate_end_date: \"2022-06-02\"\n            request_until: \"2022-06-02\"\n       }   \n    ){\n      id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M START COMMISSIONING",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   startCommissioning (\n       id:17\n    ){\n      type\n      message\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M SET WARRANTY",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   commercialProjectSetWarranty (\n       id:60\n    ){\n      type\n      message\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Credentials",
+							"item": [
+								{
+									"name": "Q Paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialQuotes \n    {\n       data {\n           id\n           file {\n               id\n               url\n           }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q Credentials Request",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialQuotes \n    {\n       data {\n           id\n           file {\n               id\n               url\n           }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q COUNTER",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    credentialsRequestCounter \n    {\n        new\n        approved\n        denied\n        total\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Settings",
+							"item": [
+								{
+									"name": "M Update OR Create",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   commercialSettings (\n       nextcloud_link: \"https://nx-cooperhunter.wezom.agency\"\n       quote_title: \"quote_title\"\n       quote_address_line_1: \"quote_address_line_1\"\n       quote_address_line_2: \"quote_address_line_2\"\n       quote_phone: \"quote_phone\"\n       quote_email: \"quote_email\"\n       quote_site: \"quote_site\"\n    ){\n      nextcloud_link\n      quote_title\n      quote_address_line_1\n      quote_address_line_2\n      quote_phone\n      quote_email\n      quote_site\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Tax",
+							"item": [
+								{
+									"name": "Q LIST",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    taxes\n    {\n        guid\n        name\n        value\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Commissiongs",
+							"item": [
+								{
+									"name": "Protocol",
+									"item": [
+										{
+											"name": "Q PAGINATOR",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    commissioningProtocols\n    # (id: 7)\n    {\n        data {\n            id\n            type\n            # translation {\n            #     title\n            #     description\n            # }\n            # questions {\n            #     id\n            #     answer_type\n            # }\n        }\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M CREATE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningProtocolCreate (\n       input: {\n           type: pre_commissioning\n           translations: [\n               {\n                   language: en\n                   title: \"update en\",\n                   description: \" desc update en\"\n               },\n               {\n                   language: es\n                   title: \"update es\",\n                   description: \" desc update es\"\n               }\n           ]\n       }   \n    ){\n        id\n        type\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M UPDATE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningProtocolUpdate (\n       id:1\n       input: {\n           type: commissioning\n           translations: [\n               {\n                   language: en\n                   title: \"update 1 en\",\n                   description: \" desc update en\"\n               },\n               {\n                   language: es\n                   title: \"update 1 es\",\n                   description: \" desc update es\"\n               }\n           ]\n       }   \n    ){\n        id\n        type\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M DELETE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningProtocolDelete (id:1)\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Q PAGINATOR",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    technicians\n    # (id: 7)\n    {\n        data {\n            id\n            country {\n                id\n                alias\n                country_code\n            }\n        }\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Question",
+									"item": [
+										{
+											"name": "Q PAGINATOR",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    commissioningQuestions\n    # (id: 1)\n    {\n        data {\n            id\n            answer_type\n            photo_type\n            translation {\n                text\n            }\n            option_answers {\n                id\n                translation {\n                    text\n                }\n            }\n        }\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M CREATE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningQuestionCreate (\n       input: {\n           answer_type: text\n           photo_type: required\n           protocol_id: 1\n           translations: [\n               {\n                   language: en\n                   text: \"some question en 1\",\n               },\n               {\n                   language: es\n                   text: \"some question es 1\",\n               },\n           ]\n       }   \n    ){\n        id\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M UPDATE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningQuestionUpdate (\n       id:3\n       input: {\n           answer_type: select\n           protocol_id: 1\n           translations: [\n               {\n                   language: en\n                   text: \"some question update en 1\",\n               },\n               {\n                   language: es\n                   text: \"some question update es 1\",\n               },\n           ]\n       }   \n    ){\n        id\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M DELETE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningQuestionDelete (id:2)\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "OptionAnswer",
+									"item": [
+										{
+											"name": "Q PAGINATOR",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    commissioningOptionAnswers\n    # (id: 1)\n    {\n        data {\n            id\n            translation {\n                text\n            }\n        }\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M CREATE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningOptionAnswerCreate (\n       input: {\n           question_id: 1\n           translations: [\n               {\n                   language: en\n                   text: \"some answer en 1\",\n               },\n               {\n                   language: es\n                   text: \"some answer es 1\",\n               },\n           ]\n       }   \n    ){\n        id\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M UPDATE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningOptionAnswerUpdate (\n       id:2\n       input: {\n           question_id: 1\n           translations: [\n               {\n                   language: en\n                   text: \"some answer update en 1\",\n               },\n               {\n                   language: es\n                   text: \"some answer update es 1\",\n               },\n           ]\n       }   \n    ){\n        id\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "M DELETE",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningOptionAnswerDelete (id:2)\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Answer",
+									"item": [
+										{
+											"name": "M SET STATUS",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{token}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "mutation {\n   commissioningSetStatusProjectQuestion (\n       project_protocol_question_id: 1\n       status: reject  \n    ){\n        id\n        answer_status\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql/BackOffice",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql",
+														"BackOffice"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "RDB Account",
+							"item": [
+								{
+									"name": "Q Paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    rdpAccounts\n    (id: 6)\n    {\n        data {\n            id\n            member {\n                id\n            }\n            login\n            password\n            active\n            start_date\n            end_date\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Sort",
+					"item": [
+						{
+							"name": "M SORT MODELS",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n   sortModels (\n       model: PROTOCOL\n       data: [23, 24] \n    )\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Slider",
+					"item": [
+						{
+							"name": "LIST",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    slider {\n        id\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Locations",
+					"item": [
+						{
+							"name": "Q STATE LIST",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    states\n    # (\n        # country_id: 1\n    # ) \n    {\n        id\n        name\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q COUNTRIES LIST",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    countries\n    # (\n        # id: 1\n        # default: true\n    # ) \n    {\n        id\n        published\n        alias\n        name\n        default\n        country_code\n        # states {\n        #     id\n        # }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Technician",
+					"item": [
+						{
+							"name": "Q PAGINATOR",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    technicians\n    (\n        query: \"Default\"\n        # default: true\n    ) \n    {\n        data {\n            id\n            email\n            is_commercial_certification\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Alert",
+					"item": [
+						{
+							"name": "Q PAGINATOR",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    alert\n    (object_name: dealer)\n    {\n        data {\n            id\n            title\n            description\n            is_read\n            type\n            object{\n                id\n                name\n            }\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q COUNTER",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    alertCounter\n    (object_name: dealer)\n    {\n        not_read\n        total\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q MEMBER FOR ALERT",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    membersForAlert\n    (member_type: dealer) \n    {\n        data {\n            id\n            first_name\n            last_name\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "Q PAGINATOR",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    order\n    # (id: 288)\n    {\n        data {\n            id\n            items {\n                id\n            }\n            # status\n            # serial_number\n            # product {\n            #     id\n            # }\n            # shipping {\n            #     state {\n            #         id\n            #     }\n            #     country {\n            #         id\n            #     }\n            # }\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Dealer",
+					"item": [
+						{
+							"name": "Order",
+							"item": [
+								{
+									"name": "Q PAGINATOR",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrders\n    (\n        id:218\n    )\n    {\n       data {\n           id\n        #    po\n        #    total_amount\n        #    is_owner\n        #    dealer {\n        #        id\n        #    }\n           items {\n               id\n            #    product {\n            #        id\n            #    }\n            #    price\n            #    discount\n            #    qty\n            #    amount\n           }\n           packing_slips {\n               id\n               dimensions {\n                   id\n               }\n           }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q Payment Desc Paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrdersPaymentDesc\n    {\n       data {\n           type\n           translations {\n               description\n           }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Q PAGINATOR",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    dealers\n    (id: 16)\n    {\n        data {\n            id\n            is_main\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Companies",
+					"item": [
+						{
+							"name": "Q PAGINATOR",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    companies\n    (id: 1)\n    {\n        data {\n            id\n            terms\n            status\n            business_name\n            corporation {\n                name\n            }\n            dealers {\n                id\n            }\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q LIST",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    companyList\n    # (id: 1)\n    {\n        id\n        business_name\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q LIST CORPORATION",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    corporationList\n    # (id: 1)\n    {\n        id\n        name\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M Update",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    companyUpdate (\n        id: \"6\",\n        company_info: {\n            corporation_id: null,\n            business_name: \"Business ma,easd\",\n            email: \"mainemail@gmail.com\",\n            phone: \"11232323232\",\n            fax: \"+1 223-333-3333\",\n            taxpayer_id: \"231 123 123\",\n            tax: \"22\",\n            type: partnership,\n            country_code: \"US\",\n            city: \"Los Angeles\",\n            address_line_1: \"22121 Clarendon Street\",\n            address_line_2: null,\n            zip: \"91367\",\n            po_box: null,\n            state_id: \"4\",\n            websites: [\n                null\n            ],\n            marketplaces: [\n                null\n            ],\n            trade_names: [\n                null\n            ]\n        },\n        shipping_address: [\n            {\n                id: \"72\",\n                name: \"SADAsddsd\",\n                phone: \"12132123131\",\n                fax: null,\n                address_line_1: \"2211 Lomas Boulevard Northeast\",\n                address_line_2: null,\n                country_code: \"US\",\n                state_id: \"30\",\n                city: \"Albuquerque\",\n                zip: \"87106\",\n                email: null,\n                receiving_persona: null\n            }\n        ],\n        contact_account: {\n            name: \"Wezom Project Update tasdasdest\",\n            email: \"asdsdcontra@gmail.com\",\n            phone: \"12323221111\",\n            po_box: null,\n            country_code: \"US\",\n            state_id: \"42\",\n            city: \"San Antonio\",\n            address_line_1: \"2218 Corner Ridge\",\n            address_line_2: null,\n            zip: \"78219\"\n        },\n        contact_order: {\n        name: \"Contac22\",\n        email: \"contaac2t@gmail.com\",\n        phone: \"12124431111\",\n        po_box: null,\n        country_code: \"US\",\n        state_id: \"41\",\n        city: \"Nashville\",\n        address_line_1: \"2111 Belcourt Avenue\",\n        address_line_2: null,\n        zip: \"37212\"\n    }\n    ){\n        id\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql/BackOffice",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql",
+										"BackOffice"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Page",
+					"item": []
+				},
+				{
+					"name": "Utilities",
+					"item": [
+						{
+							"name": "Media",
+							"item": [
+								{
+									"name": "M Sort",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{token}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    mediaSort \n    (\n       media_ids: [563, 562]\n    )\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql/BackOffice",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql",
+												"BackOffice"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "FrontOffice",
+			"item": [
+				{
+					"name": "Catalog",
+					"item": [
+						{
+							"name": "Product",
+							"item": [
+								{
+									"name": "Get Product",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{mbToken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    product(\n        id:2\n    ) {\n        id\n        # labels{\n        #     id\n        #     color_type\n        #     text_color\n        #     background_color\n        #     translation {\n        #         title\n        #     }\n        # }\n        # brand {\n        #     name\n        # }\n        # manual_groups {\n        #     id\n        #     show_commercial_certified\n        #     translation {\n        #         title\n        #     }\n        # }\n        # manuals {\n        #     id\n        #     group {\n        #         id\n        #         show_commercial_certified\n        #         translation {\n        #             title\n        #         }\n        #     }\n        # }\n        images {\n            id\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Products",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{mbToken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    products\n    (\n        category_slug: \"slug-value-3\"\n    ) \n    {\n        data {\n            id\n            labels {\n                id\n                color_type\n                background_color\n                text_color\n            }\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Category",
+							"item": [
+								{
+									"name": "Q Category For Select",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{mbToken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    categoriesForSelect\n    # (with_olmo: true) \n    {\n        id\n        name\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Category",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "{{mbToken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    category\n    (\n    slug: \"slug-value-3\"\n    ) \n    {\n        id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login as User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody).data;",
+											"console.log(jsonData)",
+											"if (jsonData.memberLogin.token_type && jsonData.memberLogin.access_token) {",
+											"    postman.setEnvironmentVariable(\"mbToken\", jsonData.memberLogin.token_type + \" \" + jsonData.memberLogin.access_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"mbToken\", \"\");",
+											"}",
+											"if (jsonData.memberLogin.refresh_token) {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", jsonData.memberLogin.refresh_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", \"\");",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    memberLogin (\n        username: \"cubic@rubic.com\",\n        password: \"password1\"\n    ){\n        token_type\n        access_token\n        access_expires_in\n        refresh_token\n        refresh_expires_in\n        member_guard\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login as Tech",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody).data;",
+											"console.log(jsonData)",
+											"if (jsonData.memberLogin.token_type && jsonData.memberLogin.access_token) {",
+											"    postman.setEnvironmentVariable(\"mbToken\", jsonData.memberLogin.token_type + \" \" + jsonData.memberLogin.access_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"mbToken\", \"\");",
+											"}",
+											"if (jsonData.memberLogin.refresh_token) {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", jsonData.memberLogin.refresh_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", \"\");",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    memberLogin (\n        username: \"test2@gmail.com\",\n        password: \"password1\"\n    ){\n        token_type\n        access_token\n        access_expires_in\n        refresh_token\n        refresh_expires_in\n        member_guard\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login as Dealer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody).data;",
+											"console.log(jsonData)",
+											"if (jsonData.memberLogin.token_type && jsonData.memberLogin.access_token) {",
+											"    postman.setEnvironmentVariable(\"mbToken\", jsonData.memberLogin.token_type + \" \" + jsonData.memberLogin.access_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"mbToken\", \"\");",
+											"}",
+											"if (jsonData.memberLogin.refresh_token) {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", jsonData.memberLogin.refresh_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", \"\");",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    memberLogin (\n        username: \"romaxa8383@gmail.com\",\n        # username: \"dutchak.evgenii@gmail.com\",\n        # username: \"hawamip693@edxplus.com\",\n        # username: \"cubic@dealer.com\",\n        # username: \"test5@comfortside.com\"\n        password: \"password1\"\n        # password: \"Qwerty123\"\n    ){\n        token_type\n        access_token\n        access_expires_in\n        refresh_token\n        refresh_expires_in\n        member_guard\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody).data;",
+											"console.log(jsonData)",
+											"if (jsonData.memberLogin.token_type && jsonData.memberLogin.access_token) {",
+											"    postman.setEnvironmentVariable(\"mbToken\", jsonData.memberLogin.token_type + \" \" + jsonData.memberLogin.access_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"mbToken\", \"\");",
+											"}",
+											"if (jsonData.memberLogin.refresh_token) {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", jsonData.memberLogin.refresh_token);",
+											"} else {",
+											"    postman.setEnvironmentVariable(\"refresh_token\", \"\");",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    memberLogin (\n        username: \"hefyanopso@vusra.com\",\n        password: \"password1\"\n    ){\n        token_type\n        access_token\n        access_expires_in\n        refresh_token\n        refresh_expires_in\n        member_guard\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q Tech profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{mbToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    technicianProfile{\n        id\n        is_certified\n        is_commercial_certification\n        email\n        permissions {\n           name\n       }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    userRegister (\n        first_name: \"cubic\",\n        last_name: \"rubic\"\n        email: \"cubic@rubic.com\"\n        password: \"password1\"\n        password_confirmation: \"password1\"\n    ){\n        token_type\n        access_token\n        access_expires_in\n        refresh_token\n        refresh_expires_in\n        member_guard\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register as Tech",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    technicianRegister (\n        country_code: \"CA\"\n        state_id: 50\n        license: \"2423\"\n        first_name: \"cubic\",\n        last_name: \"rubic\"\n        email: \"cubic32@rubic.com\"\n        password: \"password1\"\n        password_confirmation: \"password1\"\n    ){\n        token_type\n        access_token\n        access_expires_in\n        refresh_token\n        refresh_expires_in\n        member_guard\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M Forgot Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    memberForgotPasswordMutation (\n        email: \"cubic@dealer.com\"\n    )\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Commerce",
+					"item": [
+						{
+							"name": "Quotes",
+							"item": [
+								{
+									"name": "M CREATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"key": "Content-type",
+												"value": "multipart/form-data",
+												"description": "Multipart",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "operations",
+													"value": "{\"query\": \"mutation ($file: Upload!) {commercialQuoteCreate (quote: {email: \\\"test@test.com\\\", project_id: \\\"3\\\", file: $file}) {id} }\"}",
+													"type": "text"
+												},
+												{
+													"key": "map",
+													"value": "{ \"file\": [\"variables.file\"] }",
+													"type": "text"
+												},
+												{
+													"key": "file",
+													"type": "file",
+													"src": "/home/roman/Загрузки/v2 Demo_App_Additional_Translations_ALL TOGETHER.xlsx"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q Paginator",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialQuotes \n    {\n       data {\n           id\n           status\n           shipping_address\n           file {\n               id\n               url\n           },\n           commercial_project {\n               id\n           }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Projects",
+							"item": [
+								{
+									"name": "Units",
+									"item": [
+										{
+											"name": "Q EXCEL LINK",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{mbToken}}"
+													}
+												],
+												"body": {
+													"mode": "graphql",
+													"graphql": {
+														"query": "{\n    commercialProjectUnitsExcel\n    (commercial_project_id: 39) \n    {\n       message\n       type\n    }\n}",
+														"variables": ""
+													}
+												},
+												"url": {
+													"raw": "{{host}}/graphql",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"graphql"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Q LIST FOR Quotes",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialProjectsForQuotes \n    {\n       id\n       quotes {\n           id\n           status\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q PAGINATOR",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    commercialProjects\n    (\n        id: 60\n        # page: 2\n    ) \n    {\n       data {\n           id\n           start_pre_commissioning_date\n           end_pre_commissioning_date\n           start_commissioning_date\n           end_commissioning_date\n        #    project_protocols {\n        #        id\n        #        status\n        #        total_questions\n        #        total_correct_answers\n        #        total_wrong_answers\n        #        closed_at\n        #        project_questions {\n        #            id\n\n        #            answer_status\n        #            answer {\n        #                id\n        #                text\n        #                images {\n        #                    id\n        #                    url\n        #                }\n        #            }\n        #        }\n        #    }\n       }\n       meta {\n           total\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M CREATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   commercialProjectCreate (\n       input: {\n           name: \"some name\"\n           address_line_1: \"address 1\"\n           address_line_2: \"address 2\"\n           country_code: \"US\"\n           state_id: 1\n           city: \"city\"\n           zip: \"00098\"\n           first_name: \"first name\"\n           last_name: \"second name\"\n           phone: \"+14587335669\"\n           email: \"test@test.com\"\n           company_name: \"company name\"\n           company_address: \"company address\"\n           description: \"description\"\n           estimate_start_date: \"2022-08-09\"\n           estimate_end_date: \"2022-09-09\"\n       }   \n    ){\n      id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Commissioning",
+							"item": [
+								{
+									"name": "M ANSWER UPLOAD IMAGE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "operations",
+													"value": "{\"query\": \"mutation ($media: Upload!) {commissioningAnswersImageUpload (id: \\\"5\\\", media: $media)  {id}}\"}",
+													"type": "text"
+												},
+												{
+													"key": "map",
+													"value": "{ \"media\": [\"variables.media\"] }",
+													"type": "text"
+												},
+												{
+													"key": "media",
+													"type": "file",
+													"src": "/home/roman/Изображения/Выделение_002.png"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M ANSWER DELETE IMAGE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   commissioningAnswersImageDelete (id: 738)\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M ANSWER CREATE OR UPDATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n   commissioningAnswersCreateOrUpdate (\n       project_protocol_id: 1\n       input: [\n           {\n               project_protocol_question_id: 1\n               text: \"some text update\"\n           }\n       ]   \n    ){\n        id\n        status\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Slider",
+					"item": [
+						{
+							"name": "LIST",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    slider {\n        id\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Locations",
+					"item": [
+						{
+							"name": "Q COUNTRIES LIST Copy",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    countries\n    # (\n        # id: 1\n        # default: true\n    # ) \n    {\n        id\n        published\n        alias\n        name\n        default\n        # states {\n        #     id\n        # }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Warranty",
+					"item": [
+						{
+							"name": "Q VERIFY STATUS",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    verifyWarrantyStatus (serial_number: \"evgenii-10\") {\n        is_registered\n        information\n        purchase_date\n        installation_date\n    }\n}\n",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M PRODUCT REGISTRATION",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    productWarrantyRegistration \n    (\n        serial_numbers: [\"urc23245281\", \"chj02150355\"],\n        user: {\n            first_name: \"First\",\n            last_name: \"Last\",\n            email: \"test@gmail.com\"\n        }\n        address: {\n            country: \"Canada\",\n            state: \"Yukon\",\n            street: \"street_1\"\n            city: \"city_1\"\n            zip: \"4040\"\n        }\n        product: {\n            purchase_date: \"2000-01-01\"\n            installation_date: \"2000-01-01\"\n            installer_license_number: \"2000\"\n            purchase_place: \"200\"\n        }\n    )\n    {\n      message\n      type\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Technician",
+					"item": [
+						{
+							"name": "Q PROFILE",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    technicianProfile\n    {\n       id\n       email\n       phone\n       lang\n       state {\n           id\n       }\n       is_commercial_certification\n       country {\n           id\n           country_code\n       }\n       epa_license\n       first_name\n       last_name\n       permissions {\n           id\n           name\n       }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M REGISTER",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}",
+										"disabled": true
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    technicianRegister \n    (\n       state_id: 3\n       first_name: \"cubic\",\n       license: \"3454\"\n       last_name: \"rubic\",\n       email: \"test@test.com\",\n       phone: \"8976645668\",\n       password: \"password1\"\n       password_confirmation: \"password1\"\n    )\n    {\n      access_token\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "M UPDATE",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    technicianUpdate \n    (\n       state_id: 12\n       country_code: \"US\"\n       first_name: \"Technician\",\n       license: \"9090901\"\n       last_name: \"Default\",\n       email: \"test2@gmail.com\",\n       phone: \"12489340913\",\n       lang: \"en\"\n    )\n    {\n      id\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "Dealer",
+							"item": [
+								{
+									"name": "Q PRODUCT EXCEL DOWNLOAD LINK",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerProductOrderExcel\n    {\n       message\n       type\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M Product Excel Upload",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "operations",
+													"value": "{\"query\": \"mutation ($media: Upload!) {dealerOrderUploadProductsExcel (media: $media) {id}}\"}",
+													"type": "text"
+												},
+												{
+													"key": "map",
+													"value": "{ \"media\": [\"variables.media\"] }",
+													"type": "text"
+												},
+												{
+													"key": "media",
+													"type": "file",
+													"src": "/home/romaxa/Загрузки/products-1663326151.xlsx"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q PRODUCT List for order",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerProductOrderList\n    (\n        order_id:51\n    )\n    {\n       id\n       owner_type\n       img\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q PAGINATOR",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrders\n    (\n        id:70\n    )\n    {\n       data {\n            id\n            guid\n            po\n            status\n            # shipping_address {\n            #     id\n            # }\n            # po\n            # term\n            total_amount\n            # is_owner\n            # dealer {\n            #     id\n            # }\n        #    media {\n        #        id\n        #        url\n        #        name\n        #        file_name\n        #        size\n        #        mime_type\n        #        url_webp\n        #        conventions {\n        #            convention\n        #            url\n        #            url_webp\n        #        }\n        #    }\n            # has_invoice\n            # invoice\n            tax\n            shipping_price\n            total\n            total_discount\n            total_with_discount\n            # serial_numbers {\n            #     serial_number\n            # }\n            items {\n               id\n               product {\n                   id\n               }\n               price\n               discount\n               qty\n               amount\n               total\n           }\n            packing_slips {\n                id\n                guid\n                dimensions {\n                    height\n                    weight\n                }\n                # files {\n                #     name\n                #     url\n                # }\n                # invoice\n                # tax\n                # shipping_price\n                # total\n                # total_discount\n                # total_with_discount\n                # invoice_file_link\n                # items {\n                #     id\n                #     product {\n                #         id\n                #     }\n                # }\n                # serial_numbers {\n                #     serial_number\n                # }\n            }\n       }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET ONE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrder\n    (\n         id:70\n    )\n    {\n            id\n            guid\n            status\n            shipping_address {\n                id\n            }\n            # po\n            # term\n            # total_amount\n            # is_owner\n            # dealer {\n            #     id\n            # }\n        #    media {\n        #        id\n        #        url\n        #        name\n        #        file_name\n        #        size\n        #        mime_type\n        #        url_webp\n        #        conventions {\n        #            convention\n        #            url\n        #            url_webp\n        #        }\n        #    }\n            invoice\n            tax\n            shipping_price\n            total\n            total_discount\n            # total_amount\n            total_with_discount\n            serial_numbers {\n                serial_number\n            }\n            items {\n               id\n               product {\n                   id\n               }\n               price\n               discount\n               qty\n               amount\n               total\n           }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M CREATE Empty",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderCreate \n    {\n        id\n        status\n        delivery_type\n        payment_type\n        po\n        comment\n        shipping_address {\n            id\n            name\n        }\n        payment_card {\n            id\n        },\n        dealer {\n            id\n            email\n        }\n        media {\n            url\n        }\n        total_amount\n        items {\n            id\n            price\n            qty\n            amount\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M UPDATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderUpdate \n    (\n        id: 34\n        order: {\n           po: \"r000010\" ,\n           shipping_address_id: 1\n        }\n    )\n    {\n        id\n        status\n        delivery_type\n        payment_type\n        po\n        comment\n        shipping_address {\n            id\n            name\n        }\n        payment_card {\n            id\n        },\n        dealer {\n            id\n            email\n        }\n        media {\n            url\n        }\n        total_amount\n        items {\n            id\n            price\n            qty\n            amount\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M UPLOAD",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "operations",
+													"value": "\"{\"query\": \"mutation ($media: [Upload!]!) {dealerOrderUploadMedia (id: \\\"1\\\", media: $media) {id}}\"}\"",
+													"type": "text"
+												},
+												{
+													"key": "map",
+													"value": "\"{ \"media\": [\"variables.media\"] }\"",
+													"type": "text"
+												},
+												{
+													"key": "media",
+													"type": "file",
+													"src": "/home/romaxa/Загрузки/products-1663247553.xlsx"
+												},
+												{
+													"key": "media[]",
+													"type": "file",
+													"src": "/home/romaxa/Документы/Супер рисунки.docx",
+													"disabled": true
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M DELETE MEDIA",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderDeleteMedia \n    (\n        id: 893\n    )\n    {\n        id\n\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M COPY order",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderCopy \n    (\n        id: 61\n    )\n    {\n        id\n        status\n        delivery_type\n        payment_type\n        po\n        comment\n        shipping_address {\n            id\n            name\n        }\n        payment_card {\n            id\n        },\n        dealer {\n            id\n            email\n        }\n        shipped_at\n        media {\n            url\n        }\n        total_amount\n        items {\n            id\n            price\n            qty\n            amount\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M ADD Item to order",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderAddItem \n    (\n        order_id: 34\n        product_id: 1304\n    )\n    {\n        id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M UPDATE Item for order",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderUpdateItem \n    (\n        id: 1\n        qty: 8\n    )\n    {\n        id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M DELETE Item for order",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderDeleteItem \n    (\n        id: 427\n    )\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M CHECKOUT",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderCheckout \n    (\n        id: 33\n    ) {\n        message\n        type\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M CHECKOUT Copy",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerOrderCheckout \n    (\n        id: 34\n    ) {\n        message\n        type\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "https://api.stage.cooperandhunter.us/graphql",
+											"protocol": "https",
+											"host": [
+												"api",
+												"stage",
+												"cooperandhunter",
+												"us"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q IS CHANGE PRICE for order items",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerProductChangePrice \n    (\n        id: 1\n    )\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "M CHANGE PRICE for order items",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    dealerProductChangePrice \n    (\n        id: 1\n    ) {\n        id\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET ESTIMATE",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrderEstimate \n    (\n        id: 14\n    ){\n        type\n        message\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET Serial number Excel",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrderSerialNumberExcel \n    (\n        id: 14\n    ){\n        type\n        message\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET REPORT",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrderReport \n    # (\n    #     id: 1\n    # )\n    {\n        company_name\n        total\n        locations {\n            location_name\n            total\n            items {\n                po\n                qty\n                price\n                desc\n                product_title\n                date\n                total\n            }\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET REPORT EXCEL",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrderReport \n    # (\n    #     id: 1\n    # )\n    {\n        company_name\n        total\n        locations {\n            location_name\n            total\n            items {\n                po\n                qty\n                price\n                desc\n                product_title\n                date\n                total\n            }\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET Packing Slip Pdf file",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrderPackingSlipPdf\n    (\n        id: 1\n    ){\n        type\n        message\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q GET PAYMENT DESC",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    dealerOrdersPaymentDesc\n    # (\n    #     id: 4\n    # )\n    {\n        data {\n            type\n            translation {\n                description\n            }\n        }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "M CREATE",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    orderCreate \n    (\n        order: {\n            serial_number: \"3213\",\n            project_id: 1\n            first_name: \"cubic\"\n            last_name: \"rubic\"\n        }\n        serial_numbers: [\"urc23245281\", \"chj02150355\"],\n        user: {\n            first_name: \"First\",\n            last_name: \"Last\",\n            email: \"test@gmail.com\"\n        }\n        address: {\n            country: \"Canada\",\n            state: \"Yukon\",\n            street: \"street_1\"\n            city: \"city_1\"\n            zip: \"4040\"\n        }\n        product: {\n            purchase_date: \"2000-01-01\"\n            installation_date: \"2000-01-01\"\n            installer_license_number: \"2000\"\n            purchase_place: \"200\"\n        }\n    )\n    {\n      message\n      type\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tickets",
+					"item": [
+						{
+							"name": "M CREATE",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    ticketCreate (\n        input: {\n            serial_number: \"EVGENII-9\",\n            comment: \"some comment\"\n            translations: [\n                {\n                    language: \"en\"\n                    title: \"some title\",\n                    description: \"some desc\"\n                }\n            ]\n        }\n    ){\n        id\n        code\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Dealer",
+					"item": [
+						{
+							"name": "M REGISTER",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}",
+										"disabled": true
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    dealerRegister \n    (\n       code: \"909092\",\n       email: \"cubic@dealer.com\",\n       password: \"password1\"\n       password_confirmation: \"password1\"\n    )\n    {\n      access_token\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q PROFILE",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    dealerProfile\n    {\n       id\n       email\n       name\n       is_main\n       is_main_company\n       is_verify_email\n       shipping_addresses {\n           id\n       }\n       company {\n            id\n            business_name\n            manager {\n                email\n            }\n            commercial_manager {\n                email\n            }\n            payment_cards {\n                type\n            }\n            shipping_addresses {\n                id\n                name\n            }\n       }\n    #    permissions {\n    #        name\n    #    }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Alert",
+					"item": [
+						{
+							"name": "Q COUNTER",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    alertCounter\n    {\n       total\n       not_read\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Member",
+					"item": [
+						{
+							"name": "Q PROFILE",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    memberProfile {\n        ... on TechnicianProfileType {\n            id\n            email\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q PROFILE UNION",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    memberProfile {\n        ... on TechnicianProfileType {\n            id\n            email\n        }\n        ... on UserProfileType {\n            id\n            email\n        }\n        ... on DealerProfileType {\n            id\n            email\n        }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Payment",
+					"item": [
+						{
+							"name": "M ADD CARD MEMBER",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    memberAddPaymentCard \n    (\n        morph: {\n            type: company,\n            id: 1\n        }\n        payment_card: {\n            type: \"Visa\",\n            name: \"Dr. Winnifred Trantow V\",\n            number: \"4485100135006682\",\n            cvc: \"381\",\n            expiration_date: \"12/24\"\n        }\n        billing_address:{\n            country_code: \"US\"\n            state_id: 1\n            city: \"Violethaven\"\n            address_line_1: \"Wava Inlet\"\n            address_line_2: \"Kutch Hill\"\n            zip: \"77230\"\n        }\n    )\n    {\n      id\n      type\n      code\n      expiration_date\n      default\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Companies",
+					"item": [
+						{
+							"name": "ShippingAddress",
+							"item": [
+								{
+									"name": "M ADD",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											},
+											{
+												"description": "Multipart",
+												"key": "Content-type",
+												"type": "text",
+												"value": "multipart/form-data",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "mutation {\n    companyShippingAddressAdd \n    (\n        company_id: 23 \n        shipping_address:{\n            name: \"TOO addr 3\"\n            phone: \"37099990903\"\n            fax: \"37099990904\"\n            country_code: \"US\"\n            state_id: 1\n            city: \"Violethaven\"\n            address_line_1: \"Wava Inlet\"\n            zip: \"77230\"\n            po_box: \"22023\"\n        }\n    )\n    {\n      id\n      shipping_addresses {\n            id\n            name\n      }\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Q LIST",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{mbToken}}"
+											}
+										],
+										"body": {
+											"mode": "graphql",
+											"graphql": {
+												"query": "{\n    companyShippingAddressList\n    # (\n    #     id:1\n    # )\n    {\n        id\n        name\n    }\n}",
+												"variables": ""
+											}
+										},
+										"url": {
+											"raw": "{{host}}/graphql",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"graphql"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "M CREATE APP",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    companiesApplicationCreate \n    (\n        company_info: {\n            type: corporation,\n            business_name: \"Walve and Sons\",\n            email: \"cubic6@dealer.com\",\n            phone: \"28295990901\",\n            fax: \"48099990902\",\n            country_code: \"US\",\n            state_id: 1,\n            city: \"Lake Jeremieland\",\n            address_line_1: \"Aufderhar Views\",\n            zip: \"86913-4268\",\n            po_box: \"72079-0077\",\n            taxpayer_id: \"2539326525072666\",\n            tax: \"519\",\n            websites: [\n                \"http://pfeffer.com/ea-aut-adipisci-mollitia-velit.html\", \n                \"http://paucek.com/impedit-fugiat-dolorem-facere-doloribus-et\",\n                \"http://www.hudson.comlaboriosam-maiores-amet-veniam-molestiae-sit\"\n            ]\n            marketplaces: [\n                \"http://www.hane.com/\"\n            ]\n            trade_names: [\n                \"Bednar-Oberbrunner\",\n                \"Durgan, Gottlieb and Stracke\"\n            ]\n        }\n        shipping_address:[\n            {\n                name: \"some name\"\n                phone: \"18099990903\"\n                fax: \"18099990904\"\n                country_code: \"US\"\n                state_id: 1\n                city: \"Violethaven\"\n                address_line_1: \"Wava Inlet\"\n                zip: \"77230\"\n                po_box: \"22023\"\n            }\n        ]\n        contact_account: {\n            name: \"Rem vitae fugit recusandae ut.\"\n            email: \"trent1415@example.com\"\n            phone: \"38099990907\"\n            country_code: \"US\"\n            state_id: 1\n            city: \"McCluretown\"\n            address_line_1: \"Gustave Gardens\"\n            zip: \"47653\"\n            po_box: \"89546-9374\"\n        },\n        contact_order: {\n            name: \"Saepe aut eligendi ad tempore totam sed.\"\n            email: \"brendon1285@example.org\"\n            phone: \"38099990908\"\n            country_code: \"US\"\n            state_id: 2\n            city: \"Kevonberg\"\n            address_line_1: \"Tillman Passage\"\n            zip: \"13224-0371\"\n            po_box: \"26399-4213\"\n        },\n        contact_warehouse: {\n            name: \"Itaque inventore officia dolorum magnam.\"\n            email: \"cole1.bradtke5@example.com\"\n            phone: \"38099990909\"\n            country_code: \"US\"\n            state_id: 3\n            city: \"Sandrachester\"\n            address_line_1: \"Jakubowski Village\"\n            zip: \"79836-5660\"\n            po_box: \"58588\"\n        }  \n    )\n    {\n      id\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Q LIST",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    companyList\n    {\n       id\n       business_name\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "M UPDATE",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									},
+									{
+										"description": "Multipart",
+										"key": "Content-type",
+										"type": "text",
+										"value": "multipart/form-data",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation {\n    userUpdate \n    (\n        # validate_only: true\n        phone: null\n        first_name: \"tester1\"\n        last_name: \"tester\"\n        email: \"hefyanopso@vusra.com\"\n    )\n    {\n        id\n        first_name\n        last_name\n        email\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Manuals",
+					"item": [
+						{
+							"name": "Q LIST Category",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    manualCategories\n    # (category_id: 130)\n    {\n       category_name\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "News",
+					"item": [
+						{
+							"name": "Q Photo Album Paginator",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    photoAlbum\n    {\n       data {\n           id\n       }\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Translations",
+					"item": [
+						{
+							"name": "Q GET",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    translatesSimple\n    (\n        place: \"site\",\n        lang: \"en\"\n    )\n    {\n       place\n       key\n       text\n       lang\n    }\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Solution",
+					"item": [
+						{
+							"name": "Q Find Solution Download Pdf",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{mbToken}}"
+									}
+								],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "{\n    findSolutionDownloadPdf\n    (\n       pdf: {\n           outdoor_id: 928,\n           indoors: [\n                {\n                    indoor_id: 940,\n                    line_set_id: 926\n                }\n            ]\n       }\n    )\n}",
+										"variables": ""
+									}
+								},
+								"url": {
+									"raw": "{{host}}/graphql",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "HTTP",
+			"item": [
+				{
+					"name": "ONE_C",
+					"item": [
+						{
+							"name": "Auth",
+							"item": [
+								{
+									"name": "Login",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody).data;",
+													"if (jsonData.token_type && jsonData.access_token) {",
+													"    postman.setEnvironmentVariable(\"onec_token\", jsonData.token_type + \" \" + jsonData.access_token);",
+													"} else {",
+													"    postman.setEnvironmentVariable(\"onec_token\", \"\");",
+													"}",
+													"if (jsonData.refresh_token) {",
+													"    postman.setEnvironmentVariable(\"onec_refresh_token\", jsonData.refresh_token);",
+													"} else {",
+													"    postman.setEnvironmentVariable(\"onec_refresh_token\", \"\");",
+													"}"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "email",
+													"value": "one.c@gmail.com",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "password1",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/auth/login",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"auth",
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Categories",
+							"item": [
+								{
+									"name": "List",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody).data;",
+													"if (jsonData.token_type && jsonData.access_token) {",
+													"    postman.setEnvironmentVariable(\"onec_token\", jsonData.token_type + \" \" + jsonData.access_token);",
+													"} else {",
+													"    postman.setEnvironmentVariable(\"onec_token\", \"\");",
+													"}",
+													"if (jsonData.refresh_token) {",
+													"    postman.setEnvironmentVariable(\"onec_refresh_token\", jsonData.refresh_token);",
+													"} else {",
+													"    postman.setEnvironmentVariable(\"onec_refresh_token\", \"\");",
+													"}"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "{{onec_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "email",
+													"value": "one.c@gmail.com",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "password1",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/categories",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"categories"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Commercial",
+							"item": [
+								{
+									"name": "Project",
+									"item": [
+										{
+											"name": "START COMMISSIONING",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "json content-type",
+														"key": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"description": "JSON Accept",
+														"key": "Accept",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{onec_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": [\n        {\n            \"guid\" : \"2a48aa4b-52ff-444f-8435-e7e761eb3e60\",\n            \"name\": \"us_tax_1\",\n            \"value\": 12\n        },\n        {\n            \"guid\" : \"2a48aa4b-52ff-444f-8435-e7e761eb3e61\",\n            \"name\": \"us_tax_2\",\n            \"value\": 13.5\n        },\n        {\n            \"guid\" : \"2a48aa4b-52ff-444f-8435-e7e761eb3e62\",\n            \"name\": \"us_tax_3\",\n            \"value\": 0.4\n        },\n        {\n            \"guid\" : \"2a48aa4b-52ff-444f-8435-e7e761eb3e63\",\n            \"name\": \"us_tax_4\",\n            \"value\": 7\n        }\n    ]\n}"
+												},
+												"url": {
+													"raw": "{{host}}/api/1c/commercial-project/3/start-commissioning",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"1c",
+														"commercial-project",
+														"3",
+														"start-commissioning"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "ADD UNITS",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "json content-type",
+														"key": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"description": "JSON Accept",
+														"key": "Accept",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{onec_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": [\n        {\n            \"serial_numbers\" : [\"10001\", \"10002\"],\n            \"product_guid\": \"1bede561-504e-11eb-bbbd-001dd8b7293e\"\n        },\n        {\n            \"serial_numbers\" : [\"20001\", \"20002\"],\n            \"product_guid\": \"1bede569-504e-11eb-bbbd-001dd8b7293e\"\n        },\n        {\n            \"serial_numbers\" : [\"30001\"],\n            \"product_guid\": \"1bede577-504e-11eb-bbbd-001dd8b7293e\"\n        }\n    ]\n}"
+												},
+												"url": {
+													"raw": "{{host}}/api/1c/commercial-project/116fb7e2-8b95-428c-8f75-33a19d62b872/add-units",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"1c",
+														"commercial-project",
+														"116fb7e2-8b95-428c-8f75-33a19d62b872",
+														"add-units"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Tax Create or Update",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"description": "json content-type",
+												"type": "text"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"description": "JSON Accept",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "{{onec_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": [\n        {\n            \"guid\" : \"2a48aa4b-52ff-444f-8435-e7e761eb3e60\",\n            \"name\": \"us_tax_1\",\n            \"value\": 12\n        },\n        {\n            \"guid\" : \"2a48aa4b-52ff-444f-8435-e7e761eb3e61\",\n            \"name\": \"us_tax_2\",\n            \"value\": 13.5\n        },\n        {\n            \"guid\" : \"2a48aa4b-52ff-444f-8435-e7e761eb3e62\",\n            \"name\": \"us_tax_3\",\n            \"value\": 0.4\n        },\n        {\n            \"guid\" : \"2a48aa4b-52ff-444f-8435-e7e761eb3e63\",\n            \"name\": \"us_tax_4\",\n            \"value\": 7\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/tax/create-or-update",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"tax",
+												"create-or-update"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Tax Remove",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"description": "JSON Accept",
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{onec_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": [\n        \"2a48aa4b-52ff-444f-8435-e7e761eb3e62\",\n        \"2a48aa4b-52ff-444f-8435-e7e761eb3e63\"\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/tax/remove",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"tax",
+												"remove"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Warranty",
+							"item": [
+								{
+									"name": "List",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json",
+												"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman."
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{onec_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"warranty_status\": \"pending\",\n    \"page\": 2\n}"
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/warranty/index",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"warranty",
+												"index"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PROCESS",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json",
+												"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman."
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{onec_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"warranty_status\": \"on_warranty\",\n    \"serial_numbers\": [\n        {\n            \"serial_number\" : \"2a48aa4b\",\n            \"product_guid\": \"2a48aa4b-52ff-444f-8435-e7e761eb3e65\"\n        },\n        {\n            \"serial_number\" : \"298989\",\n            \"product_guid\": \"2a48aa4b-52ff-444f-8435-e7e761eb3e65\"\n        },\n        {\n            \"serial_number\" : \"3a48aa4b\",\n            \"product_guid\": \"3a48aa4b-52ff-444f-8435-e7e761eb3e65\"\n        },\n        {\n            \"serial_number\" : \"398989\",\n            \"product_guid\": \"3a48aa4b-52ff-444f-8435-e7e761eb3e65\"\n        },\n        {\n            \"serial_number\" : \"4a48aa4b\",\n            \"product_guid\": \"4a48aa4b-52ff-444f-8435-e7e761eb3e65\"\n        },\n        {\n            \"serial_number\" : \"498989\",\n            \"product_guid\": \"4a48aa4b-52ff-444f-8435-e7e761eb3e65\"\n        },\n        {\n            \"serial_number\" : \"5a48aa4b\",\n            \"product_guid\": \"5a48aa4b-52ff-444f-8435-e7e761eb3e65\"\n        },\n        {\n            \"serial_number\" : \"598989\",\n            \"product_guid\": \"5a48aa4b-52ff-444f-8435-e7e761eb3e65\"\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/warranty/process/60",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"warranty",
+												"process",
+												"60"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Dealers",
+							"item": [
+								{
+									"name": "Order",
+									"item": [
+										{
+											"name": "Add serial number",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "json content-type",
+														"key": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"description": "JSON Accept",
+														"key": "Accept",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{onec_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": [\n       {\n           \"guid\": \"88108f93-e348-11ec-90f0-d05099fbe267\",\n           \"serial_numbers\": [\n               \"11011\"\n           ]\n       }\n    ]\n}"
+												},
+												"url": {
+													"raw": "{{host}}/api/1c/dealer-orders/3792c2e0-9025-11ed-90f2-d05099fbe267/add-serial-number",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"1c",
+														"dealer-orders",
+														"3792c2e0-9025-11ed-90f2-d05099fbe267",
+														"add-serial-number"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Update",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "json content-type",
+														"key": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"description": "JSON Accept",
+														"key": "Accept",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{onec_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"status\": \"approved\"\n}"
+												},
+												"url": {
+													"raw": "{{host}}/api/1c/dealer-orders/592tbfb9-70d6-11ed-90f1-d05099fbe267",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"1c",
+														"dealer-orders",
+														"592tbfb9-70d6-11ed-90f1-d05099fbe267"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add or Update Packing Slip",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "json content-type",
+														"key": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"description": "JSON Accept",
+														"key": "Accept",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{onec_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": [\n        {\n            \"guid\": \"3792c2e0-9025-11ed-90f2-d05099fbe001\",\n            \"status\": \"shipped\",\n            \"number\": \"12345544545\",\n            \"tracking_number\": \"7544555555353\",\n            \"tracking_company\": \"test company\",\n            \"shipped_date\": \"2022-11-13\",\n            \"products\": [\n                {\n                    \"guid\": \"88108f93-e348-11ec-90f0-d05099fbe267\",\n                    \"qty\": 1,\n                    \"description\": \"some desc\"\n                }\n            ],\n            \"dimensions\": {\n                \"pallet\": 2,\n                \"box_qty\": 3,\n                \"type\": \"box\",\n                \"weight\": 10,\n                \"width\": 5,\n                \"depth\": 4,\n                \"height\": 3,\n                \"class_freight\": 14\n            }\n        }\n    ]\n}"
+												},
+												"url": {
+													"raw": "{{host}}/api/1c/dealer-orders/3792c2e0-9025-11ed-90f2-d05099fbe267/add-or-update-packing-slip",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"1c",
+														"dealer-orders",
+														"3792c2e0-9025-11ed-90f2-d05099fbe267",
+														"add-or-update-packing-slip"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add Invoice data",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "json content-type",
+														"key": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"description": "JSON Accept",
+														"key": "Accept",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{onec_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"packing_slip_guid\": \"bf1cc04c-8a1d-11ea-b7ac-48f17f684e83\",\n    \"invoice\": \"invoice-2221\",\n    \"invoice_date\": \"2022-12-09\",\n    \"tax\": 2,\n    \"shipping_price\": 123,\n    \"total\": 145,\n    \"total_discount\": 12,\n    \"total_with_discount\": 17\n}"
+												},
+												"url": {
+													"raw": "{{host}}/api/1c/dealer-orders/add/invoice-data",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"1c",
+														"dealer-orders",
+														"add",
+														"invoice-data"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Add serial number to PackingSlip",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "json content-type",
+														"key": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"description": "JSON Accept",
+														"key": "Accept",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{onec_token}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": [\n       {\n           \"guid\": \"88108f93-e348-11ec-90f0-d05099fbe267\",\n           \"serial_numbers\": [\n               \"41011R\"\n           ]\n       }\n    ]\n}"
+												},
+												"url": {
+													"raw": "{{host}}/api/1c/dealer-orders/packing-slip/3792c2e0-9025-11ed-90f2-d05099fbe001/add-serial-number",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"1c",
+														"dealer-orders",
+														"packing-slip",
+														"3792c2e0-9025-11ed-90f2-d05099fbe001",
+														"add-serial-number"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Upload",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"description": "json content-type",
+														"key": "Content-Type",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"description": "JSON Accept",
+														"key": "Accept",
+														"type": "text",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "{{onec_token}}"
+													}
+												],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "files[0][file]",
+															"value": "z/Do4uXyIQ==",
+															"type": "text"
+														},
+														{
+															"key": "files[0][name]",
+															"value": "test",
+															"type": "text"
+														},
+														{
+															"key": "files[0][extension]",
+															"value": "xml",
+															"type": "text"
+														}
+													]
+												},
+												"url": {
+													"raw": "{{host}}/api/1c/dealer-orders/792ebfb9-70d6-11ed-90f1-d05099fbe267/upload",
+													"host": [
+														"{{host}}"
+													],
+													"path": [
+														"api",
+														"1c",
+														"dealer-orders",
+														"792ebfb9-70d6-11ed-90f1-d05099fbe267",
+														"upload"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Companies",
+							"item": [
+								{
+									"name": "Update",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"description": "JSON Accept",
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{onec_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"terms\": [\n        {\n            \"name\": \"term_1\",\n            \"guid\":\"6b403d9d-e7f6-3005-afdf-797513913af4\"\n        },\n        {\n            \"name\": \"term_2\",\n            \"guid\":\"7b403d9d-e7f6-3005-afdf-797513913af4\"\n        }\n    ],\n    \"corporation\": {\n        \"name\": \"PULP CORP T Inc.\",\n        \"guid\": \"7a48aa4b-52ff-444f-8435-e7e761eb3e66\"\n    },\n    \"manager\": {\n        \"name\": \"wood\",\n        \"email\": \"wood@tst.com\",\n        \"phone\": \"86785675675\"\n    }\n}"
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/companies/d92b6a70-ed3e-4b80-92e9-f13ff32bae38",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"companies",
+												"d92b6a70-ed3e-4b80-92e9-f13ff32bae38"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Approve",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"description": "JSON Accept",
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{onec_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"authorization_code\": \"учи постман\"\n}"
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/companies/0caa40fe-4001-45ea-b156-1fb6b7ba1435/approve",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"companies",
+												"0caa40fe-4001-45ea-b156-1fb6b7ba1435",
+												"approve"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add prices",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"description": "JSON Accept",
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{onec_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": [\n       {\n           \"product_guid\": \"216fb7e2-8b95-428c-8f75-33a19d62b871\",\n           \"price\": 12.5\n       },\n       {\n           \"product_guid\": \"116fb7e2-8b95-428c-8f75-33a19d62b871\",\n           \"price\": 15\n       } \n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/companies/7a48aa4b-52ff-444f-8435-e7e761eb3e65/add-prices",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"companies",
+												"7a48aa4b-52ff-444f-8435-e7e761eb3e65",
+												"add-prices"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Products",
+							"item": [
+								{
+									"name": "Import serial numbers",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"description": "json content-type",
+												"key": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"description": "JSON Accept",
+												"key": "Accept",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "{{onec_token}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"product_guid\": \"bf1cc0fa-8a1d-11ea-b7ac-48f17f976e8a\",\n    \"serial_numbers\": [\n        \"4F88350000076\",\n        \"4F88360000465\"\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}/api/1c/serialNumbers/import",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"api",
+												"1c",
+												"serialNumbers",
+												"import"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

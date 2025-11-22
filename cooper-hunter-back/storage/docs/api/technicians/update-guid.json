@@ -1,0 +1,12 @@
+{
+    "data": [
+        {
+            "guid": "serial-A",
+            "id": "1"
+        },
+        {
+            "guid": "serial-B",
+            "id": "2"
+        }
+    ]
+}

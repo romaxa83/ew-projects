@@ -1,0 +1,15 @@
+{
+    "data": {
+        "id": "id",
+        "guid": "guid",
+        "seer": "float|null",
+        "title": "title",
+        "translations": [
+            {
+                "slug": "slug",
+                "title": "title",
+                "language": "language"
+            }
+        ]
+    }
+}

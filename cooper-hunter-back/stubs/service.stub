@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ dtoNamespace }};
+use {{ modelNamespace }};
+
+class {{ class }}
+{
+    public function create({{ dto }} $dto): {{ model }}
+    {
+        ${{ variable }} = new {{ model }}();
+
+        return $this->store(${{ variable }}, $dto);
+    }
+
+    protected function store({{ model }} ${{ variable }}, {{ dto }} $dto): {{ model }}
+    {
+        $this->fill($dto, ${{ variable }});
+
+        ${{ variable }}->save();
+
+        return ${{ variable }};
+    }
+
+    protected function fill({{ dto }} $dto, {{ model }} ${{ variable }}): void
+    {
+
+    }
+
+    public function update({{ model }} ${{ variable }}, {{ dto }} $dto): {{ model }}
+    {
+        return $this->store(${{ variable }}, $dto);
+    }
+
+    public function delete({{ model }} ${{ variable }}): bool
+    {
+        return ${{ variable }}->delete();
+    }
+}

@@ -1,0 +1,116 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.0",
+        "ext-json": "*",
+        "ext-ldap": "*",
+        "ext-openssl": "*",
+        "ext-pdo": "*",
+        "ext-zend-opcache": "*",
+        "activix/simple-eloquent": "^8.0",
+        "adldap2/adldap2-laravel": "^6.1",
+        "appstract/laravel-opcache": "^4.0",
+        "barryvdh/laravel-dompdf": "^1.0",
+        "bensampo/laravel-enum": "^3.4",
+        "beyondcode/laravel-websockets": "^1.12",
+        "ckfinder/ckfinder-laravel-package": "^3.5",
+        "clicksend/clicksend-php": "^5.0",
+        "fideloper/proxy": "^4.4",
+        "fruitcake/laravel-cors": "^2.0",
+        "laravel-notification-channels/fcm": "~2.0",
+        "laravel-validation-rules/credit-card": "^1.7",
+        "laravel/framework": "^8",
+        "laravel/octane": "^1.0",
+        "laravel/passport": "^10.1",
+        "laravel/telescope": "^4.5",
+        "laravel/tinker": "^2.5",
+        "maatwebsite/excel": "^3.1",
+        "mll-lab/laravel-graphql-playground": "^2.4",
+        "predis/predis": "^1.1",
+        "ramsey/uuid": "^4.4",
+        "rap2hpoutre/fast-excel": "^3.0",
+        "rebing/graphql-laravel": "^6.1",
+        "rennokki/laravel-eloquent-query-cache": "^2.5",
+        "spatie/laravel-medialibrary": "^9.0.0",
+        "spatie/laravel-permission": "^3.18",
+        "textalk/websocket": "^1.5",
+        "tucker-eric/eloquentfilter": "^2.4"
+    },
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.9",
+        "brianium/paratest": "^6.1",
+        "facade/ignition": "^2.5",
+        "fakerphp/faker": "^1.9.1",
+        "knuckleswtf/scribe": "^3.23",
+        "mockery/mockery": "^1.4.2",
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.3.3",
+        "roave/security-advisories": "dev-latest"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+                "laravel/telescope",
+                "CKSource\\CKFinderBridge\\CKFinderServiceProvider",
+                "Adldap\\Laravel\\AdldapServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Core\\": "core/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "app/Helpers/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan telescope:publish --ansi"
+        ],
+        "server-restart": [
+            "php artisan optimize:clear",
+            "php artisan opcache:clear",
+            "php artisan cache:clear",
+            "php artisan optimize",
+            "php artisan opcache:compile --force",
+            "php artisan queue:restart",
+            "php artisan octane:stop"
+        ]
+    }
+}

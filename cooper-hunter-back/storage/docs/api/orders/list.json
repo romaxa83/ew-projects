@@ -1,0 +1,96 @@
+{
+    "data": [
+        {
+            "data": {
+                "id": "int",
+                "status": "Enum: OrderStatusEnum",
+                "arrived_from": "OrderArrivedFormEnum",
+                "serial_number": "string",
+                "model": "string",
+                "first_name": "string",
+                "last_name": "string",
+                "phone": "string",
+                "comment": "string|null",
+                "parts": [
+                    {
+                        "order_category_guid": "string",
+                        "order_category_id": "int",
+                        "name": "string",
+                        "quantity": "int",
+                        "price": "float|null",
+                        "description": "string|null"
+                    }
+                ],
+                "shipping": {
+                    "order_id": "int",
+                    "first_name": "string",
+                    "last_name": "string",
+                    "phone": "string",
+                    "address_first_line": "string",
+                    "address_second_line": "string",
+                    "city": "string",
+                    "country": {
+                        "id": "int",
+                        "slug": "string",
+                        "active": "boolean",
+                        "default": "boolean",
+                        "country_code": "string",
+                        "translations": [
+                            {
+                                "id": "int",
+                                "name": "string",
+                                "language": "string"
+                            }
+                        ]
+                    },
+                    "state": {
+                        "id": "int",
+                        "short_name": "string",
+                        "status": "boolean",
+                        "hvac_license": "boolean",
+                        "epa_license": "boolean",
+                        "translations": [
+                            {
+                                "id": "int",
+                                "name": "string",
+                                "language": "string"
+                            }
+                        ]
+                    },
+                    "zip": "string",
+                    "trk_number": {
+                        "number": "string|null",
+                        "tracking_url": "string|null"
+                    },
+                    "delivery_type": {
+                        "id": "int",
+                        "created_at": "timestamp",
+                        "updated_at": "timestamp",
+                        "active": "bool",
+                        "translations": [
+                            {
+                                "id": "int",
+                                "slug": "string",
+                                "title": "string",
+                                "description": "string|null",
+                                "language": "string"
+                            }
+                        ]
+                    }
+                },
+                "payment": {
+                    "cost_status": "Enum: OrderCostStatusEnum",
+                    "order_id": "int",
+                    "order_price": "int",
+                    "order_price_with_discount": "int",
+                    "shipping_cost": "int",
+                    "tax": "int",
+                    "discount": "int",
+                    "paid_at": "timestamp|null"
+                }
+            }
+        }
+    ],
+    "links": {},
+    "meta": {}
+}

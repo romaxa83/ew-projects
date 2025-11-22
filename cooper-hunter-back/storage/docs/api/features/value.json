@@ -1,0 +1,8 @@
+{
+    "data": {
+        "id": "int",
+        "guid": "uuid4-uuid4-uuid4-uuid4",
+        "active": "bool",
+        "title": "string"
+    }
+}

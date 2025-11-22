@@ -1,0 +1,23 @@
+{
+    "version": 1,
+    "data": [
+        {
+            "place": "admin",
+            "key": "admin_key",
+            "en": "admin key en",
+            "es": "admin key es"
+        },
+        {
+            "place": "site",
+            "key": "site_key",
+            "en": "site key en",
+            "es": "site key es"
+        },
+        {
+            "place": "app",
+            "key": "app_key",
+            "en": "app key en",
+            "es": "app key es"
+        }
+    ]
+}

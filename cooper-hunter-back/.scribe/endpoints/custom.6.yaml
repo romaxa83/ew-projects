@@ -1,0 +1,191 @@
+- httpMethods:
+    - POST
+  uri: /developer/hs/dealers/addNewOrder
+  metadata:
+    groupName: Onec
+    groupDescription: Requests belong to the onec service.
+    title: "Create a dealer's order"
+    description: "Create a dealer's order"
+    authenticated: true
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+    Authorization: Bearer {token}
+  urlParameters: []
+  queryParameters: []
+  bodyParameters:
+    id:
+      name: id
+      description: Order ID in app
+      required: true
+      example: 1
+      type: integer
+    guid:
+      name: guid
+      description: Guid from the onec service (missing in create request)
+      required: false
+      example: 'null'
+      type: string
+    po:
+      name: po
+      description: PO
+      required: true
+      example: A123HRZ44
+      type: string
+    delivery_type:
+      name: delivery_type
+      description: Delivery method, , must be one of <b>'ltl'</b>, <b>'pickUp'</b>, <b>'train'</b> or <b>'truck'</b>
+      required: true
+      example: truck
+      type: string
+    payment_type:
+      name: payment_type
+      description: Payment method, , must be one of <b>'card'</b>, <b>'paypal'</b>, <b>'wiredTransfer'</b> or <b>'check'</b>
+      required: true
+      example: card
+      type: string
+    comment:
+      name: comment
+      description: ' '
+      required: false
+      example: some text
+      type: string
+    created_at:
+      name: created_at
+      description: ' '
+      required: true
+      example: '2022-12-01 09:04:53'
+      type: string
+    payment_card_guid:
+      name: payment_card_guid
+      description: "Will be available if the payment type is <b>'card'</b>"
+      required: false
+      example: d2c56339-5560-11ed-90f0-d05099fbe267
+      type: string
+    error:
+      name: error
+      description: ' '
+      required: false
+      example: oops, something is wrong
+      type: string
+    company:
+      name: company
+      description: 'Data of a company'
+      required: true
+      type: 'object[]'
+    'company.guid':
+      name: 'company.guid'
+      description: Company guid, (a dealer guid)
+      required: true
+      example: '7d1b18d3-70b8-11ed-90f1-d05099fbe267'
+      type: string
+    media:
+      name: media
+      description: Links to files attached to the order
+      required: false
+      example:
+        - http://pfeffer.com/ea-aut-adipisci-mollitia-velit.html
+        - http://paucek.com/impedit-fugiat-dolorem-facere-doloribus-et
+        - http://www.hudson.comlaboriosam-maiores-amet-veniam-molestiae-sit
+      type: 'string[]'
+    location:
+      name: location
+      description: ''
+      required: true
+      type: 'object[]'
+    'location.name':
+      name: 'location.name'
+      description: ''
+      required: true
+      example: Rem vitae fugit recusandae ut.
+      type: string
+    'location.phone':
+      name: 'location.phone'
+      description: ''
+      required: true
+      example: 18099990904
+      type: string
+    'location.fax':
+      name: 'location.fax'
+      description: ''
+      required: true
+      example: 17099990904
+      type: string
+    'location.country':
+      name: 'location.country'
+      description: ''
+      required: true
+      example: US
+      type: string
+    'location.state':
+      name: 'location.state'
+      description: ''
+      required: true
+      example: CA
+      type: string
+    'location.city':
+      name: 'location.city'
+      description: ''
+      required: true
+      example: Los Angeles
+      type: string
+    'location.address_line_1':
+      name: 'location.address_line_1'
+      description: ''
+      required: true
+      example: 22121 Clarendon Street
+      type: string
+    'location.address_line_2':
+      name: 'location.address_line_2'
+      description: ''
+      required: true
+      example: 22121 Clarendon Street
+      type: string
+    'location.po_box':
+      name: 'location.po_box'
+      description: ''
+      required: true
+      example: 89546-937
+      type: string
+    'location.zip':
+      name: 'location.zip'
+      description: ''
+      required: true
+      example: 99546
+      type: string
+    products:
+      name: products
+      description: ''
+      required: true
+      example:
+        - [ ]
+      type: 'object[]'
+    'products[].guid':
+      name: 'products[].guid'
+      description: ''
+      required: true
+      example: 7d1b18d3-70b8-11ed-90f1-d05099fbe267
+      type: string
+    'products[].price':
+      name: 'products[].price'
+      description: ''
+      required: true
+      example: 180.5
+      type: string
+    'products[].qty':
+      name: 'products[].qty'
+      description: 'Quantity'
+      required: true
+      example: 18
+      type: integer
+
+  responses:
+    - status: 200
+      description: 'Response from the onec service'
+      content:
+        {"guid": "7d1b18d3-70b8-11ed-90f1-d05099fbe267", "error": "", "success": true}
+  responseFields:
+    guid:
+      name: guid
+      description: Guid a dealers's order belongs to the onec service
+      type: string

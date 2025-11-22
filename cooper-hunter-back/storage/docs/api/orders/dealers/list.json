@@ -1,0 +1,99 @@
+{
+    "data": [
+        {
+            "data": {
+                "id": "int",
+                "guid": "string",
+                "arrived_from": "OrderArrivedFormEnum",
+                "status": "Enum: OrderStatus",
+                "delivery_type": "Enum: DeliveryType",
+                "payment_type": "Enum: PaymentType",
+                "po": "string",
+                "tracking_number": "string",
+                "tracking_company": "string",
+                "comment": "string",
+                "terms": [
+                    {
+                        "name": "string",
+                        "guid": "string"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "string",
+                        "url": "string"
+                    }
+                ],
+                "shipped_at": "string",
+                "created_at": "string",
+                "invoice": "string",
+                "invoice_at": "string",
+                "approved_at": "string",
+                "tax": "float",
+                "shipping_price": "float",
+                "total": "float",
+                "total_discount": "float",
+                "total_with_discount": "float",
+                "serial_numbers": [
+                    {
+                        "serial_number": "string",
+                        "product_guid": "string",
+                        "product_title": "string"
+                    }
+                ],
+                "items": [
+                    {
+                        "product_guid": "string",
+                        "product_title": "string",
+                        "price": "float",
+                        "qty": "int",
+                        "discount": "float",
+                        "total": "float",
+                        "description": "string"
+                    }
+                ],
+                "shipping_address": {
+                    "name": "string",
+                    "phone": "string",
+                    "fax": "string",
+                    "country": "string",
+                    "state": "string",
+                    "city": "string",
+                    "address_line_1": "string",
+                    "address_line_2": "string",
+                    "zip": "string"
+                },
+                "dealer": {
+                    "guid": "string",
+                    "phone": "string",
+                    "email": "string",
+                    "first_name": "string",
+                    "last_name": "string",
+                    "company": {
+                        "guid": "string",
+                        "status": "string",
+                        "type": "string",
+                        "business_name": "string",
+                        "email": "string",
+                        "phone": "string",
+                        "fax": "string",
+                        "country": "string",
+                        "state": "string",
+                        "city": "string",
+                        "address_line_1": "string",
+                        "address_line_2": "string",
+                        "zip": "string",
+                        "po_box": "string",
+                        "taxpayer_id": "string",
+                        "tax": "string",
+                        "websites": "string",
+                        "marketplaces": "string",
+                        "trade_names": "string"
+                    }
+                }
+            }
+        }
+    ],
+    "links": {},
+    "meta": {}
+}

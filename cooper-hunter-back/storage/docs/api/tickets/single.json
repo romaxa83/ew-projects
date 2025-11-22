@@ -1,0 +1,28 @@
+{
+    "data": {
+        "id": "int",
+        "guid": "uuid-4",
+        "code": "null|string",
+        "comment": "null|string",
+        "status": "TicketStatusEnum",
+        "translations": [
+            {
+                "id": "int",
+                "title": "string",
+                "description": "string",
+                "language": "string"
+            }
+        ],
+        "order_parts": [
+            "string1",
+            "string...",
+            "stringN"
+        ],
+        "order_parts_relation": [
+            "List of OrderCategoryResource objects"
+        ],
+        "orders": [
+            "List of OrderResource objects"
+        ]
+    }
+}

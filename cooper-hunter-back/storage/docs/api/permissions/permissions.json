@@ -1,0 +1,144 @@
+{
+    "data": [
+        {
+            "id": 251,
+            "name": "catalog.category.list"
+        },
+        {
+            "id": 252,
+            "name": "catalog.category.create"
+        },
+        {
+            "id": 253,
+            "name": "catalog.category.update"
+        },
+        {
+            "id": 254,
+            "name": "catalog.category.delete"
+        },
+        {
+            "id": 255,
+            "name": "catalog.category.image_upload"
+        },
+        {
+            "id": 256,
+            "name": "catalog.certificate.certificate.list"
+        },
+        {
+            "id": 257,
+            "name": "catalog.certificate.certificate.create"
+        },
+        {
+            "id": 258,
+            "name": "catalog.certificate.certificate.update"
+        },
+        {
+            "id": 259,
+            "name": "catalog.certificate.certificate.delete"
+        },
+        {
+            "id": 260,
+            "name": "catalog.certificate.type.list"
+        },
+        {
+            "id": 261,
+            "name": "catalog.certificate.type.create"
+        },
+        {
+            "id": 262,
+            "name": "catalog.certificate.type.update"
+        },
+        {
+            "id": 263,
+            "name": "catalog.certificate.type.delete"
+        },
+        {
+            "id": 264,
+            "name": "catalog.feature.feature.list"
+        },
+        {
+            "id": 265,
+            "name": "catalog.feature.feature.create"
+        },
+        {
+            "id": 266,
+            "name": "catalog.feature.feature.update"
+        },
+        {
+            "id": 267,
+            "name": "catalog.feature.feature.delete"
+        },
+        {
+            "id": 268,
+            "name": "catalog.feature.value.list"
+        },
+        {
+            "id": 269,
+            "name": "catalog.feature.value.create"
+        },
+        {
+            "id": 270,
+            "name": "catalog.feature.value.update"
+        },
+        {
+            "id": 271,
+            "name": "catalog.feature.value.delete"
+        },
+        {
+            "id": 272,
+            "name": "catalog.product.list"
+        },
+        {
+            "id": 273,
+            "name": "catalog.product.create"
+        },
+        {
+            "id": 274,
+            "name": "catalog.product.update"
+        },
+        {
+            "id": 275,
+            "name": "catalog.product.delete"
+        },
+        {
+            "id": 276,
+            "name": "catalog.product.image_upload"
+        },
+        {
+            "id": 277,
+            "name": "technician.list"
+        },
+        {
+            "id": 278,
+            "name": "user.list"
+        },
+        {
+            "id": 279,
+            "name": "order.category.create"
+        },
+        {
+            "id": 280,
+            "name": "order.category.update"
+        },
+        {
+            "id": 281,
+            "name": "order.category.delete"
+        },
+        {
+            "id": 282,
+            "name": "order.category.list"
+        },
+        {
+            "id": 283,
+            "name": "order.list"
+        },
+        {
+            "id": 284,
+            "name": "order.update"
+        },
+        {
+            "id": 285,
+            "name": "order.delete"
+        }
+    ]
+}

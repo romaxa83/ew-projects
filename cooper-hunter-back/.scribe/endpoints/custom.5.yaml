@@ -1,0 +1,28 @@
+- httpMethods:
+    - POST
+  uri: ' '
+  metadata:
+    groupName: Onec
+    groupDescription: Requests belong to the onec service.
+    title: 'Delete payment card'
+    description: 'Add payment card to member (company)'
+    authenticated: true
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+    Authorization: Bearer {token}
+  urlParameters: []
+  queryParameters: []
+  bodyParameters:
+    guid:
+      name: guid
+      description: 'Payment card guid'
+      required: true
+      example: '7d1b18d3-70b8-11ed-90f1-d05099fbe267'
+      type: string
+
+  responses:
+    - status: 204
+      description: 'Response from the onec service'
+      content: ''
+  responseFields: []

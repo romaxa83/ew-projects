@@ -1,0 +1,48 @@
+@startuml
+
+title
+    RDP Accounts
+end title
+
+left header
+Cooper&Hunter
+endheader
+
+package "Local system" {
+    class User {
+        int id
+    }
+
+    class CommercialProject {
+        int id
+        int user_id
+    }
+
+    CommercialProject --> User
+
+    class CredentialsRequest {
+        int id
+        int user_id
+        int project_id
+    }
+
+    CredentialsRequest --> User
+    CredentialsRequest --> CommercialProject
+
+    class RdpAccount {
+        int id
+        int user_id
+    }
+
+    RdpAccount --> User
+}
+
+package "Rdp system" {
+    class ADUser {
+    }
+
+    RdpAccount --> ADUser
+}
+
+
+@enduml

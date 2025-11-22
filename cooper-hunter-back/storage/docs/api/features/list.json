@@ -1,0 +1,28 @@
+{
+    "data": [
+        {
+            "id": "int",
+            "guid": "uuid4-uuid4-uuid4-uuid4",
+            "active":  "bool",
+            "display_in_web":  "bool",
+            "display_in_mobile":  "bool",
+            "translations": [
+                {
+                    "id": "int",
+                    "title": "string",
+                    "description": "string",
+                    "language": "string"
+                }
+            ],
+            "values": [
+                {
+                    "id": "int",
+                    "active":  "bool",
+                    "title": "string"
+                }
+            ]
+        }
+    ],
+    "links": {},
+    "meta": {}
+}

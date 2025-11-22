@@ -1,0 +1,54 @@
+@startuml
+
+title
+Cхема связей для "Commissioioning"
+end title
+
+left header
+Cooper&Hunter
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package Catalog #7ad378 {
+
+    class Protocol <<(M,#7ad378)>> #tomato {
+        .. commissioning_protocols ..
+
+        *questions(): HasMany
+        __
+    }
+
+    class Question <<(E,#7ad378)>> {
+        .. commissioning_questions ..
+
+        *optionAnswers(): HasMany
+        __
+    }
+
+    class OptionAnswer <<(E,#7ad378)>> {
+        .. commissioning_option_answers ..
+
+        варианты ответов если вопрос имеет
+        вариации ответов (type = select)
+
+        *admin()
+        __
+    }
+}
+
+Protocol -right--{ Question
+Question -right--{ OptionAnswer
+
+right footer
+<#lightblue,#red>|= Version |= Name |= Status|= Created_at |= Updated_at |
+<#lightgreen>| 1.0 | Rodomanov R. | dev | 08.12.2021 | 12.01.2022 |
+endfooter
+
+@enduml
+
