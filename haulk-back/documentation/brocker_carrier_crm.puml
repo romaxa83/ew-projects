@@ -1,0 +1,419 @@
+@startuml
+
+enum PaymentBegins {
+    PICKUP
+    DELIVERY
+    SEND_INVOICE
+}
+
+enum OrderLocation {
+    PICKUP
+    DELIVERY
+}
+
+enum OrderMember {
+    CARRIER
+    BROKER
+    CUSTOMER
+}
+
+entity Offer {
+    * id: UInt64 <<generated>>
+    --
+    * broker_order_id: UInt64 <<FK>>
+    * carrier_id: UInt64 <<FK>>
+    * carrier_user_id: UInt64 <<FK>>
+    carrier_order_id: UInt64 <<FK>>
+    ---
+    <<OFFER FIELDS>>
+    ---
+    approve: Boolean
+    decision_date: Timestamp
+}
+
+entity ChangeRequest {
+    * id: UInt64 <<generated>>
+    --
+    * broker_order_id: UInt64 <<FK>>
+    * carrier_order_id: UInt64 <<FK>>
+    comment: String
+    * closed = false: Boolean
+    close_date: Timestamp
+}
+
+entity ChangeRequestSuggestion {
+    * id: UInt64 <<generated>>
+    --
+    * change_request_id: UInt64 <<FK>>
+    * from: OrderMember
+    * field: String
+    value: String
+    --
+    uniq(change_request_id, field, from)
+}
+
+entity CarrierOrder {
+    * id: UInt64 <<generated>>
+    --
+    * load_id: String
+    * user_id: UInt64 <<FK>>
+    * carrier_id: UInt64 <<FK>>
+    * public_token: String
+    driver_id: UInt64 <<FK>>
+    dispatcher_id: UInt64 <<FK>>
+    distance: Float
+    * status: UInt16
+    * calculated_status: String
+    * carrier_id: UInt64 <<FK>>
+    * pickup_contact_id: UInt64 <<FK>>
+    * delivery_contact_id: UInt64 <<FK>>
+    * shipper_contact_id: UInt64 <<FK>>
+    dispatcher_instruction: String
+    driver_instruction: String
+    * pickup_date: UInt32
+    pickup_time: Time
+    * delivery_date: UInt32
+    delivery_time: Time
+    * is_billed = false: Boolean
+    * is_archive = false: Boolean
+    * need_review = false: Boolean
+    * has_review = false: Boolean
+    * seen_by_driver = false: Boolean
+    * deduct_from_driver = false: Boolean
+    deduct_note: String
+    pickup_comment: String
+    delivery_comment: String
+    shipper_comment: String
+    pickup_customer_not_available = false: Boolean
+    delivery_customer_not_available = false: Boolean
+    pickup_customer_refused_to_sign = false: Boolean
+    delivery_customer_refused_to_sign = false: Boolean
+    pickup_customer_full_name: String
+    delivery_customer_full_name: String
+    pickup_date_actual: UInt32
+    delivery_date_actual: UInt32
+    has_pickup_inspection = false: Boolean
+    has_pickup_signature = false: Boolean
+    has_delivery_inspection = false: Boolean
+    has_delivery_signature = false: Boolean
+}
+
+entity BrokerOrder {
+    * id: UInt64 <<generated>>
+    --
+    * load_id: String
+    * user_id: UInt64 <<FK>>
+    * broker_id: UInt64 <<FK>>
+    * public_token: String
+    dispatcher_name: String
+    dispatcher_contact: String
+    driver_name: String
+    driver_contact: String
+    distance: Float
+    * status: UInt16
+    * calculated_status: String
+    * broker_id: UInt64 <<FK>>
+    * pickup_contact_id: UInt64 <<FK>>
+    * delivery_contact_id: UInt64 <<FK>>
+    * customer_contact_id: UInt64 <<FK>>
+    * carrier_contact_id: UInt64 <<FK>>
+    instruction: String
+    lb_instruction: String
+    * pickup_date: UInt32
+    pickup_time: Time
+    * delivery_date: UInt32
+    delivery_time: Time
+    * is_archive = false: Boolean
+    pickup_comment: String
+    delivery_comment: String
+    delivery_customer_full_name: String
+    pickup_date_actual: UInt32
+    delivery_date_actual: UInt32
+    ---
+    carrier_order_id: UInt64
+    published_on_lb = false: Boolean
+}
+
+entity CarrierPayment {
+    * id: UInt64 <<generated>>
+    --
+    * order_id: UInt64 <<FK>>
+    * total: Float
+    terms: String
+    --
+    broker_carrier_amount: Float
+    broker_carrier_days: UInt8
+    broker_carrier_begins: PaymentBegins
+    broker_carrier_planned_date: UInt32
+    broker_carrier_method_id: UInt16
+    broker_carrier_invoice_id: String
+    broker_carrier_invoice_notes: String
+    broker_carrier_invoice_issue_date: String
+    --
+    customer_carrier_amount: Float
+    customer_carrier_location: OrderLocation
+    customer_carrier_planned_date: UInt32
+    customer_carrier_method_id: UInt16
+    customer_carrier_invoice_id: String
+    customer_carrier_invoice_notes: String
+    customer_carrier_invoice_issue_date: String
+    --
+    carrier_broker_amount: Float
+    carrier_broker_days: UInt8
+    carrier_broker_begins: PaymentBegins
+    carrier_broker_planned_date: UInt32
+    carrier_broker_method_id: UInt16
+    --
+    * driver_data_sent = false: Boolean
+    driver_amount: Float
+    driver_method_id: UInt16
+    driver_uship_code: String
+    driver_comment: String
+    driver_timestamp: UInt32
+    driver_account_type: String
+}
+
+entity BrokerPayment {
+    * id: UInt64 <<generated>>
+    --
+    * order_id: UInt64 <<FK>>
+    * total: Float
+    terms: String
+    --
+    broker_carrier_amount: Float
+    broker_carrier_days: UInt8
+    broker_carrier_begins: PaymentBegins
+    broker_carrier_planned_date: UInt32
+    broker_carrier_method_id: UInt16
+    broker_carrier_invoice_id: String
+    broker_carrier_invoice_notes: String
+    broker_carrier_invoice_issue_date: String
+    --
+    customer_carrier_amount: Float
+    customer_carrier_location: OrderLocation
+    customer_carrier_planned_date: UInt32
+    customer_carrier_method_id: UInt16
+    customer_carrier_invoice_id: String
+    customer_carrier_invoice_notes: String
+    customer_carrier_invoice_issue_date: String
+    --
+    carrier_broker_amount: Float
+    carrier_broker_days: UInt8
+    carrier_broker_begins: PaymentBegins
+    carrier_broker_planned_date: UInt32
+    carrier_broker_method_id: UInt16
+    --
+    customer_broker_amount: Float
+    customer_broker_location: OrderLocation
+    customer_broker_planned_date: UInt32
+    customer_broker_method_id: UInt16
+    customer_broker_invoice_id: String
+    customer_broker_invoice_notes: String
+    customer_broker_invoice_issue_date: String
+}
+
+entity PaymentStage {
+    * id: UInt64 <<generated>>
+    --
+    * payment_id: UInt64 <<FK>>
+    * from: OrderMember
+    * to: OrderMember
+    * amount: Float
+    * payment_date: UInt32
+    * method_id: UInt16
+    reference_number: String
+    uship_number: String
+    notes: String
+}
+
+entity Vehicle {
+    * id: UInt64 <<generated>>
+    --
+    * inop = false: Boolean
+    * enclosed = false: Boolean
+    vin: String
+    year: String
+    make: String
+    model: String
+    type_id: UInt16
+    color: String
+    license_plate: String
+    stock_number: String
+    * pickup_inspection_id: UInt64 <<FK>>
+    * delivery_inspection_id: UInt64 <<FK>>
+}
+
+entity Inspection {
+    * id: UInt64 <<generated>>
+    ---
+    ....
+    ....
+    ....
+    ....
+    ....
+    ....
+    ....
+    ....
+}
+
+entity Contact {
+    * id: UInt64 <<generated>>
+    --
+    * full_name: String
+    email: String
+    fax: String
+    type_id: UInt64 <<FK>>
+    * city_id: UInt64 <<FK>>
+    * address: String
+    working_hours: Array
+    comment: String
+    comment_date: UInt32
+    * hidden = false: Boolean
+}
+
+entity Bonus {
+    * id: UInt64 <<generated>>
+    --
+    * order_id: UInt64 <<FK>>
+    type: String
+    price: Float
+    to: OrderMember
+}
+
+entity Bonus {
+    * id: UInt64 <<generated>>
+    --
+    * order_id: UInt64 <<FK>>
+    type: String
+    price: Float
+    to: OrderMember
+}
+
+entity Expense {
+    * id: UInt64 <<generated>>
+    --
+    * order_id: UInt64 <<FK>>
+    type_id: UInt16
+    price: Float
+    date: UInt32
+    * deduct_from_driver = false: Boolean
+    to: OrderMember
+}
+
+entity Phone {
+    * id: UInt64 <<generated>>
+    --
+    * contact_id: UInt64 <<FK>>
+    * phone: String
+    extension: String
+    note: String
+    name: String
+    * primary = false: Boolean
+}
+
+entity City <<dictionary>> {
+    * id: UInt64 <<generated>>
+    --
+    * name: String
+    * zip: String
+    * status: Boolean
+    * state_id: UInt64 <<FK>>
+    * timezone: String
+    * counter_code: String
+    * country_name: String
+}
+
+class Time {
+    from: String <<g:i A>>,
+    to: String <<g:i A>>
+}
+
+note as CarrierPaymentNote
+    Возможные варианты платежей:
+    1) Customer платит Broker (не отображается у Carrier) -> Broker платит Carrier
+    2) Customer платит Carrier -> Carrier платит Broker
+    3) Customer платит Carrier - схема без участия брокера
+end note
+
+note as VehicleNote
+    Так как управление данными сущностями
+    по сути возможно с обеих сторон, а также
+    то что брокер будет иметь возможность
+    видеть полное инфо по инспекциям, то имеет
+    смысл делать эти сущности общие для заказа
+    Carrier и Broker (через связь morphMany)
+end note
+
+note as ContactNote
+    Аналогично сущности Vehicle имеет
+    сделать relation контактов с Broker
+    и Carrier
+end note
+
+note as BrokerPaymentNote
+    Возможные варианты платежей:
+    1) Customer платит Broker -> Broker платит Carrier
+    2) Customer платит Carrier -> Carrier платит Broker
+end note
+
+note as PaymentNote
+    На данный момент объекты Payment отличаются тем что у Carrier
+    есть блок для платежей водителю, а у Broker есть блок платежа
+    от Customer. В теории можно объединить эти два объекта в один.
+end note
+
+note as PaymentStageNote
+    PaymentStage описаны с учетом что объект Payment будет общий.
+    На данный момент PaymentStage имеет связь с Order, считаю что
+    нужно реализовывать связь с Payment.
+end note
+
+note right of BrokerOrder::carrier_order_id
+    Когда Broker создает заказ и публикует его на LB
+    то выставляется флаг "published_on_lb". Данный флаг можем
+    выставить только в случае когда заказ новый и за ним еще
+    не закреплен Carrier. При закреплении Carrier записываем ID
+    заказа из CRM Carrier.
+end note
+
+note right of Offer::carrier_order_id
+    Не уверен в необходимости сохранять
+    это значение в Offer
+end note
+
+note right of Offer::decision_date
+    Не "approve_date" т.к. брокер может отказаться от офера.
+    Пока офер на рассмотрении "approve" будет NULL
+end note
+
+CarrierPayment .. CarrierPaymentNote
+BrokerPayment .. BrokerPaymentNote
+Contact .. ContactNote
+Vehicle .. VehicleNote
+CarrierPayment .. PaymentNote
+BrokerPayment .. PaymentNote
+PaymentNote .. PaymentStageNote
+PaymentStage .. PaymentStageNote
+
+Contact "city_id " }o--|| "id " City
+Contact "id" ||--|{ "contact_id" Phone
+CarrierOrder "pickup_contact_id " ||--|{ "id " Contact
+CarrierOrder "delivery_contact_id " ||--|{ "id " Contact
+CarrierOrder "shipper_contact_id " ||--|{ "id " Contact
+CarrierOrder "id" ||--|{ "order_id" Bonus
+CarrierOrder "id" ||--|{ "order_id" Expense
+CarrierOrder ||--|{ Vehicle
+BrokerOrder "pickup_contact_id " ||--|{ "id " Contact
+BrokerOrder "delivery_contact_id " ||--|{ "id " Contact
+BrokerOrder "customer_contact_id " ||--|{ "id " Contact
+BrokerOrder "carrier_contact_id " ||--|{ "id " Contact
+BrokerOrder ||--|{ Vehicle
+BrokerOrder "id" ||--|{ "broker_order_id" Offer
+Vehicle "pickup_inspection_id" ||--o| "id" Inspection
+Vehicle "delivery_inspection_id" ||--o| "id" Inspection
+CarrierPayment "order_id" ||--|| "id" CarrierOrder
+BrokerPayment "order_id" ||--|| "id" BrokerOrder
+ChangeRequest |o--|| BrokerOrder
+ChangeRequest |o--|| CarrierOrder
+ChangeRequest ||--|{ ChangeRequestSuggestion
+@enduml

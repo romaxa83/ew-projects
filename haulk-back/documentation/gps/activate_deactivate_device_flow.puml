@@ -1,0 +1,184 @@
+@startuml
+
+title
+<u>Activate/Deactivate gps device</u>
+end title
+
+left header
+Wezom
+endheader
+
+skinparam {
+    TitleFontSize 25
+    TitleFontName Courier
+    TitleFontStyle underscore
+    ArrowColor #033649
+    ArrowFontColor #24292e
+    BackgroundColor #f5f5f5
+    BorderColor black
+    RoundCorner 25
+    SequenceLifeLineBorderColor #033649
+    ParticipantFontSize 17
+    BoxPadding 50
+    SequenceBoxBorderColor '
+}
+
+skinparam note {
+    BackgroundColor gold
+    BorderColor gold
+}
+
+skinparam group {
+    BackgroundColor red
+    BorderColor black
+}
+
+skinparam participant {
+    BorderColor black
+    BackgroundColor tomato
+}
+
+box "App" #LightBlue
+participant CRM
+participant BACKOFFICE
+participant Backend
+end box
+
+group отправка запроса на активацию/деактивацию
+
+CRM -> Backend: PUT /api/gps/devices/{id}/toggle-activate
+
+rnote over Backend
+если был ACTIVE, дополняются данные на деактивацию
+status_request - pending (статуса запроса)
+status_activate_request - deactivate (какой статуса запроса)
+send_request_user_id (пользователь, отправивший запрос)
+endrnote
+
+rnote over Backend
+если был INACTIVE, дополняются данные на деактивацию
+status_request - pending (статуса запроса)
+status_activate_request - activate (какой статуса запроса)
+send_request_user_id (пользователь, отправивший запрос)
+endrnote
+
+rnote over Backend
+статус девайса НЕ МЕНЯЕТСЯ
+endrnote
+
+rnote over Backend
+создается уведомление для бека [Notification]
+type - gps
+endrnote
+end
+
+group подтверждения/отклонения на активацию/деактивацию
+BACKOFFICE -> Backend: /v1/saas/gps-devices/{id}/approve-request
+
+rnote over Backend
+status_request = closed - ERROR
+endrnote
+
+rnote over Backend
+нет - gpsSubscription
+если она есть, но в статусе - canceled или active_till - ERROR
+endrnote
+
+rnote over Backend
+если девайс в статусе INACTIVE, он активируется
+company_id = null - ERROR
+phone = null - ERROR
+
+если status_request = pending
+ => status_request = closed
+        request_closed_at = now
+
+status_activate_request - none
+status - active
+active_at - now()
+
+если есть подписка и она в статусе DRAFT,
+ =>  активируем ее
+endrnote
+
+rnote over Backend
+если девайс в статусе ACTIVE, он деактивируется
+
+если status_request = pending
+ => status_request = closed
+        request_closed_at = now
+
+status_activate_request - none
+
+если есть подписка не CANCELED
+ => active_till_at = company->subscription->billing_end
+
+СТАТУС ОСТАЕТСЯ ACTIVE, появляется - active_till_at
+endrnote
+
+rnote over Backend
+создается алерт для CRM
+endrnote
+
+CRM <- Backend: ws: device.toggle-activity
+end
+
+group worker
+Backend -> Backend: worker:change-device-request-status
+
+rnote over Backend
+убирает у gps девайса статус запроса closed на none,
+ через день после получение данного статуса
+
+ запускается в полночь
+endrnote
+
+Backend -> Backend: worker:deactivate_device
+
+rnote over Backend
+устанавливаем gps девайсу статус inactive
+
+биллинг закачивается - active_till_at < now
+ => status_activate_request = none
+       status = inactive
+       inactive_at = now
+       active_at = null
+       active_till_at = null
+
+отвязываем девайсы от техники
+
+запускается каждый час
+
+endrnote
+end
+
+== Уведомления ==
+group получение уведомления
+BACKOFFICE -> Backend: GET /v1/saas/notifications
+
+rnote over BACKOFFICE
+запрашиваем со статусом - new
+endrnote
+end
+
+group получение кол-во уведомлений
+BACKOFFICE -> Backend: GET /v1/saas/notifications/count
+
+rnote over BACKOFFICE
+запрашиваем со статусом - new
+endrnote
+end
+
+group обозначаем уведомления как прочитанное
+BACKOFFICE -> Backend: PUT /v1/saas/notifications/read
+
+rnote over BACKOFFICE
+передается массив id
+endrnote
+end
+
+left footer
+<#lightblue,#red>|= Projecy|= Version |= Creator |= Status|= Created_at |= Updated_at |
+<#lightgreen>| haulk | 1.0 | Rodomanov R. | dev | 27.09.2023 | 27.09.2023 |
+endfooter
+@enduml

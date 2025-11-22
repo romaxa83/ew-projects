@@ -1,0 +1,266 @@
+@startuml
+title Взаимодействие между Broker CRM и Carrier CRM
+
+participant "Broker Websocket" as BW
+participant Broker as B
+participant Kafka as K
+participant Carrier as C
+participant "Carrier Websocket" as CW
+== Publish order on LB ==
+    B <-- B: Publish order on LB. Freezing order\n(not status, like as preloader)
+    B -> K: Produce <<Publish order>>
+    activate K
+    C -> K: Consume <<Publish order>>
+    note right
+    LB в полном своем понимании,
+    будет находится на стороне Carrier CRM.
+    Т.к. ходить за полным списком заказов,
+    по всем брокерам в другую систему будет
+    очень затратно
+    end note
+    C --> C: Publish order on LB
+    C -> CW: <<New order on LB>>
+    C -> K: Produce <<Order published>>
+    B -> K: Consume <<Order published>>
+    deactivate K
+    B <-- B: Set published time. Unfreeze order
+    B -> BW: <<Order published>>
+newpage
+== Update order / Take out order from LB (before accepting offers) / Publication timeout ==
+    B <-- B: Take out order from LB
+    B -> K: Produce <<Unpublish order>>
+    activate K
+    C -> K: Consume <<unpublish order>>
+    deactivate K
+    C --> C: Remove order from LB
+    C -> CW: <<Order removed>>
+    C --> C: Decline offers which was already created by Carriers
+    C -> CW: <<Offer declined>>
+newpage
+== Re-publish order on LB ==
+    B <-- B: Publish order on LB. Freezing order\n(not status, like as preloader)
+    B -> K: Produce <<Publish order>>
+    activate K
+    C -> K: Consume <<Publish order>>
+    C --> C: Publish order on LB
+    C -> CW: Notification for carriers which sent\noffers on previous time <<Order re-published>>
+    C -> CW: Notification for other carriers <<Order published>>
+    C -> K: Produce <<Order published>>
+    B -> K: Consume <<Order published>>
+    deactivate K
+    B <-- B: Set published time. Unfreeze order
+    B -> BW: <<Order published>>
+newpage
+== Send offer / "Booked now" with changing order options ==
+    C --> C: Create offer (freezing)
+    C -> K: Produce <<Offer>>
+    activate K
+    B -> K: Consume <<Offer>>
+    deactivate K
+    B <-- B: Read order
+    alt Successful case
+        B <-- B: Create offer
+        B -> K: Produce <<Offer received>>
+        activate K
+        C -> K: Consume <<Offer received>>
+        deactivate K
+        C --> C: Mark offer as received (unfreezing)
+        C -> CW: <<Offer received>>
+        B -> BW: <<Offer received>>
+    else Order was removed / took out from LB / Other offer already accepted
+        note over B
+            Т.к. данная схема выстраивается с
+            использованием брокера сообщений,
+            то возможны кейсы когда Broker
+            снимает заказ с публикации, но на
+            стороне Carrier это сообщение еще
+            не получено и со стороны Carrier
+            отправляется оффер.
+        end note
+        B -> K: Produce <<Offers declined>>
+        activate K
+        C -> K: Consume <<Offers declined>>
+        deactivate K
+        alt If we still have not declined offers
+            C --> C: Mark offers as declined (unfreezing)
+            C -> CW: <<Offer declined>>
+        end
+    end
+newpage
+== Remove offer ==
+    C --> C: Remove offer
+    C -> K: Produce <<Offer removed>>
+    activate K
+    B -> K: Consume <<Offer removed>>
+    deactivate K
+    B <-- B: Read order
+    B <-- B: Remove offer
+    alt Successful case
+        B -> BW: <<Offer removed>>
+    else Broker already accepted this offer
+        note over B, BW
+            Данный кейс маловероятен но возможен, и это
+            не зависит от использования брокеров сообщений,
+            т.к. даже при прямом API запросе мы можем
+            получить параллельные запросы от Broker к Carrier
+            и от Carrier к Broker (и наверное при использовании
+            прямых запросов данный кейс имеет больше шансов
+            на появление).
+            И этот кейс все также будет маловероятен, т.к. при
+            отправке подтверждения от Broker этого оффера уже
+            не будет на стороне Carrier.
+        end note
+        B -> BW: <<Offer removed>>
+        B <-- B: Unfreeze order
+    end
+newpage
+== Booked now ==
+    C --> C: Create offer (set status like as "in process")
+    C --> C: Create order (hidden)
+    C -> K: Produce <<Take order>>
+    activate K
+    B -> K: Consume <<Take order>>
+    deactivate K
+    B <-- B: Read order
+    alt Successful case
+        B <-- B: Connect Carrier to Broker order
+        B -> K: Produce <<Accept offer>>
+        activate K
+        C -> K: Consume <<Accept offer>>
+        deactivate K
+        B -> BW: Notification "Carrier connected to your order"
+        C --> C: Publish order (unhidden)
+        C --> C: Take out order from LB
+        C -> CW: <<Offer accepted>>
+        B <-- B: Mark other offers as declined
+        C --> C: Mark other offers as declined
+        C -> CW: <<Offer declined>>
+    else Order was removed / Other offer was accepted
+        B -> K: Produce <<Offer declined>>
+        activate K
+        C -> K: Consume <<Offer declined>>
+        deactivate K
+        note over C
+            Данный кейс возможен, только при параллельных действия
+            на стороне Carrier и Broker. И в теории на этой стороне
+            уже оффер должен быть отмечен как "не принят", но лучше
+            обрабатывать этот кейс.
+        end note
+        C --> C: Mark offers as declined (can show decline reason)
+        C -> CW: <<Offer declined>>
+    else Order freezed
+        note over BW, B
+            Максимально маловероятный кейс. Брокер принял, другой
+            оффер, но этот оффер еще не обработан Carrier CRM и заказ
+            зафризен. Создаем новый оффер, и если во время принятия
+            другого оффера что-то пойдет не так, то сразу примем этот.
+        end note
+        B <-- B: Create new offer
+    end
+newpage
+== Decline offer ==
+    B <-- B: Decline offer
+    B -> K: Produce <<Offer declined>>
+    activate K
+    C -> K: Consume <<Offer declined>>
+    deactivate K
+    alt Offer already exists
+    C --> C: Decline offer
+    C -> CW: <<Offer declined>>
+    end
+newpage
+== Send additional options (from Broker) ==
+    note over B, C
+        Не видел в US возможен ли такой кейс, но как я понимаю, вероятность есть, что
+        Carrier указывает свои условия, а Broker в ответ предлагает свои (отличные от
+        изначальных) и только этому Carrier
+    end note
+    B -> K: Produce <<Offer updated>>
+    activate K
+    C -> K: Consume <<Offer updated>>
+    deactivate K
+    alt Offer already exists
+        C --> C: Set new option for offer
+        C -> CW: Notification <<Offer updated>>
+    end
+newpage
+== Accept offer ==
+    B <-- B: Take offer (freeze)
+    B -> K: Produce <<Take offer>>
+    activate K
+    C -> K: Consume <<Take offer>>
+    deactivate K
+    alt Successful case
+        C --> C: Create order
+        C -> CW: <<Order created>>
+        C --> C: Take out order from LB
+        C --> C: Decline other offers by this order
+        C -> CW: <<Offer decline>>
+        C -> K: Produce <<Order created>>
+        activate K
+        B -> K: Consume <<Order created>>
+        deactivate K
+        B <-- B: Unfreeze order. Set carrier info
+        B <-- B: Decline other offers
+        B -> BW: <<Order updated>>
+    else Offer was removed
+        C -> K: Produce <<Offer removed>>
+        activate K
+        B -> K: Consume <<Offer removed>>
+        deactivate K
+        B <-- B: Unfreeze order
+        B <-- B: Remove offer
+        B -> BW: <<Offer removed>>
+        alt If order with "Booked now" setting and there are new offer with "Booked  now"
+             note over BW, B
+               Максимально маловероятный кейс описанный выше в разделе "Booked now"
+             end note
+             B -> K: Produce <<Take offer>>
+             activate K
+             C -> K: Consume <<Take offer>>
+             deactivate K
+             B -> BW: Notification "Carrier connected to your order"
+             C --> C: Publish order (unhidden)
+             C --> C: Take out order from LB
+             C -> CW: <<Offer accepted>>
+             B <-- B: Mark other offers as declined
+             C --> C: Mark other offers as declined
+             C -> CW: <<Offer declined>>
+        end
+    end
+newpage
+== Make changes in order (Broker -> Carrier) ==
+    note over BW, CW
+        Здесь описана общая схема взаимодействия при внесении изменений в заказ (без учета статусов и т.д.).
+    end note
+    B <-- B: New change request
+    B -> K: Produce <<Change request>>
+    activate K
+    C -> K: Consume <<Change request>>
+    deactivate K
+    C --> C: Create change request
+    C --> C: Freezing order
+    C -> CW: <<Change request>>
+    alt Approve changes
+        C --> C: Update order
+        C -> CW: <<Order updated>>
+        C -> K: Produce <<Approve change request>>
+        activate K
+        B -> K: Consume <<Approve change request>>
+        deactivate K
+        B <-- B: Approve change request
+        B -> BW: <<Change request approved>>
+        B <-- B: Update order
+        B -> BW: <<Order updated>>
+    else Additional options from carrier
+        C --> C: Add options in change request
+        C -> K: Produce <<New options>>
+        activate K
+        B -> K: Consume <<New options>>
+        deactivate K
+        note over BW, B
+            Далее все также разбивается на Approve changes и
+            Additional options
+        end note
+    end
+@enduml

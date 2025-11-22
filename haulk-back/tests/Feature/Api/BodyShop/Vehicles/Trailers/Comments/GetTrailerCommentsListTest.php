@@ -1,0 +1,69 @@
+<?php
+
+namespace Tests\Feature\Api\BodyShop\Vehicles\Trailers\Comments;
+
+use App\Models\Users\User;
+use App\Models\Vehicles\Comments\Comment;
+use App\Models\Vehicles\Comments\TrailerComment;
+use App\Models\Vehicles\Trailer;
+use App\Models\Vehicles\Vehicle;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\Feature\Api\Vehicles\Comments\GetCommentsListTest;
+use Tests\Helpers\Traits\UserFactoryHelper;
+
+class GetTrailerCommentsListTest extends GetCommentsListTest
+{
+    use DatabaseTransactions;
+    use UserFactoryHelper;
+
+    protected string $routeName = 'body-shop.trailers.comments.index';
+
+    protected function getVehicle(array $attributes = []): Vehicle
+    {
+        return factory(Trailer::class)->create($attributes + ['carrier_id' => null]);
+    }
+
+    protected function getComment(Vehicle $vehicle, ?User $user = null, array $attributes = []): Comment
+    {
+        return factory(TrailerComment::class)->create([
+                'user_id' => $user->id ?? $this->bsAdminFactory()->id,
+                'trailer_id' => $vehicle->id,
+                'comment' => 'test comment',
+            ] + $attributes);
+    }
+
+    protected function loginAsPermittedUser(): User
+    {
+        return $this->loginAsBodyShopAdmin();
+    }
+
+    protected function loginAsNotPermittedUser(): User
+    {
+        return $this->loginAsBodyShopMechanic();
+    }
+
+    public function test_it_has_only_bs_comments(): void
+    {
+        $user = $this->loginAsPermittedUser();
+
+        $vehicle = $this->getVehicle();
+
+        $comment1 = $this->getComment($vehicle, $user);
+
+        $comment2 = $this->getComment($vehicle);
+
+        $comment3 = $this->getComment($vehicle, $this->dispatcherFactory());
+
+        $vehicle2 = $this->getVehicle();
+
+        $this->getComment($vehicle2);
+
+        $response = $this->getJson(route($this->routeName, $vehicle))
+            ->assertOk();
+
+        $comments = $response['data'];
+        $this->assertCount(2, $comments);
+        $this->assertEquals($comment1->id, $comments[0]['id']);
+        $this->assertEquals($comment2->id, $comments[1]['id']);
+    }
+}

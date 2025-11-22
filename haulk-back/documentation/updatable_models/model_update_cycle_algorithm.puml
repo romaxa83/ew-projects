@@ -1,0 +1,17 @@
+@startuml
+
+actor Dispatcher
+participant CRM
+participant Saas
+actor SaasManager
+database DB
+
+Dispatcher --> CRM : Пожалуйста добавте...
+CRM --> Saas : Message
+Saas --> SaasManager
+SaasManager --> Dispatcher : Добавим, ожидайте...
+SaasManager --> DB : Добавление модели...
+CRM -> SaasUpdateEndpoint : По расписанию - Доступны ли обновления?
+SaasUpdateEndpoint -> CRM : Обновление
+
+@enduml

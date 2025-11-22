@@ -1,0 +1,30 @@
+@startuml
+
+class ParsingType {
+    int id
+    string name
+    string pattern
+    bool status
+}
+
+class ParsingGroup {
+    int id
+    int type_id
+    int parent_id
+    string name
+}
+
+class ParsingAttribute {
+    int id
+    int group_id
+    string type
+    string name
+    string pattern
+    string pattern_for_replacement
+    string replacement
+}
+
+ParsingType "1" <-- "*" ParsingGroup
+ParsingGroup "1" <-- "*" ParsingAttribute
+
+@enduml

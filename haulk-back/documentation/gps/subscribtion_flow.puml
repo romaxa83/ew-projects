@@ -1,0 +1,287 @@
+@startuml
+
+title
+<u>GPS subscription</u>
+end title
+
+left header
+Wezom
+endheader
+
+header
+Wezom
+endheader
+
+skinparam {
+    TitleFontSize 25
+    TitleFontName Courier
+    TitleFontStyle underscore
+    ArrowColor #033649
+    ArrowFontColor #24292e
+    BackgroundColor #f5f5f5
+    BorderColor black
+    RoundCorner 25
+    SequenceLifeLineBorderColor #033649
+    ParticipantFontSize 17
+    BoxPadding 50
+    SequenceBoxBorderColor '
+}
+
+skinparam note {
+    BackgroundColor gold
+    BorderColor gold
+}
+
+skinparam group {
+    BackgroundColor red
+    BorderColor black
+}
+
+skinparam participant {
+    BorderColor black
+    BackgroundColor tomato
+}
+
+box "App" #LightBlue
+participant CRM
+participant BACKOFFICE
+participant Backend
+end box
+
+group отправка запроса на получение девайсов
+
+CRM -> Backend: POST /api/gps/devices/request
+
+rnote over Backend
+создается запись [DeviceRequest]
+status = new
+endrnote
+
+rnote over Backend
+если подписки нет, то создается
+status = DRAFT
+endrnote
+end
+
+group потверждение запроса
+
+BACKOFFICE -> Backend: GET /v1/saas/gps-devices/requests
+BACKOFFICE <- Backend: Response pagination
+
+BACKOFFICE -> Backend: PUT /v1/saas/gps-devices/requests/{deviceRequestID}
+
+rnote over Backend #FFBBBB
+IF current status = CLOSED - ERROR
+endrnote
+
+rnote over Backend
+*status = CLOSED || IN_WORK
+*IF status = CLOSED
+ => closed_at = now
+endrnote
+
+rnote over Backend
+создается алерт для CRM
+endrnote
+
+CRM <-- Backend: ws: device-request.change-status
+
+end
+
+rnote over BACKOFFICE
+создаются девайсы, status = INACTIVE
+endrnote
+
+
+group активация девайса
+BACKOFFICE -> Backend: /v1/saas/gps-devices/{deviceID}/approve-request
+
+rnote over Backend #FFBBBB
+*status_request = CLOSED - ERROR
+*phone = null && company = null - ERROR
+*subscription = null  - ERROR
+*subscription->status = CANCELED  - ERROR
+*subscription->status = ACTIVE_TILL  - ERROR
+endrnote
+
+rnote over Backend
+IF current status = INACTIVE
+ => status_activate_request = none
+        status = ACTIVE
+        active_at = now
+
+        ===========!!!!=============
+        IF current gpsSubscription->status = DRAFT || CANCEL
+        => gpsSubscription->status = ACTIVE
+               gpsSubscription->activate_at = now
+               gpsSubscription->send_warning_notify = false
+               gpsSubscription->access_till_at = null
+               gpsSubscription->canceled_at = null
+               gpsSubscription->activate_till_at = null
+        ==========================
+
+IF current status = ACTIVE
+ => status_activate_request = none
+        active_till_at = company->subscription->billing_end
+endrnote
+
+
+rnote over Backend
+создается алерт для CRM
+endrnote
+
+CRM <-- Backend: ws: device.toggle-activity
+end
+
+
+
+== С активации подписки, начинается оплата ==
+
+group отмена подписки
+CRM -> Backend: PUT /api/gps/subscription/{gpsSubscriptionID}/cancel
+
+rnote over Backend
+ status = ACTIVE_TILL
+ activate_till_at = now
+endrnote
+
+rnote over Backend
+*все девайсы по данной подписки
+status_request = CANCEL_SUBSCRIPTION
+status_activate_request = none
+*все активные девайсы по данной подписки
+active_till_at = company->subscription->billing_end
+endrnote
+
+BACKOFFICE <-- Backend: notification, type = gps_subscription
+
+end
+
+group восстановление подписки
+CRM -> Backend: PUT /api/gps/subscription/{gpsSubscriptionID}/restore
+
+rnote over Backend #FFBBBB
+gpsSubscription->status = CANCELED - ERROR
+gpsSubscription->status = DRAFT - ERROR
+gpsSubscription->status = ACTIVE - ERROR
+endrnote
+
+rnote over Backend
+*все девайсы по данной подписки
+status_request = none
+IF device->status->isActive
+ => device->active_till_at = null
+        device->history_context = SUBSCRIPTION_RESTORE
+endrnote
+
+rnote over CRM
+данные метод используется если заявка в статусе -
+ACTIVE_TILL, в других случая нужно перенаправлять на
+список девайсов с сообщение, что восстановление происходит
+через активацию девайса
+endrnote
+
+end
+
+
+
+group деактивация девайса
+CRM -> Backend: PUT /v1/saas/gps-devices/{deviceID}/deactivate
+
+rnote over BACKOFFICE
+ используется для деактивации устройства
+ после отмены подписки, чтоб перевести девайс
+ из status_request = CANCEL_SUBSCRIPTION в
+ status_request = CLOSED
+endrnote
+
+rnote over Backend #FFBBBB
+gpsSubscription->status = ACTIVE - ERROR
+gpsSubscription->status = DRAFT - ERROR
+endrnote
+
+rnote over Backend
+status_request = CLOSED
+request_closed_at = now
+status_activate_request = none
+active_till_at = null
+status->status = INACTIVE
+endrnote
+
+end
+
+group worker
+Backend -> Backend: billing:gps_subscription_canceled
+
+rnote over Backend
+*находит все подписки = activate_till_at < now
+ => activate_till_at = null
+        canceled_at = now()
+        access_till_at = now() + 30d
+        status = CANCELED
+*девайсы найденных подписок
+ => status = INACTIVE
+        active_till_at = null
+        inactive_at = now
+        history_context = inactive
+*отвязываем девайсы от траков/трейлеров
+
+===запускается каждый час
+endrnote
+
+Backend -> Backend: worker:warning_gps_subscription
+rnote over Backend
+*При отмене gps подписки, за день до конца активного периода,
+создает сообщение, для деактивации устройств, после отмены
+
+IF current status = ACTIVE_TILL
+        send_warning_notify = false
+        activate_till_at >= now + 24h
+ => создается уведомление
+        send_warning_notify = true
+===запускается каждый час
+endrnote
+BACKOFFICE <-- Backend: notification, type = gps_subscription
+
+Backend -> Backend: worker:deactivate_device
+rnote over Backend
+*деактивирует девайсы
+*если в подписке у деактивируемого
+девайса нет активных девайсов, а подписка
+в статусе = ACTIVE, запускает процесс -
+отмены подписки (см. выше)
+endrnote
+
+
+
+end
+
+
+
+
+legend left
+В компании появляется данные по gps подписке в поле
+===gps_subscription
+
+<#f5f5f5,#172b3a>|= field |= description |
+<#f5f5f5>| status | статус |
+<#f5f5f5>| start_at | дата начало подписки |
+<#f5f5f5>| end_at | дата конца подписки |
+<#f5f5f5>| active_till_at | дата до которой подписка еще активна, после отмены подписки |
+<#f5f5f5>| access_till_at | дата до которой доступна информация о подписке |
+<#f5f5f5>| total_device | общее кол-во девайсов |
+<#f5f5f5>| total_active | кол-во активных девайсов |
+<#f5f5f5>| total_inactive_device | кол-во неактивных девайсов |
+<#f5f5f5>| has_active_at_vehicle | есть ли активные девайсы на технике |
+
+===status
+
+<#f5f5f5,#172b3a>|= value |= description |
+<#f5f5f5>| draft | подписка создана, но активных девайсов еще нет |
+<#f5f5f5>| active | подписка активирована, точно есть хотя бы один активный девайс |
+<#f5f5f5>| active_till | подписку отменили, но у нее еще активный девайсы, и оплачен |
+<#f5f5f5>| canceled | полностью отменена, деньги не снимаются |
+endlegend
+
+
+@enduml

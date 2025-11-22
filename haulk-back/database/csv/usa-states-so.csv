@@ -1,0 +1,53 @@
+id,name,state_short_name
+1,Puerto Rico,PR
+2,Massachusetts,MA
+3,Rhode Island,RI
+4,New Hampshire,NH
+5,Maine,ME
+6,Vermont,VT
+7,Connecticut,CT
+8,New York,NY
+9,New Jersey,NJ
+10,Pennsylvania,PA
+11,Delaware,DE
+12,District of Columbia,DC
+13,Virginia,VA
+14,Maryland,MD
+15,West Virginia,WV
+16,North Carolina,NC
+17,South Carolina,SC
+18,Georgia,GA
+19,Florida,FL
+20,Alabama,AL
+21,Tennessee,TN
+22,Mississippi,MS
+23,Kentucky,KY
+24,Ohio,OH
+25,Indiana,IN
+26,Michigan,MI
+27,Iowa,IA
+28,Wisconsin,WI
+29,Minnesota,MN
+30,South Dakota,SD
+31,North Dakota,ND
+32,Montana,MT
+33,Illinois,IL
+34,Missouri,MO
+35,Kansas,KS
+36,Nebraska,NE
+37,Louisiana,LA
+38,Arkansas,AR
+39,Oklahoma,OK
+40,Texas,TX
+41,Colorado,CO
+42,Wyoming,WY
+43,Idaho,ID
+44,Utah,UT
+45,Arizona,AZ
+46,New Mexico,NM
+47,Nevada,NV
+48,California,CA
+49,Hawaii,HI
+50,Oregon,OR
+51,Washington,WA
+52,Alaska,AK

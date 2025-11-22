@@ -1,0 +1,4143 @@
+{
+	"info": {
+		"_postman_id": "fef3dbc5-c146-4cce-92e3-b552b34c394f",
+		"name": "HAULK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Dispatcher",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Admin-Panel",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/dispatchers?order_by=test&order_type=desc",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"dispatchers"
+							],
+							"query": [
+								{
+									"key": "order_by",
+									"value": "test"
+								},
+								{
+									"key": "order_type",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "STORE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "New Dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "chernenko.v@wezom.com.ua",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "1234567",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1234567",
+									"type": "text"
+								},
+								{
+									"key": "phones[0][number]",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "phones[0][extension]",
+									"value": "11",
+									"type": "text"
+								},
+								{
+									"key": "phones[1][extension]",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phones[1][number]",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "permissions[profile][read]",
+									"value": "0",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "permissions[profile][update]",
+									"value": "true",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "permissions[profile][update]",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "permissions[drivers][create]",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/dispatchers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"dispatchers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/dispatchers/12",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"dispatchers",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher233",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "vlad@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								},
+								{
+									"key": "permissions[profile][read]",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "permissions[profile][update]",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "permissions[settings][create]",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/dispatchers/7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"dispatchers",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{host}}/api/dispatchers/5/change-status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"dispatchers",
+								"5",
+								"change-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DESTROY",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/dispatchers/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"dispatchers",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD PHOTO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/HYSgOFLjxm292StlBMpL6qK7pqCV0wfYB0Hdtnd8.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/dispatchers/3/upload-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"dispatchers",
+								"3",
+								"upload-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PHOTO",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/lilia94.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/dispatchers/2/delete-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"dispatchers",
+								"2",
+								"delete-photo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "SuperDriver",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/superDrivers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"superDrivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "STORE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "superdirver",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "superdirverxcz@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "23231231237567567",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/superDrivers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"superDrivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/superDrivers/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"superDrivers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "xxxx1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "superdriver1@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/superDrivers/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"superDrivers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{host}}/api/superDrivers/9/change-status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"superDrivers",
+								"9",
+								"change-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DESTROY",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/superDrivers/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"superDrivers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD PHOTO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/HYSgOFLjxm292StlBMpL6qK7pqCV0wfYB0Hdtnd8.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/superDrivers/4/upload-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"superDrivers",
+								"4",
+								"upload-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PHOTO",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/lilia94.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/superDrivers/4/delete-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"superDrivers",
+								"4",
+								"delete-photo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/admins",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admins"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "STORE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Admin-panel",
+								"value": "1",
+								"type": "text"
+							},
+							{
+								"key": "Validate-Only",
+								"value": "1",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "Kirill Vlasyk",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "vlasyuk.xcvxcvkxc@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "1234567",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phones[0][numbers]",
+									"value": "231",
+									"type": "text"
+								},
+								{
+									"key": "phones[0][extension]",
+									"value": "fdgdfg",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/admins",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admins"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/admins/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admins",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher233",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcherxz@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/admins/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admins",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-panel",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{host}}/api/admins/50/change-status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admins",
+								"50",
+								"change-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DESTROY",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/admins/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admins",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD PHOTO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/HYSgOFLjxm292StlBMpL6qK7pqCV0wfYB0Hdtnd8.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/admins/5/upload-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admins",
+								"5",
+								"upload-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PHOTO",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/lilia94.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/admins/5/delete-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"admins",
+								"5",
+								"delete-photo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Accountant",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/accountants",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"accountants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "STORE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "xcvsazcx@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "23231231237567567",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/accountants",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"accountants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/accountants/6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"accountants",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher233ddd",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatchersxx@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/accountants/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"accountants",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{host}}/api/accountants/11/change-status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"accountants",
+								"11",
+								"change-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DESTROY",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/accountants/6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"accountants",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD PHOTO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/HYSgOFLjxm292StlBMpL6qK7pqCV0wfYB0Hdtnd8.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/accountants/6/upload-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"accountants",
+								"6",
+								"upload-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PHOTO",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/lilia94.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/accountants/6/delete-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"accountants",
+								"6",
+								"delete-photo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Driver",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/drivers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"drivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "STORE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "aa",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "vladwqxsad54645336c@xxx.ya",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "23623123123",
+									"type": "text"
+								},
+								{
+									"key": "trailer_capacity",
+									"value": "52",
+									"type": "text"
+								},
+								{
+									"key": "driver_license_number",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "state_id",
+									"value": "32",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "1234567",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/drivers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"drivers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/drivers/7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"drivers",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "new name43",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "driver7@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								},
+								{
+									"key": "trailer_capacity",
+									"value": "6555533333",
+									"type": "text"
+								},
+								{
+									"key": "driver_license_number",
+									"value": "34sdfsdf2",
+									"type": "text"
+								},
+								{
+									"key": "state_id",
+									"value": "33",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/drivers/8",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"drivers",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{host}}/api/drivers/12/change-status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"drivers",
+								"12",
+								"change-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DESTROY",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "dispatcher",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dispatcher@ya.ru",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "2323123123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/drivers/7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"drivers",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD PHOTO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/HYSgOFLjxm292StlBMpL6qK7pqCV0wfYB0Hdtnd8.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/drivers/7/upload-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"drivers",
+								"7",
+								"upload-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PHOTO",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/lilia94.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/drivers/7/delete-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"drivers",
+								"7",
+								"delete-photo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "State",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/states",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"states"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/states-list",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"states-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/states/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"states",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/states?status=1&name=alaslgjjg",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"states"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "1"
+								},
+								{
+									"key": "name",
+									"value": "alaslgjjg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/states/1?name=ALALAL1xxxssxccv&status=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"states",
+								"1"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "ALALAL1xxxssxccv"
+								},
+								{
+									"key": "status",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "City",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/cities",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"cities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/cities/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"cities",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/cities",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"cities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/cities/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"cities",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "SHOW",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/profile",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "full_name",
+									"value": "Super chelx",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "superadmin@haulk.com",
+									"type": "text"
+								},
+								{
+									"key": "phone_extension",
+									"value": "333",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phones[0][number]",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "phones[0][extension]",
+									"value": "2134xcz",
+									"type": "text"
+								},
+								{
+									"key": "phones[1][number]",
+									"value": "5555",
+									"type": "text"
+								},
+								{
+									"key": "phones[1][extension]",
+									"value": "6666",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/profile",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{host}}/api/profile/change-password?password=admin&password_confirmation=admin&current_password=admin",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"change-password"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "admin"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "admin"
+								},
+								{
+									"key": "current_password",
+									"value": "admin"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPLOAD PHOTO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/HYSgOFLjxm292StlBMpL6qK7pqCV0wfYB0Hdtnd8.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/profile/upload-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"upload-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PHOTO",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/lilia94.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/profile/delete-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"delete-photo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DOWNLOAD PROFILE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/chernenko.v/Downloads/HYSgOFLjxm292StlBMpL6qK7pqCV0wfYB0Hdtnd8.jpeg",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/profile/download-photo",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"profile",
+								"download-photo"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "LIST",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/roles-list",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"roles-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/roles/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Translates",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/translates",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"translates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/translates-list",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"translates-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "write to file",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/translates-store-to-file",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"translates-store-to-file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "write from file",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/translates-write-from-file",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"translates-write-from-file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/translates/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"translates",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "key",
+									"value": "fourxcvc23fghfghzxczxc",
+									"type": "text"
+								},
+								{
+									"key": "en[text]",
+									"value": "four",
+									"type": "text"
+								},
+								{
+									"key": "ru[text]",
+									"value": "chetire",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "es[text]",
+									"value": "chetire",
+									"type": "text",
+									"disabled": true
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/translates",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"translates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "en[text]",
+									"value": "update",
+									"type": "text"
+								},
+								{
+									"key": "key",
+									"value": "kluch",
+									"type": "text"
+								},
+								{
+									"key": "ru[text]",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "es[text]",
+									"value": "gfhfgh",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/translates/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"translates",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Languages",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/languages",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"languages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/languages/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"languages",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change-Language",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "language",
+									"value": "es",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/change-language",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"change-language"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Permissions",
+			"item": [
+				{
+					"name": "SHOW",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Admin-panel",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/roles-list",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"roles-list"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Contacts",
+			"item": [
+				{
+					"name": "LIST",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/contacts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "STORE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Admin-Panel",
+								"type": "text",
+								"value": "1"
+							},
+							{
+								"key": "Validate-Only",
+								"value": "1",
+								"type": "text"
+							},
+							{
+								"key": "Draft-Store",
+								"value": "contact_create",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/contacts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Forms",
+			"item": [
+				{
+					"name": "Draft",
+					"item": [
+						{
+							"name": "SHOW",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									},
+									{
+										"key": "Admin-Panel",
+										"value": "1",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/forms/drafts",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"forms",
+										"drafts"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Parsing",
+			"item": [
+				{
+					"name": "Pdf",
+					"item": [
+						{
+							"name": "PARSE",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{token}}"
+									},
+									{
+										"key": "Admin-Panel",
+										"type": "text",
+										"value": "1"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "order_pdf",
+											"type": "file",
+											"src": "/home/box/work/wezom/easyload-haulk/tests/Data/Files/Pdf/central_dispatch_9.pdf"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/parse/pdf_order",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"parse",
+										"pdf_order"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cda2f7e0-4d60-4744-9853-6f5df05f3109",
+						"exec": [
+							"var data = pm.response.json();",
+							"pm.environment.set(\"token\",data.data.access_token);",
+							"pm.environment.set(\"refresh_token\",data.data.refresh_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Admin-panel",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "validate-only",
+						"value": "1",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "superadmin@haulk.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "romankova.s.wezom@gmail.com",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "vlad@ya.ru",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "1234567",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/api/login",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Password forgot",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cda2f7e0-4d60-4744-9853-6f5df05f3109",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "superadmin@haulk.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "dispatcher@haulk.com",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "dispatcher",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/api/password-forgot",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"password-forgot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Password-reset",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cda2f7e0-4d60-4744-9853-6f5df05f3109",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "password",
+							"value": "helloworld",
+							"type": "text"
+						},
+						{
+							"key": "password_confirmation",
+							"value": "helloworld",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/api/password-set?token=d6b5bb4f1e39ff9e5286c6dec2f828ac23cae290ebbfd09816ea1520811300df&email=superadmin%40haulk.com",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"password-set"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "d6b5bb4f1e39ff9e5286c6dec2f828ac23cae290ebbfd09816ea1520811300df"
+						},
+						{
+							"key": "email",
+							"value": "superadmin%40haulk.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh-token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cda2f7e0-4d60-4744-9853-6f5df05f3109",
+						"exec": [
+							"var data = pm.response.json();",
+							"pm.environment.set(\"token\",data.data.access_token);",
+							"pm.environment.set(\"refresh_token\",data.data.refresh_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Refresh-Token",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Admin-Panel",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "refresh_token",
+							"value": "{{refresh_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/api/refresh-token",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cda2f7e0-4d60-4744-9853-6f5df05f3109",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{host}}/api/logout?",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"logout"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

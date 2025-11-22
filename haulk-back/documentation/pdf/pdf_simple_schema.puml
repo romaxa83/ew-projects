@@ -1,0 +1,18 @@
+@startuml
+
+start
+
+:Load file;
+if (Validate dpf file type    ) then
+:Find type;
+:Process;
+else
+:Type not found;
+:Response 422;
+stop
+
+endif
+:Response 200;
+stop
+
+@enduml

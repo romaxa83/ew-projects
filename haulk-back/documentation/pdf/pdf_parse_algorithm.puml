@@ -1,0 +1,32 @@
+@startuml
+':Получаем файл;
+':Извлекаем весь текст;
+':Определяем тип;
+':Проходим по всем параметрам для парсинга;
+':Извлекаем в массив ключ значение;
+':Возаращаем данные;
+
+actor Dispatcher
+participant Front
+participant Backend
+participant PdfController
+participant Validator
+participant PdfService
+participant PdfParser
+database DB
+
+Dispatcher --> Front : attach
+Front --> Backend : upload
+Backend --> PdfController : File info
+PdfController --> Validator : validate
+PdfController --> PdfService : File info
+PdfService --> PdfParser : To text
+PdfService --> DB : Fetch pdf file types
+PdfService --> PdfService : Check type
+PdfService --> DB : Fetch attributeParsers
+PdfService --> PdfService : Parse attributes
+PdfService --> PdfController : return
+PdfController --> Backend : return
+Backend --> Front : Response
+
+@enduml

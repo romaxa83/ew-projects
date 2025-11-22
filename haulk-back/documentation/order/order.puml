@@ -1,0 +1,77 @@
+@startuml
+    class Order {
+        string id
+        int|null shipper_id
+        int|null carrier_id
+        int cars
+        int cars_picked_up
+        int cars_delivered
+    }
+
+    class Vehicle {
+        string id
+        int order_id
+    }
+
+    class Inspection {
+        string id
+        string vehicle_id
+        string type
+    }
+
+    class Payment {
+        string id
+        string order_id
+        string type
+    }
+
+    class Contact {
+        int id
+    }
+
+    class Point {
+        string id
+        string order_id
+        int|null contact_id
+        string type
+        string address
+        ...
+    }
+
+    class Transfer {
+        string id
+        int driver_id
+        unixtime started_at
+        bool picked_up
+        bool delivered
+        bool completed
+        int order_id
+        float progress
+    }
+
+    class Coordinate {
+        string id
+        string transfer_id
+        float lat
+        float lng
+    }
+
+    class TransferVehicle {
+        int transfer_id
+        int vehicle_id
+    }
+
+    Order "1" <-- "1..*" Vehicle
+    Order "1" <-- "1..*" Transfer
+    Transfer "1" <-- "0..*" Coordinate
+
+    Transfer "1" <-- "1..*" TransferVehicle
+    Vehicle "1" <-- "1..*" TransferVehicle
+    Vehicle "1" <-- "2" Inspection
+
+    Order "1" <-- "1" Payment
+    Point "1" <-- "1 pickup_point_id" Order
+    Point "1" <-- "1 delivery_point_id" Order
+    Point "0..*" --> "0..1" Contact
+
+@enduml

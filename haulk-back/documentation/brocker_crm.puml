@@ -1,0 +1,307 @@
+@startuml
+
+enum PaymentBegins {
+    PICKUP
+    DELIVERY
+    SEND_INVOICE
+}
+
+enum OrderLocation {
+    PICKUP
+    DELIVERY
+}
+
+enum OrderMember {
+    CARRIER
+    BROKER
+    CUSTOMER
+}
+
+entity Offer {
+    * id: UInt64 <<generated>>
+    --
+    * broker_order_id: UInt64 <<FK>>
+    * carrier_id: UInt64 <<FK>>
+    * carrier_user_id: UInt64 <<FK>>
+    carrier_order_id: UInt64 <<FK>>
+    ---
+    <<OFFER FIELDS>>
+    ---
+    approve: Boolean
+    decision_date: Timestamp
+}
+
+entity ChangeRequest {
+    * id: UInt64 <<generated>>
+    --
+    * broker_order_id: UInt64 <<FK>>
+    * carrier_order_id: UInt64 <<FK>>
+    comment: String
+    * closed = false: Boolean
+    close_date: Timestamp
+}
+
+entity ChangeRequestSuggestion {
+    * id: UInt64 <<generated>>
+    --
+    * change_request_id: UInt64 <<FK>>
+    * from: OrderMember
+    * field: String
+    value: String
+    --
+    uniq(change_request_id, field, from)
+}
+
+entity Order {
+    * id: UInt64 <<generated>>
+    --
+    * load_id: String
+    * user_id: UInt64 <<FK>>
+    * broker_id: UInt64 <<FK>>
+    * public_token: String
+    dispatcher_name: String
+    dispatcher_contact: String
+    driver_name: String
+    driver_contact: String
+    distance: Float
+    * status: UInt16
+    * calculated_status: String
+    * broker_id: UInt64 <<FK>>
+    * pickup_address_id: UInt64 <<FK>>
+    * delivery_address_id: UInt64 <<FK>>
+    * customer_address_id: UInt64 <<FK>>
+    * carrier_address_id: UInt64 <<FK>>
+    instruction: String
+    lb_instruction: String
+    * pickup_date: UInt32
+    pickup_time: Time
+    * delivery_date: UInt32
+    delivery_time: Time
+    * is_archive = false: Boolean
+    pickup_comment: String
+    delivery_comment: String
+    delivery_customer_full_name: String
+    pickup_date_actual: UInt32
+    delivery_date_actual: UInt32
+    ---
+    carrier_order_id: UInt64
+    published_on_lb = false: Boolean
+}
+
+entity Payment {
+    * id: UInt64 <<generated>>
+    --
+    * order_id: UInt64 <<FK>>
+    * total: Float
+    terms: String
+    --
+    broker_carrier_amount: Float
+    broker_carrier_days: UInt8
+    broker_carrier_begins: PaymentBegins
+    broker_carrier_planned_date: UInt32
+    broker_carrier_method_id: UInt16
+    broker_carrier_invoice_id: String
+    broker_carrier_invoice_notes: String
+    broker_carrier_invoice_issue_date: String
+    --
+    customer_carrier_amount: Float
+    customer_carrier_location: OrderLocation
+    customer_carrier_planned_date: UInt32
+    customer_carrier_method_id: UInt16
+    customer_carrier_invoice_id: String
+    customer_carrier_invoice_notes: String
+    customer_carrier_invoice_issue_date: String
+    --
+    carrier_broker_amount: Float
+    carrier_broker_days: UInt8
+    carrier_broker_begins: PaymentBegins
+    carrier_broker_planned_date: UInt32
+    carrier_broker_method_id: UInt16
+    --
+    customer_broker_amount: Float
+    customer_broker_location: OrderLocation
+    customer_broker_planned_date: UInt32
+    customer_broker_method_id: UInt16
+    customer_broker_invoice_id: String
+    customer_broker_invoice_notes: String
+    customer_broker_invoice_issue_date: String
+}
+
+entity PaymentStage {
+    * id: UInt64 <<generated>>
+    --
+    * payment_id: UInt64 <<FK>>
+    * from: OrderMember
+    * to: OrderMember
+    * amount: Float
+    * payment_date: UInt32
+    * method_id: UInt16
+    reference_number: String
+    uship_number: String
+    notes: String
+}
+
+entity Vehicle {
+    * id: UInt64 <<generated>>
+    --
+    * inop = false: Boolean
+    * enclosed = false: Boolean
+    vin: String
+    year: String
+    make: String
+    model: String
+    type_id: UInt16
+    color: String
+    license_plate: String
+    stock_number: String
+    * pickup_inspection_id: UInt64 <<FK>>
+    * delivery_inspection_id: UInt64 <<FK>>
+}
+
+entity Inspection {
+    * id: UInt64 <<generated>>
+    ---
+    ....
+    ....
+    ....
+    ....
+    ....
+    ....
+    ....
+    ....
+}
+
+entity Contact {
+    * id: UInt64 <<generated>>
+    --
+    * full_name: String
+    email: String
+    fax: String
+    type_id: UInt64 <<FK>>
+    * hidden = false: Boolean
+}
+
+entity Phone {
+    * id: UInt64 <<generated>>
+    --
+    * contact_id: UInt64 <<FK>>
+    * phone: String
+    extension: String
+    note: String
+    name: String
+    * primary = false: Boolean
+}
+
+entity Address {
+    * id: UInt64 <<generated>>
+    --
+    * contact_id: UInt64 <,FK>>
+    * city_id: UInt64 <<FK>>
+    * address: String
+    * default = false: Boolean
+    working_hours: Array
+    comment: String
+    comment_date: UInt32
+}
+
+entity City <<dictionary>> {
+    * id: UInt64 <<generated>>
+    --
+    * name: String
+    * zip: String
+    * status: Boolean
+    * state_id: UInt64 <<FK>>
+    * timezone: String
+    * counter_code: String
+    * country_name: String
+}
+
+class Time {
+    from: String <<g:i A>>,
+    to: String <<g:i A>>
+}
+
+note left of Payment
+    Возможные варианты платежей:
+    1) Customer платит Broker -> Broker платит Carrier
+    2) Customer платит Carrier -> Carrier платит Broker
+end note
+
+note right of Order::carrier_order_id
+    Когда Broker создает заказ и публикует его на LB
+    то выставляется флаг "published_on_lb". Данный флаг можем
+    выставить только в случае когда заказ новый и за ним еще
+    не закреплен Carrier. При закреплении Carrier записываем ID
+    заказа из CRM Carrier.
+end note
+
+note right of Offer::carrier_order_id
+    Не уверен в необходимости сохранять
+    это значение в Offer
+end note
+
+note right of Offer::decision_date
+    Не "approve_date" т.к. брокер может отказаться от офера.
+    Пока офер на рассмотрении "approve" будет NULL
+end note
+
+note right of Contact
+    В момент заполнения контакта, необходимо
+    будет реализовать логику заполнения через
+    "автокомплит" на полях:
+    - email
+    - phone (отдельная сущность)
+    - fax
+    - address
+    - full_name (под вопросом, нужна ли
+    уникальность по этому полю)
+    Пояснение (на всякий случай): это значит,
+    что при вводе значение в эти поля фронт будет
+    стучатся на бек и бек будет отдавать список
+    похожих контактов. При этом первые три поля
+    я бы сделал обязательными к выбору в случае
+    если есть найденный контакт: я ввел телефон,
+    бек нашел контакт и пока я явно его не выберу
+    это поле не заполнять. Адрес юзать просто для
+    облегчения поиска, я бы его не делал уникальным
+    в разрезе всех контактов.
+end note
+
+note bottom of Address
+    Контакт может иметь много адресов.
+    Только один адрес ставим как
+    "по-умолчанию". Нужно будет решить,
+    давать ли возможность редактировать
+    адреса или вообще не показывать список
+    адресов контакта. Редактирование адресов,
+    которые привязаны уже к каким-то заказам,
+    нужно запрещать. Если нужно будет
+    отредактировать адрес который с пометкой
+    "по-умолчанию" и этот адрес уже привязан
+    к какому-то заказу то редактирование
+    производим через создание нового адреса
+    и установку на него флага "по-умолчанию"
+    (при этом снимаем этот флаг с предыдущего
+    адреса). При редактировании адреса внутри
+    ордера, нужно будет также делать проверку,
+    если адрес привязан только к этому заказу,
+    то редактируем иначе создаем новый и
+    перепривязываем его к заказу.
+end note
+
+Contact "city_id " }o--|| "id " City
+Contact "id" ||--|{ "contact_id" Phone
+Contact "id" ||--|{ "contact_id" Address
+Order "pickup_address_id " ||--|{ "id " Address
+Order "delivery_address_id " ||--|{ "id " Address
+Order "customer_address_id " ||--|{ "id " Address
+Order "carrier_address_id " ||--|{ "id " Address
+Order ||--|{ Vehicle
+Order "id" ||--|{ "broker_order_id" Offer
+Vehicle "pickup_inspection_id" ||--o| "id" Inspection
+Vehicle "delivery_inspection_id" ||--o| "id" Inspection
+Payment "order_id" ||--|| "id" Order
+Payment "id" ||--o{ "payment_id" PaymentStage
+ChangeRequest |o--|| Order
+ChangeRequest ||--|{ ChangeRequestSuggestion
+@enduml
