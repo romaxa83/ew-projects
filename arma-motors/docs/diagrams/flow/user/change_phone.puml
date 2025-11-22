@@ -1,0 +1,109 @@
+@startuml
+
+title
+Смена телефона пользователя
+end title
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+participant "AA (1C)"
+participant "Firebase"
+
+Mobile -> Backend: editUserPhone {phone, comment, actionToken}
+
+group #FFBBBB ERROR
+rnote over Backend
+Проверяю actionToken
+коды ошибок
+endrnote
+
+Mobile <- Backend
+end
+
+group #FFBBBB ERROR
+rnote over Backend
+Если совпадают старый и новый номер
+код ошибки "41"
+endrnote
+
+Mobile <- Backend
+end
+
+group #FFBBBB ERROR
+rnote over Backend
+Если по новому номеру есть пользователь
+код ошибки "42"
+endrnote
+
+Mobile <- Backend
+end
+== User не верифицирован в AA ==
+rnote over Backend
+Если пользователь в статусе
+DRAFT или ACTIVE
+сразу меняем номер телефона
+endrnote
+
+Backend -> "Firebase": FcmAction::EDIT_PHONE_SUCCESS
+Mobile <- "Firebase": Type - "phone"
+group #7ad378 SUCCESS
+
+Mobile <- Backend: response User
+end
+
+== User верифицирован в AA ==
+rnote over Backend
+Если пользователь в статусе
+VERIFY
+создаем запись на новый телефон
+$model->new_phone = $phone;
+$model->phone_edit_at = Carbon::now();
+endrnote
+
+rnote over Backend
+ДЛЯ АДМИНКИ Список пользователей желающих
+сменить телефон
+endrnote
+Backend -> Backend: users(hasNewPhone: true)
+
+Backend -> "AA (1C)": request ConfirmChangePhone ??
+
+
+group #7ad378 SUCCESS
+"AA (1C)" -> Backend: response {'status': true}
+
+rnote over Backend
+меняется номер
+$model->phone = $model->new_phone;
+$model->new_phone = null;
+$model->phone_edit_at = null;
+endrnote
+
+Backend -> "Firebase": FcmAction::EDIT_PHONE_SUCCESS
+Mobile <- "Firebase": Type - "phone"
+
+rnote over Backend
+User logout
+endrnote
+
+Mobile <- Backend: response User
+end
+
+group #FFBBBB ERROR
+"AA (1C)" -> Backend: response {'status': true}
+
+rnote over Backend
+не меняется номер
+обнуляем запись по смене номера
+$model->new_phone = null;
+$model->phone_edit_at = null;
+endrnote
+
+Backend -> "Firebase": FcmAction::EDIT_PHONE_ERROR
+Mobile <- "Firebase": Type - "phone"
+
+Mobile <- Backend: response User
+end
+@enduml

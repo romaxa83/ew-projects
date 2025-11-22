@@ -1,0 +1,177 @@
+@startuml
+
+title
+<u>Order</u>
+end title
+
+left header
+Wezom
+endheader
+
+skinparam {
+    TitleFontSize 25
+    TitleFontName Courier
+    ArrowColor #033649
+    ArrowFontColor #24292e
+    BackgroundColor #f5f5f5
+    BorderColor black
+    RoundCorner 25
+}
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+
+    package Order #7ad378 {
+
+        class Order <<(M,#7ad378)>> #tomato {
+            * uuid : Str
+            * service_id : Int
+            * user_id : Int
+            * admin_id : null|Int
+            * communication : Str
+            * status : Int
+            * type : Str
+            * closed_at : null|Datetime
+            * deleted_at : null|Datetime
+            * created_at : null|Datetime
+            * updated_at : null|Datetime
+
+            user(): BelongsTo
+            admin(): BelongsTo
+            service(): BelongsTo
+            additions(): HasOne
+
+            files(): MorphMany
+            billFile(): MorphOne
+            actFile(): MorphOne
+        }
+        class Additions <<(E,#7ad378)>> {
+            * order_id : Int
+            * franchise_id : null|Int
+            * brand_id : null|Int
+            * model_id : null|Int
+            * region_id : null|Int
+            * city_id : null|Int
+            * transport_type_id : null|Int
+            * privileges_id : null|Int
+            * driver_age_id : null|Int
+            * duration_id : null|Int
+            * dealership_id : null|Int
+            * recommendation_id : null|Int
+            * car_id : null|Int
+            * insurance_company : null|Str
+            * car_cost : null|Int
+            * count_pay: null|Int
+            * use_as_taxi: Bool
+            * type_user: null|Int
+            * first_installment_percent: null|Int
+            * rate: null|Int
+            * rate_comment: null|Int
+
+            franchise(): BelongsTo
+            brand(): BelongsTo
+            model(): BelongsTo
+            driverAge(): BelongsTo
+            region(): BelongsTo
+            city(): BelongsTo
+            transportType(): BelongsTo
+            privileges(): BelongsTo
+            duration(): BelongsTo
+            dealership(): BelongsTo
+        }
+        class Recommendation <<(E,#7ad378)>> {
+            * status : Int
+            * uuid : Str
+            * car_uuid : Str
+            * order_uuid : null|Str
+            * qty : null|Str
+            * text : Str
+            * comment : null|Str
+            * rejection_reason : null|Str
+            * author : null|Str
+            * executor : null|Str
+            * completed : Bool
+            * completion_at : Bool
+            * relevance_at : Bool
+
+            car(): BelongsTo
+            order(): BelongsTo
+        }
+    }
+
+    package File #7ad378 {
+        class File <<(E,#7ad378)>> {}
+    }
+
+    package Region #7ad378 {
+        class Region <<(E,#7ad378)>> {}
+        class City <<(E,#7ad378)>> {}
+    }
+
+    package Car #7ad378 {
+        class Brand <<(E,#7ad378)>> {}
+        class Model <<(E,#7ad378)>> {}
+        class TransportType <<(E,#7ad378)>> {}
+    }
+
+    package Service #7ad378 {
+        class DriverAge <<(E,#7ad378)>> {}
+        class Duration <<(E,#7ad378)>> {}
+        class InsuranceFranchise <<(E,#7ad378)>> {}
+        class Privileges <<(E,#7ad378)>> {}
+        class Service <<(E,#7ad378)>> {}
+    }
+
+    package User #7ad378 {
+        class User <<(E,#7ad378)>> {}
+        class Car <<(E,#7ad378)>> {}
+    }
+
+    class Dealership <<(E,#7ad378)>> {}
+    class Admin <<(E,#7ad378)>> {}
+
+
+Order -right[#black]-> Additions :additions()
+Order -down[#black]-> File : files()
+Order -down[#black]-> File : billFile()
+Order -down[#black]-> File : actFile()
+
+Order -down[#black]-> Service : service()
+
+Order -up[#black]-> User : user()
+Order -up[#black]-> Admin : admin()
+
+Additions -up[#black]-> Region : region()
+Additions -up[#black]-> City : city()
+Additions -right[#black]-> Recommendation : recommendation()
+
+Additions -up[#black]-> Brand : brand()
+Additions -up[#black]-> Model : model()
+Additions -up[#black]-> TransportType : transportType()
+
+Additions -right[#black]-> DriverAge : driverAge()
+Additions -right[#black]-> Duration : privileges()
+Additions -right[#black]-> InsuranceFranchise : duration()
+Additions -right[#black]-> Privileges : franchise()
+Additions -right[#black]-> Car : car()
+Additions -right[#black]-> Dealership : dealership()
+
+Recommendation -up[#black]-> Car: car()
+Recommendation -left[#black]-> Order: order()
+note on link #ffe496
+данная связь не с текущей
+заявкой, а с заявкой на основе
+которой была сформирована рекомендация,
+если она была сформирована на основе заявки
+end note
+
+left footer
+<#lightblue,#red>|= Projecy|= Version |= Creator |= Status|= Created_at |= Updated_at |
+<#lightgreen>| arma-motors | 1.0 | Rodomanov R. | dev | 21.01.2022 | 21.01.2022 |
+endfooter
+@enduml

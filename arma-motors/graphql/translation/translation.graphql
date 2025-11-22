@@ -1,0 +1,67 @@
+# === QUERY ===
+extend type Query {
+    "Получение записаных переводов"
+    translations(lang: [String]!, place: [TranslationPlaceConst!]!): [TranslationsPlace]
+#        @cache(maxAge: 10)
+#        @middleware(checks: ["cache"])
+    "Получение хеша переводов"
+    translationsHash(place: TranslationPlaceConst!): HashResponse!
+}
+# === MUTATION ===
+extend type Mutation {
+    "Записать перевод"
+    translationsSet(input: SetTranslationsInput! @spread): HashResponse!
+    "Удалить перевод (или все переводы если не передавать key)"
+    translationsDelete(input: DeleteTranslationsInput! @spread): HashResponse!
+}
+# === INPUT ===
+"Поля для создании переводов"
+input SetTranslationsInput {
+    place: TranslationPlaceConst
+    group: String
+    translations: [TranslationsInput!]!
+}
+input TranslationsInput {
+    key: String! @rules(apply: ["required", "min:1"])
+    translation: [TranslationInput!]!
+}
+input TranslationInput {
+    lang: String! @rules(apply: ["exists:languages,slug"])
+    text: String! @rules(apply: ["required", "min:1"])
+}
+"Поля для удалении переводов переводов"
+input DeleteTranslationsInput {
+    place: TranslationPlaceConst
+    "если не передать ключ, удалит все переводы по place"
+    key: String
+}
+# === TYPE ===
+"Переводы"
+type TranslationsPlace {
+    place: TranslationPlaceConst!
+    key: String!
+    translation: [Translation]
+}
+type Translation {
+    lang: String!
+    text: String
+}
+
+"Хеш данных"
+type HashResponse{
+    status: Boolean!
+    hash: String!
+    message: String
+}
+
+"Константы для чего перевод"
+enum TranslationPlaceConst {
+    "админ-панель"
+    ADMIN @enum(value: "admin")
+    "мобильное приложение"
+    APP @enum(value: "app")
+    "develop"
+    UI_KIT @enum(value: "ui-kit")
+    "системные"
+    SYSTEM @enum(value: "system")
+}

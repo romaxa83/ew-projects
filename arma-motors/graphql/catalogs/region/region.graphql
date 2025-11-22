@@ -1,0 +1,45 @@
+# === QUERY ===
+extend type Query {
+    "Получение областей"
+    regions(
+        orderBy: _ @orderBy(columns: ["sort", "id", "active"])
+    ):  [Region!]!
+        @paginate(defaultCount: 10)
+        @middleware(checks: ["set.locale"])
+
+    "Получение области (по id)"
+    region(id: ID @eq): Region
+        @find(model: "App\\Models\\Catalogs\\Region\\Region")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактирование области"
+    regionEdit(input: RegionEditInput! @spread): Region
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.region.edit"])
+    "Переключение активно/неактивно"
+    regionToggleActive(id: ID!): Region!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.region.edit"])
+}
+# === INPUT ===
+"Поля для редактирования области"
+input RegionEditInput {
+    id: ID!
+    sort: Int
+    active: Boolean
+    "переводы"
+    translations: [NameTranslationsInput!]!
+}
+# === TYPE ===
+"Область"
+type Region {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+    "Города"
+    cities: [City]! @hasMany(relation: "cities")
+}

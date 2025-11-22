@@ -1,0 +1,113 @@
+@startuml
+
+title
+Calc model (моделя для калькуляции)
+end title
+
+    package Calc <<Model>> {
+
+        class CalcModel {
+            для каждого бренда свой набор
+            обязательных полей
+            через бренд можно проверить
+            какая модель
+
+            brand(): BelongsTo
+            model(): BelongsTo
+            mileage(): BelongsTo
+            engineVolume(): BelongsTo
+            transmission(): BelongsTo
+            driveUnit(): BelongsTo
+            fuel(): BelongsTo
+            works(): BelongsToMany
+            spares(): BelongsToMany
+        }
+
+        class Model {
+            модель авто
+        }
+        class Brand {
+            бренд авто
+
+            isVolvo()
+            isRenault()
+            isMitsubishi()
+        }
+        class Mileage {
+            пробег
+
+           * $value: Int
+        }
+        class EngineVolume {
+            обьем двигателя
+
+            * $volume: Int
+        }
+        class Transmission {
+            трансмиссия
+
+            translations(): HasMany
+            current(): HasOne
+        }
+        class DriveUnit {
+            привод
+
+            * $name: Str
+        }
+        class Fuel {
+            вид топлива
+
+            translations(): HasMany
+            current(): HasOne
+        }
+
+        class Work {
+            работы
+
+            translations(): HasMany
+            current(): HasOne
+        }
+        class WorkPivot {
+            связующая таблицы
+            хранит в себе коэфициент (поле минуты)
+
+
+            * $minutes: Int
+        }
+
+        class Spares {
+            запчасти
+
+        }
+        class SparesPivot {
+            связующая таблицы
+            хранит в себе нужно кол-во/обьем
+
+            * $qry: Int
+        }
+    }
+
+
+CalcModel -left-> Model
+CalcModel -left-> Brand
+CalcModel -up-> Mileage
+CalcModel -up-> EngineVolume
+CalcModel -up-> Transmission
+CalcModel -up-> DriveUnit
+CalcModel -up-> Fuel
+
+CalcModel -down-> WorkPivot
+CalcModel -down-> WorkPivot
+CalcModel -down-> WorkPivot
+WorkPivot -left-> Work
+WorkPivot -left-> Work
+WorkPivot -left-> Work
+
+CalcModel -down-> SparesPivot
+CalcModel -down-> SparesPivot
+CalcModel -down-> SparesPivot
+SparesPivot -right-> Spares
+SparesPivot -right-> Spares
+SparesPivot -right-> Spares
+
+@enduml

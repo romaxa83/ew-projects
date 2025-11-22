@@ -1,0 +1,45 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"возростов водителя\" (страхование)"
+    driverAges(
+        active: Boolean @eq
+    ):  [DriverAge!]!
+        @all(model: "App\\Models\\Catalogs\\Service\\DriverAge")
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"возраста водителя\" (по id)"
+    driverAge(
+        id: ID @eq
+    ):  DriverAge
+        @find(model: "App\\Models\\Catalogs\\Service\\DriverAge")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактирование льготы"
+    driverAgeEdit(input: DriverAgeEditInput! @spread): DriverAge!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+
+    "Переключение активно/неактивно"
+    driverAgeToggleActive(id: ID!): DriverAge!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+}
+# === INPUT ===
+"Поля для редактирования \"возроста водителя\""
+input DriverAgeEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]
+}
+# === TYPE ===
+"Возраст водителя"
+type DriverAge {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+}

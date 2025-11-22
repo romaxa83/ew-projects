@@ -1,0 +1,85 @@
+# === MUTATION ===
+extend type Mutation {
+    "Загрузка картинок к модели"
+    imagesStore(
+        "Класс модели"
+        model: ImageModelConst!
+        "Id модели"
+        modelId: ID!
+        "Тип картинки"
+        type: String
+        images: [Upload] @rules(apply: ["image"])
+    ): [Image]
+
+    "Загрузка одной картинки к модели (если уже есть будет удалена)"
+    imageStore(
+        "Класс модели"
+        model: ImageModelConst!
+        "Id модели"
+        modelId: ID!
+        "Тип картинки"
+        type: String
+        image: [Upload] @rules(apply: ["image"])
+    ): Image
+
+    "Удаление картинок"
+    imagesDelete(ids: [ID]!): Response!
+
+    "Удаление файлов"
+    filesDelete(ids: [ID]!): Response!
+}
+# === TYPE ===
+type Image {
+    id: ID!
+    "Ориганальное имя файла"
+    basename: String!
+    hash: String!
+    model: String!
+    type: String
+    "Урл оригинальной картинки"
+    url: String!
+    "Урлы по размерам"
+    sizes: ImageSizes @field(resolver: "App\\GraphQL\\Types\\Media\\ImageType@sizes")
+    position: Int
+    mime: String
+    ext: String
+    size: String
+    createdAt: DateTime! @rename(attribute: "created_at")
+}
+type File {
+    id: ID!
+    "Ориганальное имя файла"
+    basename: String!
+    hash: String!
+    model: String!
+    type: String
+    "Урл файл"
+    url: String!
+    mime: String
+    ext: String
+    size: String
+    createdAt: DateTime! @rename(attribute: "created_at")
+}
+# === ENUM ===
+"Константы для моделей"
+enum ImageModelConst {
+    "админ"
+    admin @enum(value: "admin")
+    "пользователь"
+    user @enum(value: "user")
+    "дилерский центр"
+    dealership @enum(value: "dealership")
+    "модель авто"
+    model @enum(value: "model")
+    "бренд авто"
+    brand @enum(value: "brand")
+    "авто"
+    car @enum(value: "car")
+    "акции"
+    promotion @enum(value: "promotion")
+}
+"Константы для моделей (файлы)"
+enum FileModelConst {
+    "авто"
+    car @enum(value: "car")
+}

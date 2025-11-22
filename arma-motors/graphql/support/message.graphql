@@ -1,0 +1,72 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех \"сообщений\" (тех. поддержка)"
+    messages(
+        "получение по категории"
+        categoryId: ID @eq(key: "category_id")
+        "фильтр по фио"
+        userName: String @scope(name: "userNameSearch")
+        orderBy: _ @orderBy(columns: ["id", "category_id", "created_at"])
+    ): [SupportMessage!]!
+        @paginate(defaultCount: 10, model: "App\\Models\\Support\\Message")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:support.message.list"])
+
+    "Получение по id \"сообщений\" (тех. поддержка)"
+    message(id: ID @eq): SupportMessage
+        @find(model: "App\\Models\\Support\\Message")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:support.message.get"])
+
+    "Получение статусов для \"сообщений\" (тех. поддержка)"
+    messageStatuses: [SimpleData!]!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение кол-во новых \"сообщений\" (тех. поддержка)"
+    messageCountNew: SimpleData!
+        @middleware(checks: ["auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"обращения\"  пользователем в тех. поддержку"
+    supportMessageCreate(input: SupportMessageCreateInput! @spread): Response!
+        @middleware(checks: ["set.locale"])
+
+    "Смена статуса \"обращения\" (тех. поддержка)"
+    supportMessageChangeStatus(input: SupportMessageChangeStatusInput! @spread): SupportMessage!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:support.message.edit"])
+
+    "Удаления \"обращения\" (тех. поддержка)"
+    supportMessageDelete(id: ID!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:support.message.delete"])
+}
+# === INPUT ===
+"Поля для создании \"обращения\" пользователем в тех. поддержку"
+input SupportMessageCreateInput {
+    categoryId: ID! @rules(apply: ["exists:support_categories,id"])
+    userId: ID
+    email: String!
+    text: String
+}
+"Поля для смены статуса \"обращения\" пользователем в тех. поддержку"
+input SupportMessageChangeStatusInput {
+    id: ID!
+    status: SupportMessageStatus
+}
+# === TYPE ===
+"\"Собщения\" (тех. поддержка)"
+type SupportMessage {
+    id: ID!
+    category: Category @belongsTo(relation: "category")
+    user: User @belongsTo(relation: "user")
+    status: SupportMessageStatus
+    email: String!
+    text: String
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}
+# === ENUM ===
+"Статусы сообщений (тех. поддержка)"
+enum SupportMessageStatus {
+    DRAFT @enum(value: 0)
+    READ @enum(value: 1)
+    DONE @enum(value: 2)
+}

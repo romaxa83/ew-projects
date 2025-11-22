@@ -1,0 +1,137 @@
+# === INPUT ===
+"Поля для добавления авто пользователем"
+input UserAddCarInput {
+    brandId: ID!
+    modelId: ID!
+    number: String!
+    vin: String!
+    year: String!
+    isPersonal: Boolean!
+}
+"Поля при удалении авто пользователем"
+input UserDeleteCarInput {
+    id: ID!
+    reason: CarReasonDelete
+    comment: String
+}
+"Поля массив ids авто"
+input UserCarsIdsInput {
+    carIds: [ID!]!
+}
+# === TYPE ===
+"Авто"
+type Car {
+    id: ID!
+    uuid: String
+    brand: Brand! @belongsTo(relation: "brand")
+    model: Model! @belongsTo(relation: "model")
+    user: User! @belongsTo(relation: "user")
+    number: String
+    vin: String!
+    year: String!
+    "год продажи авто магазинах арма-моторс (для программы лояльности)"
+    yearDeal: String @rename(attribute: "year_deal")
+    "Личное или корпоративное"
+    isPersonal: Boolean! @rename(attribute: "is_personal")
+    "Верифицировано в 1с"
+    isVerify: Boolean! @rename(attribute: "is_verify")
+    "Куплено в арма"
+    isBuy: Boolean! @rename(attribute: "is_buy")
+    "Добавленно через мп"
+    isAddToApp: Boolean! @rename(attribute: "is_add_to_app")
+    "Авто в заказе"
+    isOrder: Boolean! @rename(attribute: "is_order")
+    "В гараже"
+    inGarage: Boolean! @rename(attribute: "in_garage")
+    "Выбрано ли авто сейчас"
+    selected: Boolean!
+    "есть страховка"
+    hasInsurance : Boolean! @rename(attribute: "has_insurance")
+    "привязаный файл (страховка)"
+    insuranceFile: File @morphOne(relation: "insuranceFile")
+    status: CarStatus @rename(attribute: "inner_status")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    "Картинки"
+    images: [Image] @morphMany(relation: "images")
+    "Доверенные лица"
+    confidants: [Confidant]! @hasMany(relation: "confidants")
+    "причина удаления"
+    deleteReason: String @rename(attribute: "delete_reason")
+    "комментарий к удалению"
+    deleteComment: String @rename(attribute: "delete_comment")
+    "купоны по программе лояльности"
+    loyalties: [Loyalty] @belongsToMany(relation: "loyalties")
+    "данные по заказу, если авто в заказе"
+    carOrder: CarOrder @hasOne(relation: "carOrder")
+    "рекомендации для авто"
+    recommendations: [Recommendation]! @hasMany(relation: "recommendations")
+    "історія актів та рахунків цього авто"
+    history: Record @hasOne(relation: "history")
+}
+"Авто (удаленные)"
+type CarTrashed {
+    id: ID!
+    brand: Brand! @belongsTo(relation: "brand")
+    model: Model! @belongsTo(relation: "model")
+    user: User! @belongsTo(relation: "userWithTrashed")
+    number: String!
+    vin: String!
+    year: String!
+    "Личное или корпоративное"
+    isPersonal: Boolean! @rename(attribute: "is_personal")
+    "Верифицировано в 1с"
+    isVerify: Boolean! @rename(attribute: "is_verify")
+    "Куплено в арма"
+    isBuy: Boolean! @rename(attribute: "is_buy")
+    "Добавленно через мп"
+    isAddToApp: Boolean! @rename(attribute: "is_add_to_app")
+    "Выбрано ли авто сейчас"
+    selected: Boolean!
+    "есть страховка"
+    hasInsurance : Boolean! @rename(attribute: "has_insurance")
+    "привязаный файл (страховка)"
+    insuranceFile: File @morphOne(relation: "insuranceFile")
+    status: CarStatus @rename(attribute: "inner_status")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    "Картинки"
+    images: [Image] @morphMany(relation: "images")
+    "Доверенные лица"
+    confidants: [Confidant]! @hasMany(relation: "confidants")
+    "причина удаления"
+    deleteReason: String @rename(attribute: "delete_reason")
+    "комментарий к удалению"
+    deleteComment: String @rename(attribute: "delete_comment")
+}
+"Доверенное лицо"
+type Confidant {
+    name: String
+    phone: String
+}
+"Заказ на авто (эти данные приходят от АА)"
+type CarOrder {
+    "статус оплаты"
+    statusPayment: Int @rename(attribute: "payment_status")
+    sum: Float @convertToFloat
+    sumDiscount: Float @rename(attribute: "sum_discount") @convertToFloat
+    orderNumber: String @rename(attribute: "order_number")
+    statuses: [UserCarOrderStatus]
+}
+# === ENUM ===
+"Внутрении статусы авто пользователя"
+enum CarStatus {
+    "авто только заведенно"
+    DRAFT @enum(value: 0)
+    "авто промодерировано в админ панели"
+    MODERATE @enum(value: 1)
+    "АА верифицировало авто"
+    VERIFY @enum(value: 2)
+}
+"Причина удаленния авто"
+enum CarReasonDelete {
+    "продано"
+    sold @enum(value: "sold")
+    "другая"
+    other @enum(value: "other")
+}

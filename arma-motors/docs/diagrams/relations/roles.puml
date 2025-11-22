@@ -1,0 +1,88 @@
+@startuml
+
+title
+RBAC
+за основу взят пакет https://github.com/spatie/laravel-permission
+end title
+
+    package Roles <<RBAC>> {
+
+        class PermissionGroup {
+            * id : Int
+            * name : Str
+            * sort : Int
+            permissions(): HasMany
+            translations()
+            current()
+        }
+        class PermissionGroupTranslation {
+            * id : Int
+            * group_id : Int
+            * locale : Str
+            * name : Str
+        }
+
+        class Permission {
+            * id : Int
+            * name : Str
+            * guard_name : Str
+            * group_id : Int
+            * created_at : Datetime
+            * updated_at : Datetime
+            translations()
+            current()
+        }
+        class PermissionTranslation {
+            * id : Int
+            * permission_id : Int
+            * locale : Str
+            * name : Str
+        }
+
+        class Role {
+            * id : Int
+            * name : Str
+            * guard_name : Str
+            * created_at : Datetime
+            * updated_at : Datetime
+            translations()
+            current()
+        }
+        class RoleTranslation {
+            * id : Int
+            * role_id : Int
+            * locale : Str
+            * name : Str
+        }
+
+        class ModelHasPermission {
+            * permission_id : Int
+            * model_type : Str
+            * model_id : Int
+        }
+
+        class ModelHasRoles {
+            * role_id : Int
+            * model_type : Str
+            * model_id : Int
+        }
+
+        class RoleHasPermissions {
+            * permission_id : Int
+            * role_id : Int
+        }
+    }
+
+    class Admin {}
+
+PermissionGroup -right-> PermissionGroupTranslation
+Role -right-> RoleTranslation
+Permission -left-> PermissionTranslation
+PermissionGroup <-down-> Permission
+ModelHasPermission -up-> Permission
+ModelHasRoles -up-> Role
+RoleHasPermissions -up-> Role
+RoleHasPermissions -up-> Permission
+Admin -left-> ModelHasRoles
+
+@enduml

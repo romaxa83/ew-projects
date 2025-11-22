@@ -1,0 +1,101 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех условий \"программ лояльностей\""
+    loyalties(
+        orderBy: _ @orderBy(columns: ["id", "type", "discount", "brand_id"])
+    ): [Loyalty!]!
+        @paginate(defaultCount: 10, model: "App\\Models\\User\\Loyalty\\Loyalty")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:loyalty.list"])
+
+    "Получение всех \"программ лояльностей\" созданных и прикрипленах к пользователям"
+    loyaltyItems(
+        active: Boolean @eq
+        "фильтр по типу"
+        type: LoyaltyType @scope(name: "loyaltyTypeSearch")
+        "фильтр по бренду"
+        brandId: ID @scope(name: "brandSearch")
+        "фильтр по имени пользователя"
+        userName: String @scope(name: "userNameSearch")
+        "фильтр по размеру скидки"
+        discountSearch: Float @scope(name: "discountSearch")
+    ): [LoyaltyItem!]!
+        @paginate(defaultCount: 10, model: "App\\Models\\User\\Loyalty\\LoyaltyItem")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:loyalty.list"])
+
+    "Получение по id условий \"программу лояльности\""
+    loyalty(id: ID @eq): Loyalty
+        @find(model: "App\\Models\\User\\Loyalty\\Loyalty")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:loyalty.get"])
+
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание условий \"программы лояльности\""
+    loyaltyCreate(input: LoyaltyCreateInput! @spread): Loyalty!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:loyalty.create"])
+
+    "Редактировать условий \"программы лояльности\""
+    loyaltyEdit(input: LoyaltyEditInput! @spread): Loyalty!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:loyalty.edit"])
+
+    "Переключение активно/неактивно условий \"программы лояльности\""
+    loyaltyToggleActive(id: ID!): Loyalty!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:loyalty.edit"])
+
+    "Переключение активно/неактивно привязанных \"программ лояльности\""
+    loyaltyItemToggleActive(id: ID!): LoyaltyItem!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:loyalty.edit"])
+}
+# === INPUT ===
+"Поля для создании условий \"программы лояльности\""
+input LoyaltyCreateInput {
+    brandId: ID! @rules(apply: ["exists:car_brands,id"])
+    active: Boolean
+    type: LoyaltyType
+    age: String
+    discount: Float!
+}
+"Поля для редактирования условий \"программы лояльности\""
+input LoyaltyEditInput {
+    id: ID!
+    active: Boolean
+    discount: Float
+}
+# === TYPE ===
+"Условия \"Программа лояльности\""
+type Loyalty {
+    id: ID!
+    brand: Brand! @belongsTo(relation: "brand")
+    active: Boolean!
+    type: LoyaltyType
+    age: String
+    discount: Float @convertToFloat
+    pivot: UserCarLoyaltyPivot
+}
+
+"Прикрепленая \"Программа лояльности\" для пользователя"
+type LoyaltyItem {
+    id: ID!
+    active: Boolean!
+    "пользователь"
+    user: User! @belongsTo(relation: "user")
+    "программа лояльности"
+    loyalty: Loyalty! @belongsTo(relation: "loyalty")
+    "авто пользователь, к которой отоситься данная программа лояльности"
+    car: Car! @belongsTo(relation: "car")
+}
+
+type UserCarLoyaltyPivot {
+    active: Boolean!
+    car: Car @carFromLoyalty
+}
+# === ENUM ===
+"Типы по программе лояльности"
+enum LoyaltyType {
+    "на сервис"
+    service @enum(value: "service")
+    "на запчасти"
+    spares @enum(value: "spares")
+    "на покупку"
+    byu @enum(value: "byu")
+}

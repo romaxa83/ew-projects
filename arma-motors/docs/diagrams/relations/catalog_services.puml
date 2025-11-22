@@ -1,0 +1,107 @@
+@startuml
+
+title
+Catalogs
+end title
+
+    package Services <<Services>> {
+
+        class Services {
+            * parent_id : Int
+            * sort : Int
+            * active : Bool
+            * alias : string|uniq
+
+            insuranceFranchises(): BelongsToMany
+            durations(): BelongsToMany
+
+            childs(): HasMany
+            parent(): HasOne
+
+            translations(): HasMany
+            current(): HasOne
+        }
+        class ServiceTranslation {
+            * service_id : Int
+            * lang : Str
+            * name : Str
+        }
+
+        class DriverAge {
+            возраст водителя
+
+            * active : Bool
+            * sort : Int
+
+            translations()
+            current()
+        }
+        class DriverAgeTranslation {
+            * lang : Str
+            * name : Str
+        }
+
+        class Privileges {
+            льготы
+
+            * active : Bool
+            * sort : Int
+
+            translations()
+            current()
+        }
+        class PrivilegesTranslation {
+            * lang : Str
+            * name : Str
+        }
+
+        class Duration {
+            срок времени
+
+            * active : Bool
+            * sort : Int
+
+            services(): belongsToMany
+
+            translations()
+            current()
+        }
+        class DurationTranslation {
+            * lang : Str
+            * name : Str
+        }
+
+        class InsuranceFranchise {
+            франшиза
+
+            * active : Bool
+            * sort : Int
+            * name : Str
+
+            insurances() : belongsToMany
+        }
+    }
+
+Services -left-> ServiceTranslation
+Services -left-> Services : parent()
+Services <-up- Services : childs()
+DriverAge -down-> DriverAgeTranslation
+Privileges -down-> PrivilegesTranslation
+Duration -left-> DurationTranslation
+
+Duration "services()" <-down-> "durations()" Services :with pivot table
+InsuranceFranchise "insurances()" <-down-> "insuranceFranchises()" Services :with pivot table
+
+note top of Duration : Актуально для страховки/кредитования
+
+note top of InsuranceFranchise : Актуально для типов страховки (каско,го ...)
+
+note right of Services
+Имеет как главные сервисы
+так и тип (сервис/страхование) доспут через childs()
+у типов доступ к родителю через parent()
+уникален id и alias
+end note
+
+@enduml
+

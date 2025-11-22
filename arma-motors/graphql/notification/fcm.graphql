@@ -1,0 +1,36 @@
+"Пуши по firebase"
+type FcmNotification {
+    id: ID!
+    status: FcmNotificationStatus!
+    type: FcmNotificationType!
+    action: String
+    "id связаной модели"
+    relationId: ID @rename(attribute: "entity_id")
+    "сласс связаной модели. (App\\Models\\Agreement\\Agreement - досогласования, App\\Models\\Order\\Order - заявка, App\\Models\\Recommendation\\Recommendation - рекоммендация)"
+    relationModel: ID @rename(attribute: "entity_type")
+    sendData: NotificationMessagePayload @rename(attribute: "send_data")
+#    responseData: String! @rename(attribute: "response_data")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}
+
+"Константы статусов пушей"
+enum FcmNotificationStatus {
+    created @enum(value: "created")
+    send @enum(value: "send")
+    has_error @enum(value: "has_error")
+}
+
+"Константы типов пушей"
+enum FcmNotificationType {
+    complete @enum(value: "complete")
+    payment @enum(value: "payment")
+    system @enum(value: "system")
+    new @enum(value: "new")
+    message @enum(value: "message")
+    alert @enum(value: "alert")
+    percent @enum(value: "percent")
+    cupon @enum(value: "cupon")
+    email @enum(value: "email")
+    phone @enum(value: "phone")
+}

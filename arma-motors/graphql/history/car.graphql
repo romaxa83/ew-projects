@@ -1,0 +1,313 @@
+# === QUERY ===
+extend type Query {
+    "Отримання всіх записів"
+    histories (
+        "отримання записів користувача"
+        userId: ID @scope(name: "userID")
+    ): [Record!]
+        @paginate(defaultCount: 10, model: "App\\Models\\History\\CarItem")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Отримання запису по id"
+    history(id: ID @eq): Record
+        @find(model: "App\\Models\\History\\CarItem")
+        @middleware(checks: ["set.locale"])
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Отримання всіх записів для мобільного додатку"
+    historiesForMobile(
+        "фильтр по авто (id)"
+        carId: ID @scope(name: "carId")
+    ) : [Record!]
+        @paginate(defaultCount: 10, model: "App\\Models\\History\\CarItem", scopes: ["userMobile"])
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Отримання всіх записів для мобільного додатку"
+    historiesOrderForMobile(
+        "фильтр по авто (id)"
+        carId: ID @scope(name: "carId")
+        "от (в милисекундах)"
+        from: String @scope(name: "fromClosed")
+        "до (в милисекундах)"
+        to: String @scope(name: "toClosed")
+    ) : [OrderHistory!]
+    @paginate(defaultCount: 10, model: "App\\Models\\History\\Order", scopes: ["userMobile"])
+    @middleware(checks: ["set.locale", "auth:graph_user"])
+}
+# === TYPE ===
+"Запис (история)"
+type Record {
+    id: ID!
+    "uuid авто"
+    carUuid: String! @rename(attribute: "car_uuid")
+    "авто"
+    car: Car! @belongsTo(relation: "car")
+    "рахунки"
+    invoices: [Invoice] @hasMany(relation: "invoices")
+    "акти"
+    orders(
+        "от (в милисекундах)"
+        from: String @scope(name: "fromClosed"),
+        "до (в милисекундах)"
+        to: String @scope(name: "toClosed")
+    ): [OrderHistory] @hasMany(relation: "orders")
+}
+
+"Рахунок"
+type Invoice {
+    id: ID!
+    "uuid в системе АА"
+    uuid: String! @rename(attribute: "aa_uuid")
+    "адрес"
+    address: String
+    "сума з ПДВ"
+    amountIncludingVAT: Float @rename(attribute: "amount_including_vat")
+    "сума ПДВ"
+    amountVAT: Float @rename(attribute: "amount_vat")
+    "сума без ПДВ"
+    amountWithoutVAT: Float @rename(attribute: "amount_without_vat")
+    "автор"
+    author: String
+    "контактна інформація"
+    contactInformation: String @rename(attribute: "contact_information")
+    "дата"
+    date: DateTime
+    "знижка"
+    discount: Float
+    "Інше"
+    etc: String
+    "номер"
+    number: String
+    "організація"
+    organization: String
+    "номер телефону"
+    phone: String
+    "покупець"
+    shopper: String
+    "податковий код"
+    taxCode: String @rename(attribute: "tax_code")
+    parts: [InvoicePart] @hasMany(relation: "parts")
+    "привязаный pdf файл"
+    file: File @morphOne(relation: "file")
+}
+
+"Частина рахунку (товар)"
+type InvoicePart {
+    id: ID!
+    "назва товару"
+    name: String
+    "каложний номер товару"
+    ref: String
+    "одиниця виміру"
+    unit: String
+    "ціна зі знидкою"
+    discountedPrice: Float @rename(attribute: "discounted_price")
+    "ціна"
+    price: Float
+    "кількість"
+    quantity: Float
+    "відсоток знижки"
+    rate: Float
+    "сума"
+    sum: Float
+}
+
+"Акти"
+type OrderHistory {
+    id: ID!
+    "uuid в системе АА"
+    uuid: String! @rename(attribute: "aa_id")
+    "сума прописом"
+    amountInWords: String @rename(attribute: "amount_in_words")
+    "сума з ПДВ"
+    amountIncludingVAT: Float @rename(attribute: "amount_including_vat")
+    "сума ПДВ"
+    amountVAT: Float @rename(attribute: "amount_vat")
+    "сума без ПДВ"
+    amountWithoutVAT: Float @rename(attribute: "amount_without_vat")
+    "номер кузова"
+    bodyNumber: String @rename(attribute: "body_number")
+    "дата закриття"
+    closingDate: DateTime @rename(attribute: "closing_date")
+    "рахунока"
+    currentAccount: String @rename(attribute: "current_account")
+    "дата"
+    date: String
+    "дата продажі"
+    dateOfSale: DateTime @rename(attribute: "date_of_sale")
+    "дилер"
+    dealer: String
+    "сума без ПДВ"
+    disassembledParts: String @rename(attribute: "disassembled_parts")
+    "знижка"
+    discount: Float
+    "знижка на роботи"
+    discountJobs: Float @rename(attribute: "discount_jobs")
+    "знижка на товари"
+    discountParts: Float @rename(attribute: "discount_parts")
+    "сума робіт з ПДВ"
+    jobsAmountIncludingVAT: Float @rename(attribute: "jobs_amount_including_vat")
+    "сума ПДВ робіт"
+    jobsAmountVAT: Float @rename(attribute: "jobs_amount_vat")
+    "сума робіт без ПДВ"
+    jobsAmountWithoutVAT: Float @rename(attribute: "jobs_amount_without_vat")
+    "модель"
+    model: String
+    "номер історії"
+    number: String
+    "сума запчастин з ПДВ"
+    partsAmountIncludingVAT: Float @rename(attribute: "parts_amount_including_vat")
+    "сума ПДВ запчастин"
+    partsAmountVAT: Float @rename(attribute: "parts_amount_vat")
+    "сума запчатин без ПДВ"
+    partsAmountWithoutVAT: Float @rename(attribute: "parts_amount_without_vat")
+    "виробник авто"
+    producer: String
+    "рекомендації"
+    recommendations: String
+    "тип ремонту"
+    repairType: String @rename(attribute: "repair_type")
+    "дердавний номер автомобіля"
+    stateNumber: String @rename(attribute: "state_number")
+    "пробіг"
+    mileage: Float
+    "запасні частини"
+    parts: [OrderHistoryPart] @hasMany(relation: "parts")
+    "робота"
+    jobs: [OrderHistoryJob] @hasMany(relation: "jobs")
+    "замовник"
+    customer: OrderHistoryCustomer @belongsTo(relation: "customer")
+    "диспетчер"
+    dispatcher: OrderHistoryDispatcher @belongsTo(relation: "dispatcher")
+    "організація"
+    organization: OrderHistoryOrganization @belongsTo(relation: "organization")
+    "власник"
+    owner: OrderHistoryOwner @belongsTo(relation: "owner")
+    "платник"
+    payer: OrderHistoryPayer @belongsTo(relation: "payer")
+    "привязаный pdf файл"
+    file: File @morphOne(relation: "file")
+}
+
+"Частина акту (товар)"
+type OrderHistoryPart {
+    id: ID!
+    "назва товару"
+    name: String
+    "сума з ПДВ"
+    amountIncludingVAT: Float @rename(attribute: "amount_including_vat")
+    "сума без ПДВ"
+    amountWithoutVAT: Float @rename(attribute: "amount_without_vat")
+    "ціна"
+    price: Float
+    "ціна з ПДВ"
+    priceWithVAT: Float @rename(attribute: "price_with_vat")
+    "ціна без ПДВ"
+    priceWithoutVAT: Float @rename(attribute: "price_without_vat")
+    "виробник"
+    producer: String
+    "кількість"
+    quantity: Float
+    "одиниця виміру"
+    unit: String
+    "каложний номер товару"
+    ref: String
+    "відсоток знижки"
+    rate: Float
+}
+
+"Частина акту (роботи)"
+type OrderHistoryJob {
+    id: ID!
+    "назва роботи"
+    name: String
+    "сума з ПДВ"
+    amountIncludingVAT: Float @rename(attribute: "amount_including_vat")
+    "сума без ПДВ"
+    amountWithoutVAT: Float @rename(attribute: "amount_without_vat")
+    "коефіцієнт"
+    coefficient: Float
+    "ціна"
+    price: Float
+    "ціна з ПДВ"
+    priceWithVAT: Float @rename(attribute: "price_with_vat")
+    "ціна без ПДВ"
+    priceWithoutVAT: Float @rename(attribute: "price_without_vat")
+    "католожний номер"
+    ref: String
+    "відсоток знижки"
+    rate: Float
+}
+
+"Замовник"
+type OrderHistoryCustomer {
+    id: ID!
+    "ФІО"
+    FIO: String @rename(attribute: "fio")
+    "дата поручення"
+    date: DateTime
+    "email"
+    email: String
+    "повне ім'я"
+    name: String
+    "номер поручення"
+    number: String
+    "номер телефону"
+    phone: String
+}
+
+"Диспетчер"
+type OrderHistoryDispatcher {
+    id: ID!
+    "ФІО"
+    FIO: String @rename(attribute: "fio")
+    "дата поручення"
+    date: DateTime
+    "повне ім'я"
+    name: String
+    "номер поручення"
+    number: String
+    "посада"
+    position: String
+}
+
+"Організація"
+type OrderHistoryOrganization {
+    id: ID!
+    "адреса"
+    address: String
+    "повне ім'я"
+    name: String
+    "номер телефону"
+    phone: String
+}
+
+"Власник"
+type OrderHistoryOwner {
+    id: ID!
+    "адреса"
+    address: String
+    "email"
+    email: String
+    "повне ім'я"
+    name: String
+    "свідоцтво власника"
+    certificate: String
+    "номер телефону"
+    phone: String
+    "ІНН"
+    etc: String
+}
+
+"Платник"
+type OrderHistoryPayer {
+    id: ID!
+    "повне ім'я"
+    name: String
+    "дата договору"
+    date: String
+    "номер договору"
+    number: String
+    "назва договору"
+    contract: String
+}

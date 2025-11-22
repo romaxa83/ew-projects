@@ -1,0 +1,85 @@
+# === MUTATION ===
+extend type Mutation {
+    "Регистрация пользователя"
+    signUp(input: SignUpInput! @spread): AuthUserPayload!
+        @middleware(checks: ["set.locale"])
+
+    "Авторизация пользователя"
+    userLogin(input: UserLoginInput! @spread): AuthUserPayload!
+        @middleware(checks: ["set.locale"])
+
+    "Cброс пароля"
+    userResetPassword(input: UserResetPasswordInput! @spread): Response!
+        @middleware(checks: ["set.locale"])
+
+    "Потверждение email пользователя"
+    userConfirmEmail(input: UserConfirmEmailInput! @spread): Response!
+        @middleware(checks: ["set.locale"])
+
+    "Логаут для пользователя"
+    userLogout: Response!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Обновление токенов для пользователя"
+    userRefreshToken(input: UserRefreshTokenInput @spread): RefreshTokenPayload!
+        @middleware(checks: ["set.locale"])
+}
+# === QUERY ===
+extend type Query {
+    "Получение авторизованого пользователя"
+    authUser: User @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Проверка есть ли в системе пользователь по телефону"
+    existUser(phone: String!): Response!
+        @middleware(checks: ["set.locale"])
+}
+# === INPUT ===
+"Поля для авторизация пользователя"
+input UserLoginInput {
+    phone: String! @rules(apply: ["required"])
+    password: String! @rules(apply: ["min:8"])
+    deviceId: String @rules(apply: ["nullable", "string"])
+    "Удалить текущую сессию, если есть активный сеанс, для разлогина если авторизация с другого девайса"
+    dropCurrentSession: Boolean @rules(apply: ["nullable"])
+    fcmToken: String @rules(apply: ["nullable", "string"])
+}
+
+"Поля для сброса пароля"
+input UserResetPasswordInput {
+    phone: String! @rules(apply: ["required"])
+    password: String! @rules(apply: ["min:8"])
+    actionToken: String! @rules(apply: ["required", "string"])
+}
+"Поля для потверждения email"
+input UserConfirmEmailInput {
+    token: String! @rules(apply: ["required", "string"])
+}
+"Поля для обновление токена для пользователя"
+input UserRefreshTokenInput {
+    "id пользователя"
+    id: ID!
+    "токен от мб"
+    mobileToken: String!
+}
+"Поля для регистрации пользователя в мп"
+input SignUpInput {
+    name: String! @rules(apply: ["min:1"])
+    phone: String!  @rules(apply: ["required"])
+    email: String @rules(apply: ["nullable", "email", "unique:users,email"])
+    password: String! @rules(apply: ["min:8"])
+    egrpoy: String @rules(apply: ["nullable", "numeric", "min:8"])
+    fcmToken: String @rules(apply: ["nullable", "string"])
+    deviceId: String @rules(apply: ["nullable", "string"])
+    actionToken: String @rules(apply: ["nullable", "string"])
+}
+# === TYPE ===
+"Авторизационые данные для пользователя"
+type AuthUserPayload {
+    accessToken: String!
+    refreshToken: String!
+    expiresIn: Int!
+    tokenType: String!
+    "Ключ для шифрования MobileToken"
+    salt: String!
+    user: User
+}

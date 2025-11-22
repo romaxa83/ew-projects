@@ -1,0 +1,23 @@
+extend type Mutation {
+    "Логин админов"
+    adminLogin(input: AdminLoginInput! @spread): AuthAdminPayload!
+        @middleware(checks: ["set.locale"])
+    "Разлогин админа"
+    adminLogout: Response
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+
+"Поля для логина админов в системе"
+input AdminLoginInput {
+    email: String! @rules(apply: ["email"])
+    password: String! @rules(apply: ["min:8"])
+}
+
+"Авторизационые данные для админов"
+type AuthAdminPayload {
+    accessToken: String!
+    refreshToken: String!
+    expiresIn: Int!
+    tokenType: String!
+    user: Admin
+}

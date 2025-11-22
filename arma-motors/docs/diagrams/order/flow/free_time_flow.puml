@@ -1,0 +1,72 @@
+@startuml
+
+title
+<u>Получение данных для рассчета свободного времени</u>
+end title
+
+left header
+Wezom
+endheader
+
+skinparam {
+    TitleFontSize 25
+    TitleFontName Courier
+    TitleFontStyle underscore
+    ArrowColor #033649
+    ArrowFontColor #24292e
+    BackgroundColor #f5f5f5
+    BorderColor black
+    RoundCorner 25
+    SequenceLifeLineBorderColor #033649
+    ParticipantFontSize 17
+    BoxPadding 50
+    SequenceBoxBorderColor '
+}
+
+skinparam note {
+    BackgroundColor gold
+    BorderColor gold
+}
+
+skinparam group {
+    BackgroundColor red
+    BorderColor black
+}
+
+skinparam participant {
+    BorderColor black
+    BackgroundColor tomato
+}
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+
+participant AA
+
+AA -> Backend : orders/set/free-slot-time
+rnote over AA
+Передает данные для создания/обновления
+данных по постам (то, кузовной ...)
+и графику их работ
+endrnote
+Backend -> Backend: сохраняем данные
+...
+
+AA -> Backend : orders/set/exists
+rnote over AA
+В момент вериф. заявки от МП или
+создания заявки в самом дц, система АА
+шлет данные по этой заявки, на какой поста
+и время эта заявка
+endrnote
+Backend -> Backend: сохраняем данные
+...
+
+left footer
+<#lightblue,#red>|= Projecy|= Version |= Creator |= Status|= Created_at |= Updated_at |
+<#lightgreen>| arma-motors | 1.0 | Rodomanov R. | dev | 21.01.2022 | 21.01.2022 |
+endfooter
+@enduml
+

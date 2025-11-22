@@ -1,0 +1,98 @@
+version: "3.7"
+services:
+
+  nginx:
+    build:
+      context: docker
+      dockerfile: dev/nginx/Dockerfile
+    container_name: ${APP_NAME}__nginx
+    hostname: ${APP_NAME}__nginx
+    volumes:
+      - ./:/app
+      - ./storage/logs:/var/log/nginx
+    ports:
+      - ${DOCKER_BRIDGE}:80:80
+    restart: always
+
+  php-fpm:
+    build:
+      context: docker
+      dockerfile: dev/php-fpm/Dockerfile
+    container_name: ${APP_NAME}__php-fpm
+    hostname: ${APP_NAME}__php-fpm
+    environment:
+      TERM: xterm-256color
+      XDEBUG_CONFIG: "client_host=${DOCKER_BRIDGE}"
+      PHP_IDE_CONFIG: "serverName=${APP_NAME}"
+    volumes:
+      - ./:/app
+      - ./docker/dev/php/.bashrc:/root/.bashrc
+
+  db:
+    image: mysql:8
+    container_name: ${APP_NAME}__db
+    hostname: ${APP_NAME}__db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    ports:
+      - ${DOCKER_BRIDGE}:3306:3306
+    volumes:
+      - ./storage/db/:/var/lib/mysql/
+
+  db_testing:
+    image: mysql:8
+    container_name: ${APP_NAME}__db_testing
+    ports:
+      - ${DOCKER_BRIDGE}:3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: am_db_test
+    tmpfs:
+      - /var/lib/mysql
+
+  mailer:
+    image: mailhog/mailhog
+    container_name: ${APP_NAME}__mailer
+    hostname: ${APP_NAME}__mailer
+    ports:
+      - ${DOCKER_BRIDGE}:8025:8025
+      - ${DOCKER_BRIDGE}:1025:1025
+
+  redis:
+    image: redis:5.0-alpine
+    container_name: ${APP_NAME}__redis
+    hostname: ${APP_NAME}__redis
+    ports:
+      - ${DOCKER_BRIDGE}:6379:6379
+    volumes:
+      - ./storage/redis:/data
+    command:
+      - 'redis-server'
+      - '--databases 2'
+      - '--save 900 1' # сохраняем бекап на диск каждые 900 сек если было одно изменение
+      - '--save 300 10'
+      - '--save 60 10000'
+      - '--requirepass secret'
+      - '--loglevel debug'
+
+#  grafana:
+#    image: grafana/grafana:latest
+#    container_name: ${APP_NAME}__grafana
+#    hostname: ${APP_NAME}__grafana
+#    volumes:
+#      - ./storage/grafana:/var/lib/grafana
+#    environment:
+#      - GF_SECURITY_ADMIN_USER=admin
+#      - GF_SECURITY_ADMIN_PASSWORD=password
+#      - GF_USERS_ALLOW_SIGN_UP=false
+#    ports:
+#      - ${DOCKER_BRIDGE}:3000:3000
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${DOCKER_NETWORK}

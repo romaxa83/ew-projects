@@ -1,0 +1,58 @@
+# === MUTATION ===
+extend type Mutation {
+    "Рассчет стоимость на ТО (калькулятор)"
+    userCalc(input: UserCalcInput! @spread): CalcResponse!
+#        @middleware(checks: ["set.locale", "auth:graph_user"])
+        @middleware(checks: ["set.locale"])
+}
+# === INPUT ===
+"Поля для просчета стоимости"
+input UserCalcInput {
+    "модель"
+    modelId: ID! @rules(apply: ["exists:car_models,id"])
+    "бренд"
+    brandId: ID! @rules(apply: ["exists:car_brands,id"])
+    "пробег"
+    mileageId: ID @rules(apply: ["exists:mileages,id"])
+    "обьем двигателя"
+    engineVolumeId: ID @rules(apply: ["exists:car_engine_volumes,id"])
+    "привод"
+    driveUnitId: ID @rules(apply: ["exists:drive_units,id"])
+    "кпп"
+    transmissionId: ID @rules(apply: ["exists:transmissions,id"])
+    "вид топлива"
+    fuelId: ID @rules(apply: ["exists:fuels,id"])
+}
+# === TYPE ===
+"Ответ по расчету"
+type CalcResponse {
+    "общай сумма по запчастям"
+    totalSpares: Float
+    "общай сумма со скидкой по запчастям"
+    totalSparesDiscount: Float
+    "запчасти"
+    spares: [CalcItmeResponse]
+    "общай сумма по работам"
+    totalWorks: Float
+    "общай сумма со скидкой по работам"
+    totalWorksDiscount: Float
+    "работы"
+    works: [CalcItmeResponse]
+    "общая сумма"
+    allTotal: Float
+    "общая сумма со скидкой"
+    allTotalDiscount: Float
+}
+"Данные по расчету для конкретной позиции"
+type CalcItmeResponse {
+    "просчитаная цена"
+    price: Float
+    "просчитаная цена со скидкой"
+    priceDiscount: Float
+    "Название позиции (работа/запчасть)"
+    name: String
+    "коэфициент/кол-во"
+    qty: String
+    "ед. измерений"
+    unit: String
+}

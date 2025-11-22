@@ -1,0 +1,53 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"типов топлива\""
+    fuels(
+        active: Boolean @eq
+    ):  [Fuel!]!
+        @all(model: "App\\Models\\Catalogs\\Car\\Fuel")
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"типа топлива\""
+    fuel(
+        id: ID @eq
+    ): Fuel
+        @find(model: "App\\Models\\Catalogs\\Car\\Fuel")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"тип топлива\""
+    fuelCreate(input: FuelCreateInput! @spread): Fuel!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.create"])
+
+    "Редактирование \"тип топлива\""
+    fuelEdit(input: FuelEditInput! @spread): Fuel!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+
+}
+# === INPUT ===
+"Поля для создания \"типа топлива\""
+input FuelCreateInput {
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]!
+}
+"Поля для редактирования \"типа топлива\""
+input FuelEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]
+}
+# === TYPE ===
+"\"Тип топлива\""
+type Fuel {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+}

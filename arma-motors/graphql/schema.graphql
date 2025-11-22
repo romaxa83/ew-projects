@@ -1,0 +1,164 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec"
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
+"Координаты"
+scalar Location @scalar(class: "App\\GraphQL\\Scalars\\Location")
+
+"Сообщение уведомления, обьект включает в себе title и body"
+scalar NotificationMessagePayload @scalar(class: "App\\GraphQL\\Scalars\\NotificationMessagePayload")
+
+"Размеры для картинок"
+scalar ImageSizes @scalar(class: "App\\GraphQL\\Scalars\\ImageSizes")
+
+"Массив данных"
+scalar ArrayData @scalar(class: "App\\GraphQL\\Scalars\\ArrayData")
+
+"Время рабочего дня для отдела"
+scalar ScheduleTime @scalar(class: "App\\GraphQL\\Scalars\\ScheduleTime")
+
+"Страховые компании (актуально для \"Каско\")"
+scalar InsuranceCompany @scalar(class: "App\\GraphQL\\Scalars\\Catalogs\\Service\\InsuranceCompany")
+
+"Кол-во платежей (актуально для \"Каско\")"
+scalar CountPayments @scalar(class: "App\\GraphQL\\Scalars\\Catalogs\\Service\\CountPayments")
+
+type Mutation {
+    "Обновление токенов"
+    adminRefreshToken(input: RefreshTokenInput @spread): RefreshTokenPayload!
+        @middleware(checks: ["set.locale"])
+}
+
+extend type Query {
+    "Получение хеша по данным для кеша"
+    hashData(alias: HashAliasConst!): HashResponse!
+    "Коммуникация"
+    communications: [SimpleData!]!
+        @middleware(checks: ["set.locale"])
+}
+
+"Ответ"
+type Response {
+    code: Int!
+    status: Boolean!
+    message: String!
+}
+
+"Все переводы"
+type Translations {
+    id: ID!
+    name: String!
+    lang: String!
+    text: String
+}
+"Поля для переводов названия"
+input NameTranslationsInput {
+    lang: String! @rules(apply: ["exists:languages,slug"])
+    name: String! @rules(apply: ["required", "min:3"])
+    text: String
+}
+
+"Данные после обновления токена"
+type RefreshTokenPayload {
+    accessToken: String!
+    refreshToken: String!
+    expiresIn: Int!
+    tokenType: String!
+}
+
+"Поля для обновление токена"
+input RefreshTokenInput {
+    refreshToken: String
+}
+
+type SimpleData{
+    key: String!
+    name: String!
+}
+
+type SimpleDataArray{
+    values: ArrayData
+}
+
+enum OrderByType {
+    ASC @enum(value: "asc")
+    DESC @enum(value: "desc")
+}
+
+"Константы для хешей данных"
+enum HashAliasConst {
+    "бренд авто"
+    brand @enum(value: "brand")
+    "модель авто"
+    model @enum(value: "model")
+    "сервисы"
+    service @enum(value: "service")
+    "дц"
+    dealership @enum(value: "dealership")
+}
+
+#import user/auth.graphql
+#import user/user.graphql
+#import user/car.graphql
+
+#import admin/auth.graphql
+#import admin/admin.graphql
+#import admin/user.graphql
+#import admin/car.graphql
+#import admin/loyalty.graphql
+#import admin/car_order_status.graphql
+#import admin/dashboard.graphql
+
+#import role/role.graphql
+
+#import verify/sms.graphql
+
+#import translation/language.graphql
+#import translation/translation.graphql
+
+#import media/media.graphql
+
+#import calc/calc.graphql
+
+#import catalogs/region/region.graphql
+#import catalogs/region/city.graphql
+#import catalogs/car/brand.graphql
+#import catalogs/car/model.graphql
+#import catalogs/car/transport_type.graphql
+#import catalogs/car/transmission.graphql
+#import catalogs/car/engine_volume.graphql
+#import catalogs/car/drive_unit.graphql
+#import catalogs/car/fuel.graphql
+#import catalogs/service/service.graphql
+#import catalogs/service/privileges.graphql
+#import catalogs/service/driver_age.graphql
+#import catalogs/service/insurance_franchise.graphql
+#import catalogs/service/duration.graphql
+#import catalogs/calc/spares_group.graphql
+#import catalogs/calc/work.graphql
+#import catalogs/calc/mileage.graphql
+#import catalogs/calc/spares.graphql
+#import catalogs/calc/calc_model.graphql
+
+#import dealership/department.graphql
+#import dealership/dealership.graphql
+
+#import history/car.graphql
+
+#import notification/fcm.graphql
+
+#import order/order.graphql
+#import order/recommendation.graphql
+#import order/agreement.graphql
+
+#import page/page.graphql
+
+#import support/category.graphql
+#import support/message.graphql
+
+#import promotion/promotion.graphql

@@ -1,0 +1,85 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех департаментов"
+    departments : [Department!]
+        @all(model: "App\\Models\\Dealership\\Department")
+        @middleware(checks: ["set.locale"])
+}
+# === INPUT ===
+"Поля для создания отдела"
+input DepartmentCreateInput {
+    active: Boolean
+    sort: Int
+    phone: String!
+    email: String! @rules(apply: ["email"])
+    telegram: String!
+    viber: String!
+    lat: String
+    lon: String
+    translations: [DepartmentTranslationsInput!]
+    schedule: [ScheduleInput!]! @rulesForArray(apply: ["size:7"])
+}
+"Поля для переводов отдела"
+input DepartmentTranslationsInput {
+    lang: String! @rules(apply: ["exists:languages,slug"])
+    name: String! @rules(apply: ["min:5"])
+    address: String
+}
+"Поля для графика работы отдела"
+input ScheduleInput {
+    day: Int
+    from: Int
+    to: Int
+}
+# === TYPE ===
+"Отдел дц"
+type Department {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    phone: String!
+    email: String
+    telegram: String
+    type: DepartmentType
+    viber: String
+    "все переводы"
+    translations: [DepartmentTranslation!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: DepartmentTranslation! @hasOne(relation: "current")
+    "координаты"
+    location: Location
+    "график работы"
+    schedule: [Schedule!] @hasMany(relation: "schedule")
+    "дц"
+    dealership: Dealership @belongsTo(relation: "dealership")
+}
+"Переводы для отделов"
+type DepartmentTranslation {
+    id: ID!
+    name: String!
+    lang: String!
+    address: String
+}
+"График работы отдела"
+type Schedule {
+    id: ID!
+    "день недели"
+    day: Int
+    "с (от начала дня в милисекундах)"
+    from: Int
+    "до (от начала дня в милисекундах)"
+    to: Int
+    time: ScheduleTime
+}
+# === ENUM ===
+"Константы типов отдела"
+enum DepartmentType {
+    "отдел продаж"
+    sales @enum(value: 1)
+    "сервисный отдел"
+    service @enum(value: 2)
+    "отдел страхования и кредитования"
+    credit @enum(value: 3)
+    "кузовной одел"
+    body @enum(value: 4)
+}

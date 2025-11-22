@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<style>
+
+    table, tr {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    @media print {
+        @page { margin: 0; }
+        body { margin: 1.6cm; }
+    }
+
+    .work-akt__name {
+        text-align: center;
+        font-size: 18px;
+        margin-top: 3px;
+        border-bottom: 2px solid;
+        padding-bottom: 13px;
+    }
+
+    .work-akt__img {
+        background-color: #ccc;
+        height: 75px;
+        width: 234px;
+    }
+
+    .work-akt__img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .work-akt__title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 17px;
+        text-align: center;
+    }
+
+    .work-akt__title--small {
+        font-size: 11px;
+        margin-bottom: 3px;
+        margin-top: 9px;
+    }
+
+    .table-border td {
+        border-right: 1px solid;
+        border-bottom: 1px solid;
+    }
+
+    .work-akt__text {
+        font-size: 10px;
+        margin: 20px 0;
+        line-height: 1.2;
+        font-weight: 300;
+    }
+
+    .work-akt__text ol {
+        margin: 0;
+        padding: 10px 0 0 11px;
+    }
+
+    .work-akt__text ol li {
+        margin: 0 0 4px;
+    }
+
+    .work-akt__text strong {
+        display: block;
+        font-size: 11px;
+    }
+
+    .work-akt__frame {
+        height: 20px;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+    }
+
+    body {
+        width: 836px;
+        padding: 0 20px;
+        color: #000000;
+        margin: 5px auto;
+    }
+
+    .work-akt__descr-block {
+        border-top: 1px solid;
+        text-align: center;
+        margin: 10px 0 5px;
+    }
+
+    .work-akt__ask {
+        display: inline-block;
+    }
+
+    .work-akt__ask span {
+        display: inline-block;
+    }
+
+    .work-akt__ask span:first-child {
+        margin-right: 5px;
+    }
+
+    .work-akt__ask span:last-child {
+        width: 80px;
+    }
+
+    .div-after {
+        position: relative;
+    }
+
+    .div-after::after {
+        content: '/';
+        display: block;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+    }
+
+    .table {
+        page-break-inside: auto;
+    }
+
+    .va-base {
+        vertical-align: baseline;
+    }
+
+    .fs-11 {
+        font-size: 11px;
+    }
+
+    .fs-12 {
+        font-size: 12px;
+    }
+
+    .fs-14 {
+        font-size: 14px;
+    }
+
+    .ta-c {
+        text-align: center;
+    }
+
+    .lh11 {
+        line-height: 1.1;
+    }
+
+    .table > tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    .table thead {
+        display: table-header-group;
+        page-break-after: auto
+    }
+    .table tfoot {
+        display: table-footer-group;
+    }
+</style>
+    <table class="table">
+        <thead>
+            <tr>
+            <th>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="work-akt__img">
+                                <img src="/" alt="" width="234" height="60">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="work-akt__img" style="margin-left: auto;">
+                                <img src="/" alt="" width="234" height="60">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="work-akt__name">
+                    ФОП Барабаш О.Ю.
+                </div>
+                <div class="work-akt__title">
+                    <strong>АКТ ВИКОНАНИХ РОБІТ № ARM0107582</strong>
+                </div>
+                <!-- АКТО РОБОТ -->
+                <table class="fs-12" style="margin: 0 0 9px;">
+                    <tr>
+                        <td style="width: 90px"></td>
+                        <td class="fs-14" style="width: 62.5%;"></td>
+                        <td>27 серпня 2021 р.</td>
+                    </tr>
+                </table>
+                <table class="fs-12" style="border-bottom: 2px solid; text-align: left;font-weight: 300">
+                    <tr class="va-base">
+                        <td style="width: 90px">
+                            <strong>Виконавець</strong>
+                        </td>
+                        <td style="width: 62.5%;">
+                            <strong class="fs-14">ФОП Барабаш О.Ю.</strong>
+                            <div class="fs-12">Україна, м.Київ</div>
+                            <div class="fs-12">тел. (044) 4902300</div>
+                            <div class="fs-12">  Р/р 26003056230233 в ПАТ КБ ПриватБанк текущий в м.г. Киев МФО 380269 код ЄДРПОУ 257070994</div>
+                        </td>
+                        <td>
+                            <strong>Технічне обслуговування</strong>
+                        </td>
+                    </tr>
+                </table>
+            </th>
+        </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td></td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr>
+                <td>
+                    <table class="fs-11 lh11" style="text-align: left;border-bottom: 4px solid;padding: 4px 0 20px;display: inherit;width: 79%;">
+                        <tbody class="va-base">
+                        <tr>
+                            <td style="width: 90px">
+                                <strong>Власник:</strong>
+                            </td>
+                            <td style="width: 49.5%;">
+                                <strong>Бабіч Сергій Валерійович</strong>
+                            </td>
+                            <td style="width: 160px">
+                                Марка, модель ДТЗ
+                            </td>
+                            <td>
+                                <strong>LOGAN</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                Адреса
+                            </td>
+                            <td style="width: 49.5%;">
+                                02105, Київ, Київ, Чудновського, №7А, 38
+                            </td>
+                            <td style="width: 160px"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                Телефон
+                            </td>
+                            <td style="width: 49.5%;">
+                                +380679834656
+                            </td>
+                            <td style="width: 160px">
+                                № кузова
+                            </td>
+                            <td>
+                                <strong>VF1LSRABH45114027</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                Електр. пошта
+                            </td>
+                            <td style="width: 49.5%;">
+                                1@ukr.net
+                            </td>
+                            <td style="width: 160px">
+                                Дата продажу
+                            </td>
+                            <td>
+                                09.06.2011
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                ІНН/ЄДРПОУ
+                            </td>
+                            <td style="width: 49.5%;"></td>
+                            <td style="width: 160px"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                Свід.ПДВ
+                            </td>
+                            <td style="width: 49.5%;">
+
+                            </td>
+                            <td style="width: 160px">
+                                Держ. номеру
+                            </td>
+                            <td>
+                                <strong>AA1410KP</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                <strong>Замовник:</strong>
+                            </td>
+                            <td style="width: 49.5%;">
+                                <strong>Бабіч Сергій Валерійович</strong>
+                            </td>
+                            <td style="width: 160px"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                Телефон
+                            </td>
+                            <td style="width: 49.5%;">
+                                +380679834656
+                            </td>
+                            <td style="width: 160px">
+                                Пробіг, км
+                            </td>
+                            <td>
+                                <strong>250 315</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                Доруч.№ / від
+                            </td>
+                            <td style="width: 49.5%;">
+                                від
+                            </td>
+                            <td style="width: 160px"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 90px">
+                                <strong>Платник:</strong>
+                            </td>
+                            <td style="width: 49.5%;">
+                                <strong>Бабіч Сергій Валерійович</strong>
+                                <div>Замовлення на обслуговування № ARM0107582 от 27.08.2021 р.</div>
+                            </td>
+                            <td style="width: 160px"></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- ЗАПЧАСТИ -->
+                    <table class="work-akt__title work-akt__title--small">
+                        <tr>
+                            <td>
+                                Запчастини
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table-border fs-11 ta-c lh11" style="border-left: 1px solid;">
+                        <thead class="ta-c" style="border-top: 1px solid">
+                             <tr>
+                            <td style="width: 19px">
+                                № п/п
+                            </td>
+                            <td style="width: 61px">
+                                Виробник
+                            </td>
+                            <td style="width: 56px">
+                                Кат.№
+                            </td>
+                            <td style="width: 287px">
+                                Назва
+                            </td>
+                            <td style="width: 32px">
+                                Кіль- кість
+                            </td>
+                            <td style="width: 42px">
+                                Од. виміру
+                            </td>
+                            <td style="width: 51px">
+                                Ціна за
+                                од. без
+                                ПДВ
+                            </td>
+                            <td style="width: 15px">
+                                Знижка (+),
+                                Округлення
+                                (-), %
+                            </td>
+                            <td style="width: 63px">
+                                Відпускна
+                                ціна без ПДВ
+                            </td>
+                            <td style="width: 68px">
+                                Сума без ПДВ
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    ELF
+                                </td>
+                                <td>
+                                    000432
+                                </td>
+                                <td style="text-align: left;">
+                                    Олива Elf Evolution 900 SXR 5W40 1L.(208L)
+                                </td>
+                                <td>
+                                    3,3
+                                </td>
+                                <td>
+                                    л
+                                </td>
+                                <td>
+                                    204,14
+                                </td>
+                                <td>
+                                    20,0056
+                                </td>
+                                <td>
+                                    163,30
+                                </td>
+                                <td style="text-align: right">
+                                    538,89
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    2
+                                </td>
+                                <td>
+                                    RENAULT
+                                </td>
+                                <td>
+                                    7700274177
+                                </td>
+                                <td style="text-align: left;">
+                                    ФІЛЬТР ОЛИВИ
+                                </td>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    л
+                                </td>
+                                <td>
+                                    201,11
+                                </td>
+                                <td>
+                                    20,0056
+                                </td>
+                                <td>
+                                    163,30
+                                </td>
+                                <td style="text-align: right">
+                                    538,89
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    2
+                                </td>
+                                <td>
+                                    RENAULT
+                                </td>
+                                <td>
+                                    7700274177
+                                </td>
+                                <td style="text-align: left;">
+                                    ФІЛЬТР ОЛИВИ
+                                </td>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    л
+                                </td>
+                                <td>
+                                    201,11
+                                </td>
+                                <td>
+                                    20,0056
+                                </td>
+                                <td>
+                                    163,30
+                                </td>
+                                <td style="text-align: right">
+                                    538,89
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="fs-11 lh11">
+                        <tbody>
+                        <tr>
+                            <td style="width: 19px"></td>
+                            <td style="width: 61px"></td>
+                            <td style="width: 298px;border-bottom: 1px solid;">
+                                <strong> Всього без ПДВ, грн.</strong>
+                            </td>
+                            <td style="width: 36px;text-align: right;border: 1px solid;border-top: none;">
+                                <strong>  717,03</strong>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- РАБОТЫ -->
+                    <table class="work-akt__title work-akt__title--small">
+                        <tr>
+                            <td>
+                                Роботы
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table-border fs-11 ta-c lh11" style="border-left: 1px solid;">
+                        <thead class="ta-c" style="border-top: 1px solid">
+                            <tr>
+                            <td style="width: 19px">
+                                № п/п
+                            </td>
+                            <td style="width: 125px">
+                                Виробник
+                            </td>
+                            <td style="width: 287px">
+                                Назва
+                            </td>
+                            <td style="width: 32px">
+                                Кіль- кість
+                            </td>
+                            <td style="width: 42px">
+                                Од. виміру
+                            </td>
+                            <td style="width: 51px">
+                                Ціна за
+                                од. без
+                                ПДВ
+                            </td>
+                            <td style="width: 15px">
+                                Знижка (+),
+                                Округлення
+                                (-), %
+                            </td>
+                            <td style="width: 63px">
+                                Відпускна
+                                ціна без ПДВ
+                            </td>
+                            <td style="width: 68px">
+                                Сума без ПДВ
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                000432
+                            </td>
+                            <td>
+                                Олива Elf Evolution 900 SXR 5W40 1L.(208L)
+                            </td>
+                            <td>
+                                3,3
+                            </td>
+                            <td>
+                                л
+                            </td>
+                            <td>
+                                204,14
+                            </td>
+                            <td>
+                                20,0056
+                            </td>
+                            <td>
+                                163,30
+                            </td>
+                            <td style="text-align: right">
+                                538,89
+                            </td>
+                        </tr>
+                            <tr>
+                                <td>
+                                    2
+                                </td>
+                                <td>
+                                    RENAULT
+                                </td>
+                                <td>
+                                    ФІЛЬТР ОЛИВИ
+                                </td>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    л
+                                </td>
+                                <td>
+                                    201,11
+                                </td>
+                                <td>
+                                    20,0056
+                                </td>
+                                <td>
+                                    163,30
+                                </td>
+                                <td style="text-align: right">
+                                    538,89
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    2
+                                </td>
+                                <td>
+                                    RENAULT
+                                </td>
+                                <td>
+                                    ФІЛЬТР ОЛИВИ
+                                </td>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    л
+                                </td>
+                                <td>
+                                    201,11
+                                </td>
+                                <td>
+                                    20,0056
+                                </td>
+                                <td>
+                                    163,30
+                                </td>
+                                <td style="text-align: right">
+                                    538,89
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="fs-11 lh11">
+                        <tbody>
+                        <tr>
+                            <td style="width: 19px"></td>
+                            <td style="width: 61px"></td>
+                            <td style="width: 298px;border-bottom: 1px solid;">
+                                <strong> Всього без ПДВ, грн.</strong>
+                            </td>
+                            <td style="width: 36px;text-align: right;border: 1px solid;border-top: none;">
+                                <strong>  717,03</strong>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- РАЗОМ -->
+                    <table class="work-akt__title work-akt__title--small">
+                        <tr>
+                            <td>
+                                Разом
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="fs-11 lh11" style="border: 2px solid;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 19px"></td>
+                                <td style="width: 61px"></td>
+                                <td style="width: 298px;border-bottom: 1px solid;">
+                                    <strong> Всього без ПДВ, грн.</strong>
+                                </td>
+                                <td style="width: 36px;text-align: right;border-left: 1px solid;border-right: 1px solid;">
+                                    <strong>  717,03</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="fs-11 lh11">
+                        <tbody>
+                        <tr>
+                            <td style="width: 76px;padding-right: 15px;box-sizing: border-box">
+                                <strong>Всього до сплати прописом</strong>
+                            </td>
+                            <td style="width: 298px;">
+                                Дві тисячі сто п'ятдесят гривень нуль копійок
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- СКИДКИ -->
+                    <table class="work-akt__title work-akt__title--small">
+                        <tr>
+                            <td>
+                                Надані знижки (+)/округлення (-)
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="fs-11 lh11">
+                        <tbody>
+                        <tr style="border: 1px solid;">
+                            <td style="width: 19px"></td>
+                            <td style="width: 61px"></td>
+                            <td style="width: 298px;border-bottom: 1px solid;">
+                                Запчастини
+                            </td>
+                            <td style="width: 36px;text-align: right;border-left: 1px solid;border-right: 1px solid;">
+                                717,03
+                            </td>
+                        </tr>
+                        <tr  style="border: 1px solid;">
+                            <td style="width: 19px"></td>
+                            <td style="width: 61px"></td>
+                            <td style="width: 298px;border-bottom: 1px solid;">
+                                Роботи
+                            </td>
+                            <td style="width: 36px;text-align: right;border-left: 1px solid;border-right: 1px solid;">
+                                717,03
+                            </td>
+                        </tr>
+                        <tr  style="border: 1px solid;">
+                            <td style="width: 19px"></td>
+                            <td style="width: 61px"></td>
+                            <td style="width: 298px;border-bottom: 1px solid;">
+                                <strong> Всього без ПДВ, грн.</strong>
+                            </td>
+                            <td style="width: 36px;text-align: right;border-left: 1px solid;border-right: 1px solid;">
+                                <strong> 717,03</strong>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- ТЕКСТ 1 -->
+
+                    <table class="work-akt__text">
+                        <tr>
+                            <td>
+                                Умови гарантії (згідно умов гарантії заводу-виробника та ДСТУ 2322-93): 1(один) рік на встановлені оригінальні деталі, вузли і агрегати , на які розповсюджується гарантія заводу; 20
+                                діб але не більше 1500 км пробігу - на ремонт ДТЗ; 10 діб але не більше 500 км пробігу - на регулювальні роботи.
+                                <strong> Гарантія не розповсюджується на деталі, вузли і агрегати, надані для здійснення ремонту Замовником.</strong>
+                                УВАГА! Гарантія на виконані роботи та встановлені оригінальні деталі, вузли і агрегати надається Виконавцем за наступних умов: своєчасне проходження технічного обслуговування
+                                автомобілів тільки на авторизованій сервісній станції , виконання вимог (правил) експлуатації та зберігання автомобіля заводу-виробника, викладених у сервісній книжці та посібнику
+                                з експлуатації.
+                                <strong> Рекомендації:</strong>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="work-akt__frame" style="display: block"></table>
+
+                    <!-- ТЕКСТ 2 -->
+                    <table class="work-akt__text">
+                        <tr>
+                            <td>
+
+                                <strong>  Даний акт є Актом передання-прийняття ДТЗ, його складових після надання послуг з технічного обслуговування і ремонту.</strong>
+                                <ol>
+                                    <li>Цей акт складено згідно Замовлення на обслуговування № ARM0107582 від 27.08.2021 р. представником ФОП Барабаш О.Ю. в особі Консультант з сервісу Рено , що діє на
+                                        підставі доручення від № , з одного боку (надалі Виконавець), і власника ДТЗ чи його представника Бабіч Сергій Валерійович (надалі Замовник), що діє за довіреністю від р. № , з
+                                        другого боку, про технічний стан ДТЗ шасі (кузов) № VF1LSRABH45114027, держ. реєстраційний № AA1410KP , який передається- приймається після надання послуг з технічного
+                                        обслуговування і ремонту.</li>
+                                    <li>Наявність пломб лічильника ТАК / НІ (непотрібне закреслити)</li>
+                                    <li>Надані послуги відповідають умовам договору / замовлення на обслуговування</li>
+                                    <li>Претензій щодо якості, терміну та обсягу робіт Замовник не має</li>
+                                    <li>Після надання послуг замовнику повернено:
+                                        <div class="work-akt__descr-block">
+                                            (найменування, номери складових частин, їхні ідентифікаційні дані, кількість, технічний стан)
+                                        </div>
+                                    </li>
+                                    <li>Експлуатаційна документація передана:
+                                        <div class="work-akt__ask">
+                                            <span>сервісна книжка</span>
+                                            <span>ТАК   \   NI</span>
+                                        </div>
+                                        <div class="work-akt__ask">
+                                            <span>техпаспорт</span>
+                                            <span>ТАК   \   NI</span>
+                                        </div>
+                                        (непотрібне закреслити)
+                                    </li>
+                                    <li>Майно повернено Замовнику.</li>
+                                    <li>Претензій до комплектності та стану ДТЗ Замовник не має.</li>
+                                    <li>Майно повернено Замовнику.</li>
+                                    <li>Претензій до комплектності та стану ДТЗ Замовник не має.</li>
+                                    <li>Майно повернено Замовнику.</li>
+                                    <li>Претензій до комплектності та стану ДТЗ Замовник не має.</li>
+                                    <li>Майно повернено Замовнику.</li>
+                                    <li>Претензій до комплектності та стану ДТЗ Замовник не має.</li>
+                                    <li>Майно повернено Замовнику.</li>
+                                    <li>Претензій до комплектності та стану ДТЗ Замовник не має.</li>
+                                </ol>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="lh11" style="font-size: 13px;">
+                        <tbody>
+                        <tr>
+                            <td>
+                                ДТЗ (його складові), замінені (запасні) частини, невикористані матеріали передав.
+                                <strong style="display: block">Виконавець, Консультант з сервісу Рено</strong>
+                            </td>
+                            <td style="width: 318px;">
+                                <table>
+                                    <tr class="ta-c">
+                                        <td><div class="div-after"></div></td>
+                                        <td><div class="div-after"></div></td>
+                                        <td><div>27.08.2021</div></td>
+                                    </tr>
+                                    <tr style="border-top: 1px solid;" class="ta-c">
+                                        <td><div class="div-after">Підпис</div></td>
+                                        <td><div class="div-after">Прізвище, ініціали</div></td>
+                                        <td><div>Дата</div></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="lh11" style="font-size: 13px;margin-top: 30px">
+                        <tbody>
+                        <tr>
+                            <td>
+                                ДТЗ (його складові), замінені (запасні) частини, невикористані матеріали прийняв. З
+                                умовами гарантії ознайомлений.
+                                <strong style="display: block">Замовник</strong>
+                            </td>
+                            <td style="width: 318px;">
+                                <table>
+                                    <tr class="ta-c">
+                                        <td><div class="div-after"></div></td>
+                                        <td><div class="div-after">Бабіч С.В.</div></td>
+                                        <td><div>27.08.2021</div></td>
+                                    </tr>
+                                    <tr style="border-top: 1px solid;" class="ta-c">
+                                        <td><div class="div-after">Підпис</div></td>
+                                        <td><div class="div-after">Прізвище, ініціали</div></td>
+                                        <td><div>Дата</div></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </tablec>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

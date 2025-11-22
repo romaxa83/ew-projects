@@ -1,0 +1,86 @@
+# === QUERY ===
+extend type Query {
+    "Список авто пользователей (для админа)"
+    cars(
+        "фильтр по vin"
+        vin: String @scope(name: "carVinSearch")
+        "фильтр по гос.номеру"
+        number: String @scope(name: "carNumberSearch")
+        "фильтр по бренду (id)"
+        brandId: ID @eq(key: "brand_id")
+        "фильтр по модели (id)"
+        modelId: ID @eq(key: "model_id")
+        "фильтр по фио владельца"
+        userName: String @scope(name: "userNameSearch")
+        "фильтр по фио телефону владельца"
+        userPhone: String @scope(name: "userPhoneSearch")
+        "фильтр по авто в заказе"
+        isOrder: Boolean @scope(name: "isOrder")
+        orderBy: _ @orderBy(columns: ["year", "inner_status", "is_personal", "has_insurance"])
+    ): [Car!]!
+        @paginate(defaultCount: 10, scopes: ["carGate"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.list"])
+
+    "Получение авто по id"
+    car(id: ID @eq): Car!
+        @find
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.get"])
+
+    "Список авто пользователей, архив (удаленные, для админа)"
+    carsArchive(
+        orderBy: _ @orderBy(columns: ["createdAt", "year", "id", "inner_status", "phone"])
+    ): [CarTrashed!]!
+        @paginate(defaultCount: 10, scopes: ["onlyTrashed"], model: "App\\Models\\User\\Car")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:archive.car.list"])
+
+    "Получение статусов для машин"
+    carStatuses: [SimpleData!]!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение кол-во авто по статусу, если статус не передовать, вернет кол-во всех авто"
+    carCount(status: CarStatus): SimpleData
+        @middleware(checks: ["auth:graph_admin"])
+
+#    "Получение машин в заказе по пользователю"
+#    carsOrder(userId: ID @eq): [Car]
+#        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.list"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Модерация авто"
+    carModerate(id: ID!): Car!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.moderate"])
+
+    "Востановленние авто из архива"
+    carRestore(id: ID!): Car!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.restore"])
+
+    "Смена статуса для авто"
+    carChangeStatus(input: CarChangeStatusInput! @spread): Car!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.edit"])
+
+    "Полное удаление авто (после того как его удалил пользователь)"
+    carDelete(id: ID!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.delete"])
+
+    "Привязывание файл страховки к авто"
+    carAttachInsuranceFile(
+        "ID машины"
+        modelId: ID!
+        file: [Upload] @rules(apply: ["file"])
+    ): File!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.edit"])
+
+    "Отвязать файл страховки от авто"
+    carDetachInsuranceFile(
+        "ID машины"
+        id: ID!
+    ): Car!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.car.edit"])
+}
+# === INPUT ===
+"Поля для смены статуса авто"
+input CarChangeStatusInput {
+    id: ID!
+    status: CarStatus
+}

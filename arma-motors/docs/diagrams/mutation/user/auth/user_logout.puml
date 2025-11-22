@@ -1,0 +1,60 @@
+@startuml
+
+title
+<&lock-locked> Logout
+end title
+
+left header
+Wezom
+endheader
+
+skinparam title {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam header {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam  {
+    FontSize 13
+    FontName Courier
+    BorderColor black
+    BackgroundColor 172b3a
+    ArrowFontName Impact
+    ArrowColor white
+    ArrowFontColor f5f5f5
+    ArrowFontSize 20
+    ArrowThickness 16
+}
+
+skinparam activity {
+    StartColor f5f5f5
+    BarColor SaddleBrown
+    EndColor f5f5f5
+    BackgroundColor Peru
+    BackgroundColor<< Event >> Olive
+    BackgroundColor<< AA >> SaddleBrown
+    BorderColor Peru
+    DiamondBackgroundColor Peru
+    DiamondBorderColor Peru
+}
+
+skinparam note {
+    BorderColor 172b3a
+}
+
+start
+:вызываем метод passportService->logout(),
+который ревокает авторизационные данные
+авторизованного пользователя;
+:отправляем ответ об успешном логауте;
+stop
+
+left footer
+<#f5f5f5,#172b3a>|= Project |= Version |= Creator |= Status|= Created_at |= Updated_at |
+<#f5f5f5>|ArmaMotors| 1.0 | Rodomanov R. | dev | 14.01.2022 | 14.01.2022 |
+endfooter
+@enduml

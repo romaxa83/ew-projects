@@ -1,0 +1,45 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка типа транспорта (страхование)"
+    transportTypes(
+        active: Boolean @eq
+    ):  [TransportType!]!
+        @all(model: "App\\Models\\Catalogs\\Car\\TransportType")
+        @middleware(checks: ["set.locale"])
+
+    "Получение типа транспорта (по id)"
+    transportType(
+        id: ID @eq
+    ):  TransportType
+        @find(model: "App\\Models\\Catalogs\\Car\\TransportType")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактирование типа транспорта"
+    transportTypeEdit(input: TransportTyprEditInput! @spread): TransportType!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+
+    "Переключение активно/неактивно"
+    transportTypeToggleActive(id: ID!): TransportType!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+}
+# === INPUT ===
+"Поля для редактирования типа транспорта"
+input TransportTyprEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]
+}
+# === TYPE ===
+"Типа транспорта"
+type TransportType {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations!  @hasOne(relation: "current")
+}

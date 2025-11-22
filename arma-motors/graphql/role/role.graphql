@@ -1,0 +1,91 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех ролей"
+    roles: [Role!]
+        @all(model: "App\\Models\\Permission\\Role" scopes: ["notSuperAdmin"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:role.list"])
+    "Получение роли (по id)"
+    role(id: ID @eq): Role
+        @find(model: "App\\Models\\Permission\\Role" scopes: ["notSuperAdmin"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:role.get"])
+    "Получение всех разрешений"
+    permissions: [Permission!]
+        @all(model: "App\\Models\\Permission\\Permission")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:permission.list"])
+    "Получение всех разрешений группами"
+    permissionGroups(
+        orderBy: _ @orderBy(columns: ["sort"])
+    ): [GroupPermission!]
+        @all(model: "App\\Models\\Permission\\GroupPermission")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:permission.list"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание роли"
+    roleCreate(input: RoleInput! @spread): Role!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:role.create"])
+    "Редактирования роли"
+    roleEdit(input: RoleEditInput! @spread): Role!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:role.edit"])
+    "Удаление роли"
+    roleDelete(id: ID!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:role.delete"])
+    "Привязывание разрешений к роли"
+    permissionsAttach(input: PermissionAttachInput! @spread): Role!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:permission.attach"])
+}
+# === INPUT ===
+"Поля для создания роли"
+input RoleInput {
+    "алиас для роли"
+    name: String! @rules(apply: ["required", "min:3", "unique:roles,name"])
+    "переводы"
+    translations: [NameTranslationsInput!]!
+}
+"Поля для редактирования роли"
+input RoleEditInput {
+    "алиас для роли"
+    id: ID!
+    "переводы"
+    translations: [NameTranslationsInput!]!
+}
+"Поля для присваивания разарешений к ролям"
+input PermissionAttachInput{
+    "ID роли"
+    id: ID! @rules(apply: ["exists:roles,id"])
+    "Маcсив названий разрешений"
+    permissions: [String!]
+}
+# === TYPE ===
+"Роль"
+type Role {
+    id: ID!
+    name: String!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+    "все разрешения данной роли"
+    permissions: [Permission] @belongsToMany(relation:  "permissions")
+}
+"Разрешения"
+type Permission {
+    id: ID!
+    name: String
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+}
+"Группы разрешений"
+type GroupPermission {
+    id: ID!
+    name: String!
+    sort: Int!
+    "разрешения данной группы"
+    permissions: [Permission!] @hasMany(relation: "permissions")
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+}

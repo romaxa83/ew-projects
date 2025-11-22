@@ -1,0 +1,46 @@
+@startuml
+
+title
+Catalogs
+end title
+
+    package Region <<Region>> {
+
+        class City {
+            * sort : Int
+            * active : Bool
+            * location : Point
+            * region_id : Int
+
+            region(): BelongsTo
+
+            translations(): HasMany
+            current(): HasOne
+        }
+        class CityTranslation {
+            * lang: Str
+            * name : Str
+        }
+
+        class Region {
+            * active : Bool
+            * sort : Int
+
+            cities(): HasMany
+
+            translations()
+            current()
+        }
+        class RegionTranslation {
+            * lang : Str
+            * name : Str
+        }
+    }
+
+City <-left-> Region
+City -down-> CityTranslation
+Region -down-> RegionTranslation
+
+note top of City : location являеться GeoPoint в бд
+
+@enduml

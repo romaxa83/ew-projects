@@ -1,0 +1,53 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"обьемов двигателя\""
+    engineVolumes(
+        active: Boolean @eq
+    ):  [EngineVolume!]!
+        @all(model: "App\\Models\\Catalogs\\Car\\EngineVolume")
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"обьем двигателя\""
+    engineVolume(
+        id: ID @eq
+    ):  EngineVolume
+        @find(model: "App\\Models\\Catalogs\\Car\\EngineVolume")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"обьем двигателя\""
+    engineVolumeCreate(input: EngineVolumeCreateInput! @spread): EngineVolume!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.create"])
+
+    "Редактирование \"обьем двигателя\""
+    engineVolumeEdit(input: EngineVolumeEditInput! @spread): EngineVolume!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+
+    "Переключение активно/неактивно"
+    engineVolumeToggleActive(id: ID!):EngineVolume!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+}
+# === INPUT ===
+"Поля для создания \"обьем двигателя\""
+input EngineVolumeCreateInput {
+    active: Boolean
+    sort: Int
+    volume: Float!
+}
+"Поля для редактирования \"обьем двигателя\""
+input EngineVolumeEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    volume: Float
+}
+# === TYPE ===
+"\"Обьем двигателя\""
+type EngineVolume {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    volume: String!
+}

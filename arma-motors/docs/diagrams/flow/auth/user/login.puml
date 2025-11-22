@@ -1,0 +1,71 @@
+@startuml
+
+title
+Авторизация пользователя (Arma Motors)
+end title
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+
+== RESPONSE ==
+
+rnote over Mobile
+Принимаю такие данные
+
+data = [
+    phone (str) - телефон пользователя,
+    password (str) - пароль пользователя
+    fcmToken (str) - токен для firebase
+    deviceId (str) - id устройства
+    dropCurrentSession (bool) - удалить ли текущую сессию
+]
+endrnote
+
+rnote over Mobile
+Обычный запрос
+endrnote
+Mobile -> Backend: userLogin(data, dropCurrentSession = false)
+
+
+group #7ad378 SUCCESS
+
+Backend -> Mobile:  data
+
+rnote over Backend
+Возвращаю данные
+data = [
+    accessToken (str),
+    refreshToken (str)
+    tokenType (str)
+    salt (str) - для генерации mobileToken
+    user (obj)
+]
+endrnote
+end
+
+group  #FFBBBB ERROR
+Backend -> Mobile: response {'error_code'}
+
+note left of Backend
+error_code:
+21 - есть активная сессия на другом девайсе
+22 - не верифицирован номер
+23 - неверный телефон или пароль
+24 - неизвестная ошибка при авторизации
+end note
+
+end
+
+rnote over Backend
+Если возвращается ошибка (21)
+т.е. пользователь имеет активную сессию
+на другом
+устройстве, нужно послать повторный запрос ,
+но dropCurrentSession = true,
+после чего сессия на другом устройстве
+будет удаленна
+endrnote
+
+@enduml

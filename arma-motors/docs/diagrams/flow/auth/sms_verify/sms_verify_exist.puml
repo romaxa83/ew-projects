@@ -1,0 +1,24 @@
+@startuml
+
+title
+Запрос на смс верификацию
+end title
+
+start
+:При запросе, по данному телефону, запись уже есть;
+if (проверяем наличие actionToken) then (true)
+    if (проверяем \n протух ли он) then (true)
+    :удаляем и создаем \nновую запись;
+    else (false)
+    :кидаем исключение \nчто активен actionToken;
+    endif
+else (false)
+:переходим к smsToken;
+ if (проверяем \n протух ли он) then (true)
+    :удаляем и создаем \nновую запись;
+    else (false)
+    :кидаем исключение \nчто активен smsToken;
+    endif
+endif
+stop
+@enduml

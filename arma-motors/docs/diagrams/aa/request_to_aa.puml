@@ -1,0 +1,28 @@
+@startmindmap
+
+caption Course
+title
+Запросы к AA
+end title
+
+*[#Orange] App
+**[#lightgreen]:<&lock-locked> Получение пользователя по телефону
+<code>
+GET /user?phone=+380950000001
+</code>;
+
+**[#lightgreen]:<&lock-locked> Получение авто по VIN или номеру авто
+<code>
+GET /auto?vin=1111118899QQ?number=QQ1111QQ
+</code>;
+
+header
+wezom
+endheader
+
+left footer
+<#lightblue,#red>|= Version |= Name |= Status|= Created_at |= Updated_at |
+<#lightgreen>| 1.0 | Rodomanov R. | dev | 12.11.2021 | 12.11.2021 |
+endfooter
+
+@endmindmap

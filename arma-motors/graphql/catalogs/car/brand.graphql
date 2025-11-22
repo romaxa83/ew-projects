@@ -1,0 +1,82 @@
+# === QUERY ===
+extend type Query {
+    "Получение брендов"
+    brands(
+        "для получение главных брендов"
+        isMain: Boolean @eq(key: "is_main")
+        "для получение активных"
+        active: Boolean @eq
+        orderBy: _ @orderBy(columns: ["sort", "id", "active"])
+    ): [Brand!]!
+        @paginate(defaultCount: 10)
+        @middleware(checks: ["set.locale"])
+
+    "Получение бренда (по id)"
+    brand(id: ID @eq): Brand!
+        @find(model: "App\\Models\\Catalogs\\Car\\Brand")
+        @middleware(checks: ["set.locale"])
+
+    "Получение цветов для гл. брендов"
+    brandColors: [BrandColor!]!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Переключение активно/неактивно"
+    brandToggleActive(id: ID!): Brand!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.brand.edit"])
+
+    "Переключение бренда в статус главной"
+    brandToggleMain(id: ID!): Brand!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.brand.edit"])
+
+    "Редактирование бренда"
+    brandEdit(input: BrandEditInput! @spread): Brand!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.brand.edit"])
+}
+# === INPUT ===
+"Поля для редактирование бренда"
+input BrandEditInput {
+    id: ID!
+    isMain: Boolean
+    active: Boolean
+    sort: Int
+    color: Int
+    name: String
+    "почасовая оплата (для калькуляторов)"
+    hourlyPayment: Float
+    "почасовая оплата со скидкой (для калькуляторов)"
+    discountHourlyPayment: Float
+    "массив id's \"пробегов\" (для калькуляторов)"
+    mileageIds: [ID]
+    "массив id's \"работ\" (для калькуляторов)"
+    workIds: [ID]
+}
+# === TYPE ===
+"Бренд авто"
+type Brand {
+    id: ID!
+    uuid: String
+    "главные бренды (привязываются к дц, участвуют в калькуляторах)"
+    isMain: Boolean! @rename(attribute: "is_main")
+    active: Boolean!
+    sort: Int!
+    name: String
+    color: Int
+    models: [Model!] @hasMany(relation: "models")
+    image: Image @morphOne(relation: "image")
+    "почасовая оплата (для калькуляторов)"
+    hourlyPayment: String @rename(attribute: "hourly_payment")
+    "почасовая оплата со скидкой (для калькуляторов)"
+    discountHourlyPayment: String @rename(attribute: "discount_hourly_payment")
+    "привязаные к бренду \"пробеги\" (для калькуляторов)"
+    mileages: [Mileage] @belongsToMany(relation:  "mileages")
+    "привязаные к бренду \"работы\" (для калькуляторов)"
+    works: [Work] @belongsToMany(relation:  "works")
+    dealership: Dealership @hasOne(relation: "dealership")
+}
+
+type BrandColor{
+    key: Int!
+    name: String!
+}

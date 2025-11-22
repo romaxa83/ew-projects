@@ -1,0 +1,125 @@
+# === MUTATION ===
+extend type Mutation {
+    "Создание дилерского центра"
+    dealershipCreate(input: DealershipCreateInput! @spread): Dealership!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:dealership.create"])
+
+    "Редактирование дилерского центра"
+    dealershipEdit(input: DealershipEditInput! @spread): Dealership!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:dealership.edit"])
+
+    "Переключение активно/неактивно"
+    dealershipToggleActive(id: ID!): Dealership!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:dealership.edit"])
+}
+# === QUERY ===
+extend type Query {
+    "Получение всех дц"
+    dealerships (
+        "для получение активных"
+        active: Boolean @eq
+    ): [Dealership!]
+        @all(model: "App\\Models\\Dealership\\Dealership")
+        @middleware(checks: ["set.locale"])
+
+    "Получение дц (id)"
+    dealership(id: ID @eq): Dealership!
+        @find(model: "App\\Models\\Dealership\\Dealership")
+        @middleware(checks: ["set.locale"])
+}
+# === INPUT ===
+"Поля для создания дц"
+input DealershipCreateInput {
+    brandId: ID! @rules(apply: ["exists:car_brands,id"])
+    active: Boolean
+    sort: Int
+    website: String!
+    lat: String
+    lon: String
+    "переводы"
+    translations: [DealershipTranslationsInput!]!
+    "отдел продаж"
+    departmentSales: DepartmentCreateInput!
+    "сервисный отдел"
+    departmentService: DepartmentCreateInput!
+    "отдел страхования и кредитования"
+    departmentCash: DepartmentCreateInput!
+    "кузовной одел"
+    departmentBody: DepartmentCreateInput!
+    "шаг времени, для заявок (миллисекунды)"
+    timeStep: [TimeStepInput!]
+}
+"Поля для переводов дц"
+input DealershipTranslationsInput {
+    lang: String! @rules(apply: ["exists:languages,slug"])
+    name: String! @rules(apply: ["min:5"])
+    text: String! @rules(apply: ["min:5"])
+    address: String! @rules(apply: ["min:5"])
+}
+"Поля для редактирования дц"
+input DealershipEditInput {
+    id: ID!
+#    brandId: ID! @rules(apply: ["exists:car_brands,id"])
+    brandId: ID!
+    active: Boolean
+    sort: Int
+    website: String
+    lat: String
+    lon: String
+    "переводы"
+    translations: [DealershipTranslationsInput!]!
+    "отдел продаж"
+    departmentSales: DepartmentCreateInput!
+    "сервисный отдел"
+    departmentService: DepartmentCreateInput!
+    "отдел страхования и кредитования"
+    departmentCash: DepartmentCreateInput!
+    "кузовной одел"
+    departmentBody: DepartmentCreateInput!
+    "шаг времени, для заявок (миллисекунды)"
+    timeStep: [TimeStepInput!]
+}
+"Поля для шага времени"
+input TimeStepInput {
+    serviceId: ID!
+    step: Int!
+}
+# === TYPE ===
+"Дилерский центр"
+type Dealership {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "координаты"
+    location: Location
+    website: String
+    "все переводы"
+    translations: [DealershipTranslation!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: DealershipTranslation! @hasOne(relation: "current")
+    brand: Brand! @belongsTo(relation: "brand")
+    "отдел продаж"
+    departmentSales: Department! @hasOne(relation: "departmentSales")
+    "сервисный отдел"
+    departmentService: Department! @hasOne(relation: "departmentService")
+    "отдел страхования и кредитования"
+    departmentCash: Department! @hasOne(relation: "departmentCash")
+    "кузовной одел"
+    departmentBody: Department! @hasOne(relation: "departmentBody")
+    images: [Image] @morphMany(relation: "images")
+    timeStep: [TimeStep!] @hasMany(relation: "timeStep")
+}
+"Переводы для дилерский центр"
+type DealershipTranslation {
+    id: ID!
+    lang: String!
+    name: String
+    text: String
+    address: String
+}
+"Переводы для дилерский центр"
+type TimeStep {
+    id: ID!
+    service: Service! @belongsTo(relation: "service")
+    step: Int!
+}

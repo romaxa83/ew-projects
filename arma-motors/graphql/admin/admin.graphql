@@ -1,0 +1,141 @@
+# === QUERY ===
+extend type Query {
+    "Получение авторизованого админа"
+    authAdmin: Admin @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение админа"
+    admin(id: ID @eq): Admin!
+        @find(scopes: ["withLastLoginAt"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:admin.get"])
+
+    "Получение всех админов"
+    admins(
+        "фильтр по фио"
+        userName: String @scope(name: "nameSearch")
+        "сортировка по роли (принимает ASC/DESC, сортирует по имени)"
+        orderByRole: String @scope(name: "roleSort")
+        "сортировка по кол-ву заявок у админа (принимает ASC/DESC)"
+        orderByCountOrders: String @scope(name: "countOrdersSort")
+        "сортировка по кол-ву закрытых заявок у админа (принимает ASC/DESC)"
+        orderByCountCloseOrders: String @scope(name: "countOrdersCloseSort")
+        orderBy: _ @orderBy(columns: ["createdAt", "name", "email", "id", "status"])
+    ):  [Admin!]!
+        @paginate(defaultCount: 10, scopes: ["notSuperAdmin"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:admin.list"])
+
+    "Получение списка админов для привязывания их к заявки (учитывая дц и отдел)"
+    adminListForOrder(orderId: ID! @rules(apply: ["exists:orders,id"])): [Admin]!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:order.edit"])
+
+    "Список админов, архив (удаленные)"
+    adminsArchive(
+        orderBy: _ @orderBy(columns: ["createdAt", "name", "email", "id", "status"])
+    ): [Admin!]!
+        @paginate(defaultCount: 10, scopes: ["onlyTrashed"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:archive.admin.list"])
+
+    "Генерация нового пароля"
+    generateNewPassword(id: ID! @rules(apply: ["exists:admins,id"])): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:admin.generate_password"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание админа"
+    adminCreate(input: AdminInput! @spread): Admin!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:admin.create"])
+
+    "Редактирование админа (в системе)"
+    adminEdit(input: AdminEditInput! @spread): Admin!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:admin.edit"])
+
+    "Редактирование профиля"
+    adminEditProfile(input: AdminEditProfileInput! @spread): Admin!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Изменения статуса у админа"
+    adminChangeStatus(input: AdminChangeStatusInput! @spread): Admin!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:admin.change_status"])
+
+    "Загрузка аватарки (self)"
+    adminUploadAvatar(images: [Upload] @rules(apply: ["image"])): Image!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Удаление админа (soft)"
+    adminDelete(id: ID!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:admin.delete"])
+
+    "Востановить админа (после удаления)"
+    adminRestore(id: ID!): Admin!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:admin.restore"])
+}
+# === INPUT ===
+"Поля для создания админа в системе"
+input AdminInput {
+    name: String!
+    email: String! @rules(apply: ["email", "unique:admins,email"])
+    phone: String
+    roleId: ID @rules(apply: ["nullable", "exists:roles,id"])
+    dealershipId: ID @rules(apply: ["nullable", "exists:dealerships,id"])
+    departmentType: DepartmentType
+    serviceId: ID @rules(apply: ["nullable", "exists:services,id"])
+}
+"Поля для редактирование админа в системе"
+input AdminEditInput {
+    id: ID!
+    name: String
+    email: String @rules(apply: ["email"])
+    phone: String
+    roleId: ID @rules(apply: ["nullable", "exists:roles,id"])
+    dealershipId: ID @rules(apply: ["nullable", "exists:dealerships,id"])
+    departmentType: DepartmentType
+    serviceId: ID @rules(apply: ["nullable", "exists:services,id"])
+}
+"Поля для редактирование собственного профиля (админа)"
+input AdminEditProfileInput {
+    name: String!
+    phone: String
+    lang: LocaleConst
+}
+"Поля для смены статуса админа"
+input AdminChangeStatusInput {
+    id: ID! @rules(apply: ["exists:admins,id"])
+    status: AdminStatus
+}
+# === TYPE ===
+"Администратор"
+type Admin {
+    id: ID!
+    name: String!
+    email: String!
+    phone: String
+    status: AdminStatus
+    role: Role
+    lang: LocaleConst!
+    "локаль"
+    locale: Language! @hasOne(relation: "locale")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    "дата последнего логина"
+    lastLoginAt: DateTime
+    avatar: Image @morphOne(relation: "avatar")
+    "Дц к которому относиться \"админ\""
+    dealership: Dealership @belongsTo(relation: "dealership")
+    "Тип отдел к которому относиться \"админ\""
+    departmentType: DepartmentType @rename(attribute: "department_type")
+    "общее кол-во заявок"
+    ordersCount: Int! @count(relation: "orders")
+    "общее кол-во закрытых заявок"
+    ordersCloseCount: Int! @count(relation: "ordersClose")
+    "общее кол-во заявок (с учетом архива)"
+    ordersWithArchiveCount: Int! @count(relation: "ordersWithTrashed")
+    "общее кол-во закрытых заявок (с учетом архива)"
+    ordersCloseWithArchiveCount: Int! @count(relation: "ordersCloseWithTrashed")
+    "сервис к которому привязан админ (для отображения заказов по сервису)"
+    service: Service @belongsTo(relation: "service")
+}
+# === ENUM ===
+"Статусы админов"
+enum AdminStatus {
+    inactive @enum(value: 0)
+    active @enum(value: 1)
+}

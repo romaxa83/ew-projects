@@ -1,0 +1,45 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"льгот\""
+    privileges(
+        active: Boolean @eq
+    ):  [Privileges!]!
+        @all(model: "App\\Models\\Catalogs\\Service\\Privileges")
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"льготы\" (по id)"
+    privilege(
+        id: ID @eq
+    ):  Privileges
+        @find(model: "App\\Models\\Catalogs\\Service\\Privileges")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактирование льготы"
+    privilegesEdit(input: PrivilegesEditInput! @spread): Privileges!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+
+    "Переключение активно/неактивно"
+    privilegesToggleActive(id: ID!): Privileges!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+}
+# === INPUT ===
+"Поля для редактирования льготы"
+input PrivilegesEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]
+}
+# === TYPE ===
+"Льготы"
+type Privileges {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+}

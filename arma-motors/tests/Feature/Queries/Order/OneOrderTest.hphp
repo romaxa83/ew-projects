@@ -1,0 +1,180 @@
+<?php
+
+namespace Tests\Feature\Queries\Order;
+
+use App\Exceptions\ErrorsCode;
+use App\Models\Agreement\Agreement;
+use App\Models\Catalogs\Service\Service;
+use App\Types\Order\Status;
+use App\Types\Permissions;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
+use Tests\Traits\AdminBuilder;
+use Tests\Traits\Builders\AgreementBuilder;
+use Tests\Traits\OrderBuilder;
+use Tests\Traits\Statuses;
+
+class OneOrderTest extends TestCase
+{
+    use DatabaseTransactions;
+    use AdminBuilder;
+    use OrderBuilder;
+    use Statuses;
+    use AgreementBuilder;
+
+    /** @test */
+    public function success()
+    {
+        $service = Service::query()->where('alias', Service::CREDIT_ALIAS)->first();
+
+        $orderBuilder = $this->orderBuilder();
+        $order = $orderBuilder->setServiceId($service->id)->asOne()->create();
+
+        $orderBuilder->setStatus(Status::DRAFT)->setCount(5)->create();
+        $orderBuilder->setStatus(Status::DONE)->setCount(2)->create();
+
+        $admin = $this->adminBuilder()->createRoleWithPerms([Permissions::ORDER_GET])->create();
+        $this->loginAsAdmin($admin);
+
+        $response = $this->graphQL($this->getQueryStr($order->id));
+
+        $responseData = $response->json('data.order');
+
+        $this->assertArrayHasKey('id', $responseData);
+        $this->assertArrayHasKey('uuid', $responseData);
+        $this->assertArrayHasKey('status', $responseData);
+        $this->assertArrayHasKey('type', $responseData);
+        $this->assertArrayHasKey('communication', $responseData);
+        $this->assertArrayHasKey('billFile', $responseData);
+        $this->assertArrayHasKey('actFile', $responseData);
+        $this->assertArrayHasKey('relatedSystem', $responseData);
+
+        $this->assertEmpty($responseData['agreements']);
+        $this->assertEmpty($responseData['agreementsAccept']);
+
+        $this->assertEquals($order->id, $responseData['id']);
+        $this->assertEquals($order->uuid, $responseData['uuid']);
+        $this->assertTrue($responseData['relatedSystem']);
+
+        $this->assertNull($responseData['billFile']);
+        $this->assertNull($responseData['actFile']);
+    }
+
+    /** @test */
+    public function success_not_related_system()
+    {
+        $service = Service::query()->where('alias', Service::SERVICE_TO_ALIAS)->first();
+
+        $orderBuilder = $this->orderBuilder();
+        $order = $orderBuilder->setServiceId($service->id)->asOne()->create();
+
+        $admin = $this->adminBuilder()->createRoleWithPerms([Permissions::ORDER_GET])->create();
+        $this->loginAsAdmin($admin);
+
+        $response = $this->graphQL($this->getQueryStr($order->id));
+
+        $responseData = $response->json('data.order');
+
+        $this->assertArrayHasKey('relatedSystem', $responseData);
+
+        $this->assertFalse($responseData['relatedSystem']);
+    }
+
+    /** @test */
+    public function success_with_accept_agreement()
+    {
+        $orderUuid = "8ee4670f-0016-11ec-8274-4cd98fc26f15";
+        $orderBuilder = $this->orderBuilder();
+        $order = $orderBuilder->setUuid($orderUuid)->asOne()->create();
+
+        /** @var $model Agreement */
+        $a_1 = $this->agreementBuilder()->setStatus(Agreement::STATUS_VERIFY)
+            ->setBaseOrderUuid($orderUuid)->create();
+        $a_2 = $this->agreementBuilder()->setBaseOrderUuid($orderUuid)->create();
+        $a_3 = $this->agreementBuilder()->setBaseOrderUuid($orderUuid)->create();
+
+        $admin = $this->adminBuilder()->createRoleWithPerms([Permissions::ORDER_GET])->create();
+        $this->loginAsAdmin($admin);
+
+        $this->graphQL($this->getQueryStr($order->id))
+            ->assertJson(["data" => [
+                "order" => [
+                    "id" => $order->id,
+                    "agreements" => [
+                        ["id" => $a_1->id],
+                        ["id" => $a_2->id],
+                        ["id" => $a_3->id],
+                    ],
+                    "agreementsAccept" => [
+                        ["id" => $a_1->id],
+                    ]
+                ]
+            ]])
+            ->assertJsonCount(3, 'data.order.agreements')
+            ->assertJsonCount(1, 'data.order.agreementsAccept')
+        ;
+    }
+
+    /** @test */
+    public function not_auth()
+    {
+        $orderBuilder = $this->orderBuilder();
+        $order = $orderBuilder->asOne()->create();
+
+        $admin = $this->adminBuilder()->createRoleWithPerms([Permissions::ORDER_GET])->create();
+
+        $response = $this->graphQL($this->getQueryStr($order->id));
+
+        $this->assertArrayHasKey('errors', $response->json());
+        $this->assertEquals(__('auth.not auth'), $response->json('errors.0.message'));
+        $this->assertEquals(ErrorsCode::NOT_AUTH, $response->json('errors.0.extensions.code'));
+    }
+
+    /** @test */
+    public function not_perm()
+    {
+        $orderBuilder = $this->orderBuilder();
+        $order = $orderBuilder->asOne()->create();
+
+        $admin = $this->adminBuilder()->createRoleWithPerms([Permissions::USER_LIST])->create();
+        $this->loginAsAdmin($admin);
+
+        $response = $this->graphQL($this->getQueryStr($order->id));
+
+        $this->assertArrayHasKey('errors', $response->json());
+        $this->assertEquals(__('auth.not perm'), $response->json('errors.0.message'));
+        $this->assertEquals(ErrorsCode::NOT_PERM, $response->json('errors.0.extensions.code'));
+    }
+
+    public static function getQueryStr($id): string
+    {
+        return  sprintf('{
+            order (id: "%s") {
+                id
+                uuid
+                status
+                type
+                communication
+                relatedSystem
+                agreements {
+                    id
+                }
+                agreementsAccept {
+                    id
+                }
+                billFile {
+                    id
+                    url
+                }
+                actFile {
+                    id
+                    url
+                }
+               }
+            }',
+            $id
+        );
+    }
+
+
+}
