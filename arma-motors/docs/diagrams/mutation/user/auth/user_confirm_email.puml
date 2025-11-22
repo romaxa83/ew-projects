@@ -1,0 +1,91 @@
+@startuml
+
+title
+Верификация пользовательского email (ConfirmEmail)
+end title
+
+left header
+Wezom
+endheader
+
+skinparam title {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam header {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam  {
+    FontSize 13
+    FontName Courier
+    BorderColor black
+    BackgroundColor 172b3a
+    ArrowFontName Impact
+    ArrowColor white
+    ArrowFontColor f5f5f5
+    ArrowFontSize 20
+    ArrowThickness 16
+}
+
+skinparam activity {
+    StartColor f5f5f5
+    BarColor SaddleBrown
+    EndColor f5f5f5
+    BackgroundColor Peru
+    BackgroundColor<< Event >> Olive
+    BackgroundColor<< AA >> SaddleBrown
+    BorderColor Peru
+    DiamondBackgroundColor Peru
+    DiamondBorderColor Peru
+}
+
+skinparam note {
+    BorderColor 172b3a
+}
+
+start
+:прилетает EmailVerifyToken;
+:по данному токену из табл. <size:15><color:f5f5f5>email_verify</color></size>
+получаем данные;
+if (у пользователя уже верифицирована почта) then (true)
+:отдаем ответ с сообщением что почта верифицирована;
+else (false)
+-[dotted]->
+endif
+:вызываем метод - emailVerifyService->verify();
+if (время жизни токена истек) then (true)
+    :удаляем запись из табл. <size:15><color:f5f5f5>email_verify</color></size>
+    по данному токену;
+    :кидаем ошибку что токен истек;
+    if (в приложении верификация почты ) then (true)
+        :создаем новый EmailVerifyToken;
+        << Event >>:создаем событие EmailConfirm, \n для отправки на почту токена;
+        << Event >>:создаем событие FcmPush (FcmAction::EMAIL_VERIFY), \n для отправки пуша на телефон;
+        :отдаем ответ с сообщением о отправки \n нового токена для верификации;
+    else (false)
+        -[dotted]->
+    endif
+    stop
+else (false)
+:у пользователя проставляем email_verify = true;
+:у токена в бд проставляем запись verify = true;
+    if (у пользователя есть uuid \n (значит он верифицирован в системе AA)) then (true)
+        << Event >>:создаем событие UserConfirmEmail;
+        <<AA>>: делаем POST запрос в систему AA, на редактирование пользователя;
+        : формируем данные для запроса;
+        : ответ пишем в табл. <size:15><color:f5f5f5>aa_responses</color></size> под статусом update user;
+    else (false)
+        -[dotted]->
+    endif
+endif
+:отдаем ответ с сообщением что почта потвержденна;
+stop
+
+left footer
+<#f5f5f5,#172b3a>|= Project |= Version |= Creator |= Status|= Created_at |= Updated_at |
+<#f5f5f5>|ArmaMotors| 1.0 | Rodomanov R. | dev | 14.01.2022 | 14.01.2022 |
+endfooter
+@enduml

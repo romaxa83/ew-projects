@@ -1,0 +1,88 @@
+# === QUERY ===
+extend type Query {
+    "Получение сервисов (главные)"
+    services(
+        active: Boolean @eq,
+        "получение сервисов у которых есть время записи"
+        haveRealDate: Boolean @scope(name: "haveRealDate")
+        orderBy: _ @orderBy(columns: ["sort", "id", "active"])
+    ):  [Service!]!
+        @all(model: "App\\Models\\Catalogs\\Service\\Service" scopes: ["parent"])
+        @middleware(checks: ["set.locale"])
+
+    "Получение сервиса (по id, alias)"
+    service(id: ID @eq, alias: String @eq): Service
+        @find(model: "App\\Models\\Catalogs\\Service\\Service")
+        @middleware(checks: ["set.locale"])
+
+    servicesHaveRealDate(
+        active: Boolean @eq
+    ): [Service!]!
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание сервиса"
+    serviceCreate(input: ServiceCreateInput! @spread): Service!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.service.create"])
+
+    "Редактирование сервиса"
+    serviceEdit(input: ServiceEditInput! @spread): Service!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.service.edit"])
+
+    "Переключение активно/неактивно"
+    serviceToggleActive(id: ID!): Service!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.service.edit"])
+}
+# === INPUT ===
+"Поля для создания сервиса"
+input ServiceCreateInput {
+    alias: String! @rules(apply: ["unique:services,alias"])
+    active: Boolean
+    sort: Int
+    "временной шаг (мин.) для заявок"
+    timeStep: Int
+    parentId: ID @rules(apply: ["nullable", "exists:services,id"])
+    translations: [NameTranslationsInput!]!
+}
+"Поля для редактирования сервиса"
+input ServiceEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    "временной шаг (мин.) для заявок"
+    timeStep: Int
+    parentId: ID @rules(apply: ["nullable", "exists:services,id"])
+    translations: [NameTranslationsInput!]
+}
+# === TYPE ===
+"Сервис"
+type Service {
+    id: ID!
+    alias: String!
+    active: Boolean!
+    "видна для не авторизованого пользователя"
+    forGuest: Boolean! @rename(attribute: "for_guest")
+    sort: Int!
+    "временной шаг (мин.) для заявок"
+    timeStep: Int! @rename(attribute: "time_step")
+    icon: String
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+    "дочерние элементы"
+    childs: [Service] @hasMany(relation: "childs")
+    "родительский элемент"
+    parent: Service @hasOne(relation: "parent")
+    "значение франшизы (есть только у дочерних элементов страховки)"
+    insuranceFranchises: [InsuranceFranchise] @belongsToMany(relation: "insuranceFranchises")
+    "значение \"сроков\" (кредитование/страхование)"
+    durations: [Duration] @belongsToMany(relation: "durations")
+    "страховые компании (актуально для \"Каско\")"
+    insuranceCompany: InsuranceCompany
+    "кол-во платежей (актуально для \"Каско\")"
+    countPayments: CountPayments
+    "отдел обрабатывающий заявку"
+    orderDepartment: String
+}

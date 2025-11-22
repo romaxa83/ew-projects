@@ -1,0 +1,22 @@
+extend type Query {
+    "Запрос на смс верификацию"
+    smsVerify(phone: String, accessToken: String): smsVerifyResponse!
+    "Проверка смс верификации"
+    smsCheck(smsCode: String!, smsToken: String!): smsCheckResponse!
+}
+
+"Ответ после запроса на смс верификацию"
+type smsVerifyResponse {
+    status: Boolean!
+    smsToken: String
+    message: String
+    "При включеном sender, будет пустота"
+    smsCode: String
+}
+
+"Ответ полсле успешной смс верификации"
+type smsCheckResponse {
+    status: Boolean!
+    actionToken: String
+    message: String
+}

@@ -1,0 +1,56 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"кпп\" (коробка передач)"
+    transmissions(
+        active: Boolean @eq
+    ):  [Transmission!]!
+        @all(model: "App\\Models\\Catalogs\\Car\\Transmission")
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"кпп\" (коробка передач)"
+    transmission(
+        id: ID @eq
+    ):  Transmission
+        @find(model: "App\\Models\\Catalogs\\Car\\Transmission")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"кпп\" (коробка передач)"
+    transmissionCreate(input: TransmissionCreateInput! @spread): Transmission!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.create"])
+
+    "Редактирование \"кпп\" (коробка передач)"
+    transmissionEdit(input: TransmissionEditInput! @spread): Transmission!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+
+    "Переключение активно/неактивно"
+    transmissionToggleActive(id: ID!): Transmission!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+}
+# === INPUT ===
+"Поля для создания \"кпп\" (коробка передач)"
+input TransmissionCreateInput {
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]!
+}
+"Поля для редактирования \"кпп\" (коробка передач)"
+input TransmissionEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]
+}
+# === TYPE ===
+"\"Кпп\" (коробка передач)"
+type Transmission {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+}

@@ -3,6 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/amnex" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/arma-motors" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/haul-bs" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/johndeer3" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/niko-backend" vcs="Git" />
   </component>

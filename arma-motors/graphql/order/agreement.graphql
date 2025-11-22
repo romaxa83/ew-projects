@@ -1,0 +1,120 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех согласований"
+    agreements(
+        "по id"
+        id: ID @eq
+    ): [Agreement!]
+        @paginate(defaultCount: 10)
+        @middleware(checks: ["set.locale"])
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получения согласования (по id)"
+    agreement(id: ID @eq): Agreement
+        @find(model: "App\\Models\\Agreement\\Agreement")
+        @middleware(checks: ["set.locale"])
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение всех согласований пользователя для таба рекомендуем (МП)"
+    agreementsCurrent(
+        "по пользователю"
+        userId: ID @scope(name: "userId")
+        orderBy: _ @orderBy(columns: ["id", "created_at"])
+    ): [Agreement!]
+        @paginate(defaultCount: 10, scopes: ["forCurrent"])
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Получение всех согласований пользователя которые приняты пользовтелем и потверждены в АА"
+    agreementsAccept(
+        "по пользователю"
+        userId: ID @scope(name: "userId")
+        "период"
+        period: OrderPeriodType @scope(name: "period")
+        orderBy: _ @orderBy(columns: ["id", "created_at", "accepted_at"])
+    ): [Agreement!]
+    @paginate(defaultCount: 10, scopes: ["forVerify"])
+    @middleware(checks: ["set.locale", "auth:graph_user"])
+}
+
+# === MUTATION ===
+extend type Mutation {
+    "Пинять согласованые работы"
+    agreementAccept(input: AcceptAgreementInput! @spread): Agreement!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+    "Отклонить согласованые работы"
+    agreementReject(id: ID!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+}
+
+# === INPUT ===
+"Поля при принятии согласования"
+input AcceptAgreementInput {
+    id: ID!
+    dealershipId: ID! @rules(apply: ["exists:dealerships,id"])
+}
+
+# === TYPE ===
+"Согласование"
+type Agreement {
+    id: ID!
+    "статус"
+    status: AgreementStatus!
+    "uuid согласования, установленное системой AA"
+    uuid: String!
+    "авто, для которого сформированно согласование"
+    car: Car @belongsTo(relation: "car")
+    "пользователь, для которого сформированна согласования"
+    user: User @belongsTo(relation: "user")
+    "телефон пользователя"
+    phone: String!
+    "гос. нормер авто"
+    number: String!
+    "вин код авто"
+    vin: String!
+    "автор (консультант) согласования"
+    author: String
+    "телефон автора (консультанта) согласования"
+    authorPhone: String @rename(attribute: "author_phone")
+    "дилерский центр"
+    dealership: Dealership @belongsTo(relation: "dealership")
+    "заявка, на основе которой создана данная доп. соглашение"
+    baseOrder: Order @belongsTo(relation: "baseOrder")
+    "работы для согласования"
+    jobs: [Job]
+    "запчасти для согласования"
+    parts: [Part]
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}
+
+"Работы для согласования"
+type Job {
+    id: ID!
+    "название работ"
+    name: String!
+    "сумма работ"
+    sum: String!
+}
+
+"Запчасти для согласования"
+type Part {
+    id: ID!
+    "название запчасти"
+    name: String!
+    "сумма"
+    sum: String!
+    "кол-во"
+    qty: String!
+}
+
+"Статусы для доп. согласования"
+enum AgreementStatus {
+    "только создана (пришла от AA)"
+    NEW @enum(value: 1)
+    "принята пользователем (Отправлен запрос в АА)"
+    USED @enum(value: 2)
+    "потверждена AA, на ее основе создана заявка"
+    VERIFY @enum(value: 3)
+    "произошла ошибка при принятии в системе AA, имеет смысл поовторить запрос"
+    ERROR @enum(value: 4)
+}

@@ -1,0 +1,97 @@
+version: "3"
+
+services:
+
+    nginx:
+        image: nginx:alpine
+        container_name: ${APP_NAME}_nginx
+        hostname: ${APP_NAME}_nginx
+        ports:
+            - ${DOCKER_ADDRESS}:80:80
+            - ${DOCKER_ADDRESS}:443:443
+        environment:
+            WEB_DOCUMENT_ROOT: /app/public
+            WEB_PHP_SOCKET: ${APP_NAME}_php:9000
+            LOG_STDOUT: /app/storage/logs/web.access.log
+            LOG_STDERR: /app/storage/logs/web.errors.log
+        volumes:
+            - ./:/app
+        working_dir: /app
+        depends_on:
+            - php
+
+    php:
+        build: ./docker/php/
+        container_name: ${APP_NAME}_php
+        hostname: ${APP_NAME}_php
+        working_dir: /app
+        volumes:
+            - ./:/app/
+            - ./storage/framework/tmp:/tmp
+            - ./docker/php/.bashrc:/root/.bashrc
+            - ./docker/php/.bashrc:/home/appuser/.bashrc
+            - ./docker/php/.bash_aliases:/root/.bash_aliases
+            - ./docker/php/.bash_aliases:/home/appuser/.bash_aliases
+        environment:
+            TERM: xterm-256color
+            COMPOSER_ALLOW_SUPERUSER: 1
+            XDEBUG_CONFIG: "client_host=${DOCKER_ADDRESS}"
+            PHP_IDE_CONFIG: "serverName=${APP_NAME}"
+        ports:
+            - ${DOCKER_ADDRESS}:6001:6001
+            - ${DOCKER_ADDRESS}:8000:8000
+        depends_on:
+            - pgsql
+#            - pgsql_testing
+            - redis
+    #        entrypoint: ["/bin/bash", "/var/www/html/docker/bin/php_start.sh"]
+
+    pgsql:
+        image: postgres:14
+        container_name: ${APP_NAME}_pgsql
+        hostname: ${APP_NAME}_pgsql
+        ports:
+            - ${DOCKER_ADDRESS}:${DB_PORT}:${DB_PORT}
+        environment:
+            POSTGRES_DB: ${DB_DATABASE}
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - ./storage/pgsql/:/var/lib/postgresql/data/
+
+    pgsql_testing:
+        image: postgres:14
+        container_name: ${APP_NAME}_pgsql_testing
+        hostname: ${APP_NAME}_pgsql_testing
+        ports:
+            - ${DOCKER_ADDRESS}:5433:${DB_PORT}
+        environment:
+            POSTGRES_DB: db_testing
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        tmpfs:
+            - /var/lib/postgresql/data
+
+    redis:
+        image: redis:alpine
+        environment:
+            REDIS_PASSWORD: ${REDIS_PASSWORD}
+        container_name: ${APP_NAME}_redis
+        hostname: ${APP_NAME}_redis
+        ports:
+            - ${DOCKER_ADDRESS}:${REDIS_PORT}:${REDIS_PORT}
+
+    mailer:
+        image: mailhog/mailhog:latest
+        container_name: ${APP_NAME}_mailer
+        hostname: ${APP_NAME}_mailer
+        ports:
+            - ${DOCKER_ADDRESS}:8025:8025
+            - ${DOCKER_ADDRESS}:1025:1025
+
+networks:
+    default:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: ${DOCKER_NETWORK}

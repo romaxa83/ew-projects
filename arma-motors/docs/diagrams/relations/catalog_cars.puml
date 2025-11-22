@@ -1,0 +1,98 @@
+@startuml
+
+title
+Catalogs
+end title
+
+    package Cars <<Cars>> {
+
+        class Brand {
+            + COLOR_NONE  = 0;
+            + COLOR_RED   = 1;
+            + COLOR_GREEN = 2;
+            + COLOR_BLUE  = 3;
+
+            * uuid : Str
+            * is_main : Bool
+            * active : Bool
+            * name : string
+            * color : string
+
+            models(): HasMany
+            image(): MorphOne
+        }
+
+        class Model {
+
+            * uuid : Str
+            * active : Bool
+            * sort : Int
+            * name : Str
+            * brand_id : Int
+            * for_credit : Bool
+            * for_calc : Bool
+
+            brand(): BelongsTo
+            image(): MorphOne
+        }
+
+        class TransportType {
+            тип транспорта
+
+            * active : Bool
+            * sort : Int
+
+            translations()
+            current()
+        }
+        class TransportTypeTranslation {
+            * lang : Str
+            * name : Str
+        }
+
+        class Transmission {
+            коробка переда
+
+            * active : Bool
+            * sort : Int
+
+            translations()
+            current()
+        }
+        class TransmissionTranslation {
+            * lang : Str
+            * name : Str
+        }
+
+        class EngineVolume {
+            обьем двигателя
+
+            * active : Bool
+            * sort : Int
+            * volume : Int
+
+            volume храниться как целое число
+            значение * 10
+        }
+    }
+
+    class Image {}
+
+Brand <-left-> Model
+TransportType -down-> TransportTypeTranslation
+Transmission -down-> TransmissionTranslation
+
+Brand -right-> Image
+Model -right-> Image
+
+note right of Brand
+uuid - для связи с AA
+is_main - главные бренды в системе (Volvo,Renault,Mitsubishi)
+color - цветовая схема для главных брендов
+end note
+
+note top of TransportType : Актуально для сервиса страхования
+
+note top of Model : for_credit - выводить для кредитования \n for_calc - выводить для калькуляции
+
+@enduml

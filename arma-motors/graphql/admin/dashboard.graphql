@@ -1,0 +1,39 @@
+# === QUERY ===
+extend type Query {
+    "Кол-во закрытых заявок за год по брендам"
+    dashboardCountOrders(
+        year: Int! @eq
+    ): [DashboardCountOrdersResponse]
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Каунтеры для верхней панели дашборда"
+    dashboardCounts: DashboardCountsResponse
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+
+## === TYPE ===
+"Данные за месяц"
+type DashboardCountOrdersResponse {
+    "алиас месяца"
+    month: String
+    "данные по кол-ву заявок"
+    data: [DashboardCountOrdersItemResponse]
+}
+"Данные по кол-ву заявок для гл. брендов"
+type DashboardCountOrdersItemResponse {
+    "название бренда"
+    brand: String!
+    "кол-во закрытых заявок"
+    count: Int!
+}
+"Счетчики для дашборда"
+type DashboardCountsResponse {
+    "кол-во пользователей"
+    usersCount: Int!
+    "кол-во сотрудников"
+    employeeCount: Int!
+    "кол-во заявок"
+    orderCount: Int!
+    "кол-во авто в заказе"
+    orderCarCount: Int!
+}

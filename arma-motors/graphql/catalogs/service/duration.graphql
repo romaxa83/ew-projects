@@ -1,0 +1,50 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"Сроков для сервиса\" (кредитование/страхование)"
+    durations(
+        active: Boolean @eq
+        "фильтр по сервисам"
+        serviceId: ID @scope(name: "byService")
+    ):  [Duration!]!
+        @all(model: "App\\Models\\Catalogs\\Service\\Duration")
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"срока\" (по id)"
+    duration(
+        id: ID @eq
+    ):  Duration
+        @find(model: "App\\Models\\Catalogs\\Service\\Duration")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактирование \"Сроков для сервиса\""
+    durationEdit(input: DurationEditInput! @spread): Duration!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+
+    "Переключение активно/неактивно"
+    durationToggleActive(id: ID!): Duration!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+}
+# === INPUT ===
+"Поля для редактирования \"Сроков для сервиса\""
+input DurationEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]
+    "массив id's сервисов (кредитование/страхование)"
+    serviceIds: [ID]
+}
+# === TYPE ===
+"Сроки для сервисов (кредитование/страхование)"
+type Duration {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+    services: [Service] @belongsToMany(relation: "services")
+}

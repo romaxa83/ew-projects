@@ -1,0 +1,57 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех рекомендаций"
+    recommendations(
+        "по id"
+        id: ID @eq
+    ): [Recommendation!]
+    @paginate(defaultCount: 10)
+    @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получения рекомендации (по id)"
+    recommendation(id: ID @eq): Recommendation
+        @find(model: "App\\Models\\Recommendation\\Recommendation")
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение всех рекоммендаций пользователя для таба рекомендуем (МП)"
+    recommendationsCurrent(
+        "по пользователю"
+        userId: ID! @eq(key: "user_id")
+        orderBy: _ @orderBy(columns: ["id", "created_at"])
+    ): [Recommendation!]
+        @paginate(defaultCount: 10, scopes: ["forCurrent"])
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+}
+
+"Рекомендации"
+type Recommendation {
+    id: ID!
+    "uuid рекомендации, установленное системой AA"
+    uuid: String!
+    "авто, для которого сформированна рекомендация"
+    car: Car! @belongsTo(relation: "car")
+    "пользователь, для которого сформированна рекомендация"
+    user: User! @belongsTo(relation: "user")
+    "заявка, на основе которой сформирована рекомендация"
+    order: Order @belongsTo(relation: "order")
+    "название рекомендуемых работ"
+    text: String!
+    "кол-во"
+    qty: String
+    "комментарий к рекомендациям"
+    comment: String
+    "причина отказа"
+    rejectionReason: String @rename(attribute: "rejection_reason")
+    "автор рекомендации"
+    author: String
+    "исполнитель рекомендации"
+    executor: String
+    "выполнена или нет рекомендации"
+    completed: Boolean
+    "дата выполнения"
+    completionAt: DateTime @rename(attribute: "completion_at")
+    "дата актуальности"
+    relevanceAt: DateTime @rename(attribute: "relevance_at")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}

@@ -1,0 +1,61 @@
+@startuml
+
+title
+Cхема связей для "Order bs"
+end title
+
+left header
+Haulk BS
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package OrderBS #7ad378 {
+
+    class Order <<(M,#7ad378)>> #tomato {
+    }
+
+    class TypeOfWork <<(E,#7ad378)>> {
+    }
+
+    class Inventory <<(E,#7ad378)>> {
+    }
+
+    class Vehicle <<(E,#7ad378)>> {
+    }
+
+    class Payments <<(E,#7ad378)>> {
+    }
+
+}
+class Customer {}
+class Company {}
+class User {}
+class Comment {}
+class History {}
+class Media {}
+
+Order -up--{ Payments : payments()
+
+Order -right--{ TypeOfWork : typesOfWork()
+TypeOfWork -up--{ Inventory : inventories()
+
+Order -up--> Inventory : inventories()
+
+Order -down--> Vehicle : vehicle()
+Vehicle -left--> Customer : customer()
+Vehicle -down--> Company : company()
+
+Order -left--> User : mechanic()
+
+Order -left--{ Comment : comments()
+Order -right--{ History : histories()
+Order -down--{ Media : media()
+
+@enduml
+

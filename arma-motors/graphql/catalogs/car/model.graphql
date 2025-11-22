@@ -1,0 +1,68 @@
+# === QUERY ===
+extend type Query {
+    "Получение моделей"
+    models(
+        "получение по бренду"
+        brandId: ID @eq(key: "brand_id")
+        "для получение активных"
+        active: Boolean @eq
+        "фильтр для кредитования"
+        forCredit: Boolean @eq(key: "for_credit")
+        "фильтр для калькуляции"
+        forCalc: Boolean @eq(key: "for_calc")
+        "фильтр по имени модели"
+        modelName: String @scope(name: "modelNameSearch")
+        "фильтр по имени бренда"
+        brandName: String @scope(name: "brandNameSearch")
+        "сортировка по бренду (принимает ASC/DESC, сортирует по имени)"
+        orderByBrand: String @scope(name: "brandSort")
+        orderBy: _ @orderBy(
+            columns: ["sort", "id", "active", "name"]
+        )
+    ): [Model!]!
+        @paginate(defaultCount: 10)
+        @middleware(checks: ["set.locale"])
+
+    "Получения модели (по id)"
+    model(id: ID @eq): Model!
+        @find(model: "App\\Models\\Catalogs\\Car\\Model")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Переключение активно/неактивно"
+    modelToggleActive(id: ID!): Model!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.model.edit"])
+
+    "Редактирование модели"
+    modelEdit(input: ModelEditInput! @spread): Model!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.model.edit"])
+}
+# === TYPE ===
+"Поля для редактирования модели"
+input ModelEditInput {
+    id: ID!
+    active: Boolean
+    forCredit: Boolean
+    forCalc: Boolean
+    sort: Int
+    name: String
+    brandId: ID @rules(apply: ["nullable", "exists:car_brands,id"])
+}
+# === TYPE ===
+"Модель авто"
+type Model {
+    id: ID!
+    uuid: String
+    active: Boolean!
+    "для заявки на кредитование"
+    forCredit: Boolean! @rename(attribute: "for_credit")
+    "для калькуляции"
+    forCalc: Boolean! @rename(attribute: "for_calc")
+    sort: Int!
+    name: String
+    brand: Brand! @belongsTo(relation: "brand")
+    image: Image @morphOne(relation: "image")
+    "данные для калькуляции"
+    calcs: [CalcModel] @hasMany(relation: "calcs")
+}

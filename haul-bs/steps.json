@@ -1,0 +1,39 @@
+{
+    "steps": [
+    ],
+    "master": [
+        "git checkout HEAD -- composer.lock",
+        "git pull origin master",
+        "composer install",
+        "php artisan optimize:clear",
+        "php artisan cache:clear",
+        "php artisan migrate --force",
+        "php artisan db:seed --force",
+        "php artisan l5-swagger:generate",
+        "php artisan optimize",
+        "php artisan queue:restart"
+    ],
+    "stage": [
+        "git checkout HEAD -- composer.lock",
+        "git pull origin stage",
+        "composer install",
+        "php artisan optimize:clear",
+        "php artisan cache:clear",
+        "php artisan migrate",
+        "php artisan db:seed",
+        "php artisan l5-swagger:generate",
+        "php artisan optimize",
+        "php artisan queue:restart"
+    ],
+    "develop": [
+        "git checkout HEAD -- composer.lock",
+        "git pull origin develop",
+        "composer install",
+        "php artisan optimize:clear",
+        "php artisan migrate",
+        "php artisan db:seed",
+        "php artisan l5-swagger:generate",
+        "php artisan optimize",
+        "php artisan queue:restart"
+    ]
+}

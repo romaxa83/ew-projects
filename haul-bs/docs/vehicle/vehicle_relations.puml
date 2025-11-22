@@ -1,0 +1,51 @@
+@startuml
+
+title
+Cхема связей для "Vehicle"
+end title
+
+left header
+Haulk BS
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package Domain #7ad378 {
+
+    class "Vehicle" <<(M,#7ad378)>> #tomato {}
+
+    class Truck <<(E,#7ad378)>> {}
+    class Trailer <<(E,#7ad378)>> {}
+
+    class Make <<(E,#7ad378)>> {}
+    class Model <<(E,#7ad378)>> {}
+    class Company <<(E,#7ad378)>> {}
+}
+class Customer {}
+class OrderBs {}
+class Comment {}
+class History {}
+class Media {}
+
+Vehicle -up--> Make
+Vehicle -up--> Model
+Model -left--> Make : make()
+
+Vehicle -left--> Truck
+Vehicle -right--> Trailer
+
+Vehicle -down--> Company: company()
+
+Vehicle -right--{ OrderBs: orders()
+Vehicle -right--> Customer: customer()
+Vehicle -up--{ Comment: comments()
+Vehicle -down--{ History: histories()
+Vehicle -down--{ Media: media()
+
+@enduml
+

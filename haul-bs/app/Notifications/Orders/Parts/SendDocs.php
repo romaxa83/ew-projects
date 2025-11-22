@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Notifications\Orders\Parts;
+
+use App\Models\Orders\Parts\Order;
+use App\Models\Settings\Settings;
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Str;
+
+class SendDocs extends Notification
+{
+    use Queueable;
+    public const ATTACHMENT_CUSTOMER_INVOICE = 'invoice_customer';
+
+    public const ATTACHMENTS_NAME = [
+        self::ATTACHMENT_CUSTOMER_INVOICE => 'customer invoice',
+    ];
+
+    public Order $order;
+
+    private array $attachments;
+    private string $attachmentsStringList;
+    private int $countAttachments;
+
+    public function __construct(Order $order, array $attachments)
+    {
+        $this->order = $order;
+        $this->attachments = $attachments;
+        $this->countAttachments = count($attachments);
+
+        $this->createAttachmentsStringList();
+    }
+
+    private function createAttachmentsStringList(): void
+    {
+        $attachments = collect(array_keys($this->attachments));
+
+        $this->attachmentsStringList = ucfirst(self::ATTACHMENTS_NAME[$attachments[0]]);
+
+        $attachments->forget(0);
+
+        $last = $attachments->last();
+
+        if (!$last) {
+            return;
+        }
+        $attachments = $attachments->slice(0, -1);
+        $attachments->map(function ($item) {
+            $this->attachmentsStringList .= ', ' . self::ATTACHMENTS_NAME[$item];
+        });
+
+        $this->attachmentsStringList .= ' and ' . self::ATTACHMENTS_NAME[$last];
+    }
+
+    public function via(): array
+    {
+        return [
+            'mail',
+        ];
+    }
+
+    public function toMail(): MailMessage
+    {
+        $companyName = Settings::getParam('ecommerce_company_name');
+        $subject = $this->attachmentsStringList . " " .
+            ($companyName ? 'from ' . $companyName : '') .
+            " for Order id: " . $this->order->order_number;
+
+        $mail = (new MailMessage)
+            ->greeting(
+                "Hello, " . $this->order->customer?->full_name ?? $this->order->ecommerce_client_name
+            )
+            ->subject($subject)
+            ->line($subject. '.')
+            ->line('You will find PDF ' .Str::plural('file', $this->countAttachments). ' with the ' . $this->attachmentsStringList .' attached to this email.');
+
+        $mail = $this->addAttachments($mail);
+
+        if ($companyName) {
+            $billingEmail = Settings::getParam('ecommerce_billing_email');
+            if ($billingEmail) {
+                $mail->replyTo($billingEmail);
+            }
+
+            $mail->viewData = [
+                'companyName' => $companyName,
+                'companyContactString' => sprintf(
+                    'contact %s or email us at %s',
+                    Settings::getParam('ecommerce_phone') ?? '',
+                    Settings::getParam('ecommerce_email') ?? ''
+                ),
+            ];
+        }
+
+        return $mail;
+    }
+
+    /**
+     * @param MailMessage $message
+     * @return MailMessage
+     */
+    private function addAttachments($message)
+    {
+        foreach ($this->attachments as $attachment) {
+            $message->attachData(
+                $attachment['data'],
+                $attachment['name'],
+                !empty($attachment['options']) ? $attachment['options'] : ['mime' => 'application/pdf']
+            );
+        }
+
+        return $message;
+    }
+
+    public function attachments(): array
+    {
+        return array_keys($this->attachments);
+    }
+}

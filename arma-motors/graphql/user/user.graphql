@@ -1,0 +1,171 @@
+# === QUERY ===
+extend type Query {
+    "Проверка на пароль"
+    userCheckPassword(password: String!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Пользовательские уведомления(push)"
+    userNotifications(
+        "по id пользователя"
+        id: ID @scope(name: "userSearch")
+        "фильтр по статусу уведомлению"
+        status: FcmNotificationStatus @scope(name: "fcmStatus")
+        "фильтр типу"
+        type: FcmNotificationType @scope(name: "fcmType")
+        orderBy: _ @orderBy(columns: ["id", "created_at"])
+    ):[FcmNotification!]
+        @paginate(
+            defaultCount: 10
+            model: "App\\Models\\Notification\\Fcm"
+        )
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Запросить верфикацию email"
+    userRequestVerifyEmail: User!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Запросить информацию о наличии новых уведомлений для пользователя"
+    userHasNewNotification: Response!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Записать пользователю что у него \"нет\" новых уведомлений "
+    userSetNotHasNewNotification: Response!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Загрузка картинок пользователем мп"
+    userUploadImage(
+        type: UserImageType
+        images: [Upload] @rules(apply: ["image"])
+    ): [Image]
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Загрузка аватарки"
+    userUploadAvatar(images: [Upload] @rules(apply: ["image"])): Image!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Редактирование пользователя"
+    userEdit(input: UserEditInput! @spread): User!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Редактирование email"
+    userEditEmail(input: UserEditEmailInput! @spread): User!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Редактирование телефон"
+    userEditPhone(input: UserEditPhoneInput! @spread): User!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Редактирование пароля"
+    userEditPassword(input: UserEditPasswordInput! @spread): Response!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Добавление авто"
+    userAddCars(input: [UserAddCarInput!] @spread): User!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Добавление авто (несколько) в гараж (актуально для авто пришедших из AA)"
+    userAddCarsToGarage(input: UserCarsIdsInput! @spread): User!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Удалить авто (несколько) из гараж"
+    userDeleteCarsFromGarage(input: UserCarsIdsInput! @spread): User!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Выбор главного авто (передается id машины)"
+    userSetMainCar(id: ID!): Car!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Удаление авто пользователем (soft)"
+    userDeleteCar(input: UserDeleteCarInput! @spread): Response!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Удаление авто пользователем (soft)"
+    userDeleteAccount: Response!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+}
+# === INPUT ===
+"Поля для редактирования пользователя"
+input UserEditInput {
+    name: String
+    egrpoy: String
+    deviceId: String
+    fcmToken: String
+    lang: String
+}
+"Поле для редактирования/добавление email пользователя"
+input UserEditEmailInput {
+    email: String @rules(apply: ["nullable", "email", "unique:users,email"])
+}
+"Поле для редактирования телефона пользователя"
+input UserEditPhoneInput {
+    phone: String! @rules(apply: ["required"])
+    comment: String @rules(apply: ["nullable", "string"])
+    actionToken: String! @rules(apply: ["required", "string"])
+    "Ответ от AA (ОСТОРОЖНО с ним ,исключительно для тестирвания, на проде данного поля не будет)"
+    aaResponse: Boolean @rules(apply: ["nullable"])
+}
+"Поля для редактирования пароля"
+input UserEditPasswordInput {
+    password: String! @rules(apply: ["min:8"])
+}
+# === TYPE ===
+"Пользователи мп"
+type User {
+    id: ID!
+    uuid: String
+    name: String!
+    email: String
+    emailVerified: Boolean! @rename(attribute: "email_verify")
+    status: UserStatus
+    phone: String!
+    phoneVerified: Boolean! @rename(attribute: "phone_verify")
+    newPhone: String @rename(attribute: "new_phone")
+    newPhoneComment: String @rename(attribute: "new_phone_comment")
+    "дата подачи заявки на смену телефона (актуально только для веририфицированого пользователя), по ней имеет смысл получать пользователей для заявки"
+    newPhoneEditAt: DateTime @rename(attribute: "phone_edit_at")
+    egrpoy: String
+    deviceId: String @rename(attribute: "device_id")
+    fcmToken: String @rename(attribute: "fcm_token")
+    lang: LocaleConst!
+    "локаль"
+    locale: Language! @hasOne(relation: "locale")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    avatar: Image @morphOne(relation: "avatar")
+    images: [Image] @morphMany(relation: "images")
+    "пуши"
+    fcmNotifications: [FcmNotification] @hasMany(type: paginator, defaultCount: 10)
+    "все авто"
+    cars: [Car] @hasMany(relation: "cars")
+    "авто из гаража"
+    carsGarage: [Car] @hasMany(relation: "carsGarage")
+    "Выбраное авто,как основное"
+    selectedCar: Car @hasOne(relation: "selectedCar")
+    "Заявки - все"
+    orders: [Order] @hasMany(relation: "orders")
+    "Заявки - текущие"
+    ordersCurrent: [Order] @hasMany(relation: "ordersCurrent")
+    "Заявки - история"
+    ordersHistory: [Order] @hasMany(relation: "ordersHistory")
+    "индивидуальные акции"
+    promotions: [Promotion] @belongsToMany(relation: "promotions")
+    "все купоны по программе лояльности"
+    loyalties: [Loyalty] @belongsToMany(relation: "loyalties")
+}
+# === ENUM ===
+"Статусы пользователей"
+enum UserStatus {
+    "пользователь только создан"
+    DRAFT @enum(value: 0)
+    "пользователь активен, но не клиент AA"
+    ACTIVE @enum(value: 1)
+    "пользователь является клиентом AA"
+    VERIFY @enum(value: 2)
+}
+"Типы картинок при загрузки"
+enum UserImageType {
+    PASSPORT @enum(value: "passport")
+    AVATAR @enum(value: "avatar")
+}

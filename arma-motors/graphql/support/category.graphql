@@ -1,0 +1,57 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех \"категорий вопросов\" для тех. поддержки"
+    categories(
+        "для получение активных"
+        active: Boolean @eq
+        orderBy: _ @orderBy(columns: ["sort", "id", "active"])
+    ): [Category!]!
+        @all(model: "App\\Models\\Support\\Category")
+        @middleware(checks: ["set.locale"])
+
+    "Получение по id \"категорий вопросов\" для тех. поддержки"
+    category(id: ID @eq): Category
+        @find(model: "App\\Models\\Support\\Category")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"категорий вопросов\" (тех. поддержка)"
+    supportCategoryCreate(input: SupportCategoryCreateInput! @spread): Category!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:support.category.create"])
+
+    "Редактирование \"категорий вопросов\" (тех. поддержка)"
+    supportCategoryEdit(input: SupportCategoryEditInput! @spread): Category!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:support.category.edit"])
+
+    "Переключение активно/неактивно"
+    supportCategoryToggleActive(id: ID!): Category!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:support.category.edit"])
+}
+# === INPUT ===
+"Поля для создании \"категорий вопросов\" (тех. поддержка)"
+input SupportCategoryCreateInput {
+    active: Boolean!
+    sort: Int!
+    "переводы"
+    translations: [NameTranslationsInput!]!
+}
+"Поля для редактирования \"категорий вопросов\" (тех. поддержка)"
+input SupportCategoryEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    "переводы"
+    translations: [NameTranslationsInput!]
+}
+# === TYPE ===
+"\"Категория вопроса\" (тех. поддержка)"
+type Category {
+    id: ID!
+    sort: String!
+    active: Boolean!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+}

@@ -1,0 +1,135 @@
+@startuml
+
+title
+Регистрация пользователя (SignUp)
+end title
+
+left header
+Wezom
+endheader
+
+skinparam title {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam header {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam  {
+    FontSize 13
+    FontName Courier
+    BorderColor black
+    BackgroundColor 172b3a
+    ArrowFontName Impact
+    ArrowColor white
+    ArrowFontColor f5f5f5
+    ArrowFontSize 20
+    ArrowThickness 16
+}
+
+skinparam activity {
+    StartColor f5f5f5
+    BarColor SaddleBrown
+    EndColor f5f5f5
+    BackgroundColor Peru
+    BackgroundColor<< Event >> Olive
+    BackgroundColor<< AA >> SaddleBrown
+    BorderColor Peru
+    DiamondBackgroundColor Peru
+    DiamondBorderColor Peru
+}
+
+skinparam note {
+    BorderColor 172b3a
+}
+
+start
+:Валидация на уникальность телефона;
+note right
+Телефон приходит уже потвержденным
+ через sms верификацию
+end note
+<<Begin>>: Формируем dto;
+:У UserService вызываем метод создания пользователя;
+if (Если пользователь передал email) then (true)
+    :генерим  EmailToken , записываем в таблицу <size:15><color:f5f5f5>email_verify</color></size>;
+    <<Event>>:запускаем событие EmailConfirm (отправляется email);
+    <<Event>>:запускаем событие FcmPush (FcmAction::EMAIL_VERIFY) \n для отправки пуша чтоб уведомить пользователя потвердить почту;
+
+else (false)
+-[dotted]->
+endif
+
+<<AA>>:Делаем Get запрос в AA (getUserByPhone) для получения пользователя;
+:Результата ответа пишем в
+в таблицу <size:15><color:f5f5f5>aa_responses</color></size> под типом 'signup';
+if (От AA приходят данные пользователю) then (true)
+    :передаем данные методу userService->completeFromAA(),
+    где присваивается uuid обновляется статус;
+
+    if (пришли данные по авто) then (true)
+    : передаем в метод carService->createFromAA();
+        if (проверяем наличие uuid бренда и модели) then (true)
+            : записываем авто в табл. <size:15><color:f5f5f5>user_cars</color></size>;
+
+            if (проверяем является ли авто в заказе) then (true)
+                : проставляем is_order = true для авто;
+                : вызываем метод carOrderService->create(),
+                    который создает запись в табл. <size:15><color:f5f5f5>user_car_orders</color></size>;
+                : создаем и привязываем к данному авто статусы-заказа
+                    в таблицу <size:15><color:f5f5f5>user_car_order_statuses</color></size>, первому статусу-заказу
+                    присваиваем статус "current", остальным "wait"
+                    (сами статусы находятся в табл. <size:15><color:f5f5f5>car_order_statuses</color></size>);
+            else (false)
+                if (если у пользователя нет выбранного авто) then (true)
+                    :проставляем selected = true для авто;
+                else (false)
+                    -[dotted]->
+                endif
+            endif
+            if (проверяем данные по конфиденциальным лицами) then (true)
+                : вызываем метод carConfidantsService->createFromAA(),
+                    который запишит их в табл. <size:15><color:f5f5f5>user_car_confidants</color></size>;
+            else (false)
+                -[dotted]->
+            endif
+
+            <<Event>>: запускаем событие SaveCarFromAA, на который подписан \n обработчик AttachLoyaltyListeners;
+            if (проверяем является бренда данного авто, \n основным) then (true)
+                : получаем программы лояльности для данного авто;
+                : привязываем лояльности для данного авто;
+            else (false)
+                -[dotted]->
+            endif
+
+        else (false)
+            -[dotted]->
+        endif
+    else (false)
+        -[dotted]->
+    endif
+
+else (false)
+    <<Event>>:запускаем событие NotUserFromAA, \n которое делает POST запрос в AA на создание n\ пользователя в системе АА;
+    :обработчик запускает команду AA\Commands\CreateUser;
+    :формируются данные по пользователю;
+    <<AA>>:отправляются данные в систему AA;
+    : Результата ответа пишем в
+      в таблицу <size:15><color:f5f5f5>aa_responses</color></size> под типом 'create user';
+
+endif
+
+:Генерируем accessToken и refreshToken с помощью passport, добавляем их к ответу;
+:добавляем к ответу salt, который уникален для каждого пользователя
+(генерируем в момент создания пользователя);
+:добавляем к ответу данные по пользователя и отдаем его;
+stop
+
+left footer
+<#f5f5f5,#172b3a>|= Project |= Version |= Creator |= Status|= Created_at |= Updated_at |
+<#f5f5f5>|ArmaMotors| 1.0 | Rodomanov R. | dev | 14.01.2022 | 14.01.2022 |
+endfooter
+@enduml

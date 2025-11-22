@@ -1,0 +1,59 @@
+@startuml
+
+title
+Обновление токенов для пользователя мп (Arma Motors)
+end title
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+
+== RESPONSE ==
+
+rnote over Mobile
+Формируется mobileToken
+endrnote
+
+rnote over Mobile
+Для шифрования используется JWT
+
+algorithm 'HS256'
+secret = user_salt
+payload = [
+    refreshToken => user_refresh,
+    deviceId => user_device_id
+]
+
+user_salt - выдается при регистрации/авторизации
+уникальнай для каждого пользователя
+не изменяется
+
+mobileToken = JWT::encode(payload, secret, algorithm)
+endrnote
+
+Mobile -> Backend: userRefreshToken(id, mobileToken)
+
+rnote over Backend
+Декодирую mobileToken
+endrnote
+
+group #7ad378 SUCCESS
+Backend -> Mobile: RefreshTokenPayload
+end
+
+group  #FFBBBB ERROR
+Backend -> Mobile: response {'error_code'}
+
+note left of Backend
+error_code:
+51 - в payload не передан refreshToken
+52 - в payload не передан deviceId
+53 - у пользователя не совпал deviceId
+54 - проблема при генерации refreshToken
+55 - что-то пошло не так
+end note
+
+end
+
+@enduml

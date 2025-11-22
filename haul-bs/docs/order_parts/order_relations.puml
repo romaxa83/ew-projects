@@ -1,0 +1,50 @@
+@startuml
+
+title
+Cхема связей для "Order parts"
+end title
+
+left header
+Haulk BS
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package OrderParts #7ad378 {
+
+    class Order <<(M,#7ad378)>> #tomato {
+
+    }
+
+    class Item <<(E,#7ad378)>> {
+    }
+
+    class Payments <<(E,#7ad378)>> {
+    }
+
+    class Delivery <<(E,#7ad378)>> {
+
+    }
+
+    class Inventory <<(E,#7ad378)>> {
+
+    }
+}
+class Customer {}
+class SalesManger {}
+
+Order -right--{ Item : items()
+Order -up--{ Payments : payments()
+Order -down--> Customer : customer()
+Order -down--> SalesManger : salesManager()
+Item -up--> Inventory : inventory()
+Order -up--> Inventory : inventories()
+Order -up--{ Delivery : deliveries()
+
+@enduml
+

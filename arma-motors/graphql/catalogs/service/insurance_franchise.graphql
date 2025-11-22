@@ -1,0 +1,48 @@
+# === QUERY ===
+extend type Query {
+    "Получение \"франшиз\" (заявки на страховку)"
+    insuranceFranchises(
+        active: Boolean @eq
+        "фильтр по страховке (дочерние элементы сервиса \"Страховка\")"
+        insuranceId: ID @scope(name: "insuranceService")
+    ):  [InsuranceFranchise!]!
+        @all(model: "App\\Models\\Catalogs\\Service\\InsuranceFranchise")
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"франшизы\" (по id)"
+    insuranceFranchise(
+        id: ID @eq
+    ):  InsuranceFranchise
+        @find(model: "App\\Models\\Catalogs\\Service\\InsuranceFranchise")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактирование льготы"
+    insuranceFranchiseEdit(input: InsuranceFranchiseEditInput! @spread): InsuranceFranchise!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+
+    "Переключение активно/неактивно"
+    insuranceFranchiseToggleActive(id: ID!): InsuranceFranchise!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.other.edit"])
+}
+# === INPUT ===
+"Поля для редактирования франшизы"
+input InsuranceFranchiseEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    name: String
+    "массив id's страховок (дочерние эелементы сервиса страховки)"
+    insuranceIds: [ID]
+}
+
+# === TYPE ===
+"Франшиза (заявки на страховку)"
+type InsuranceFranchise {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    name: String!
+    insurances: [Service] @belongsToMany(relation: "insurances")
+}

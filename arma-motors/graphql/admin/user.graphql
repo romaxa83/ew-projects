@@ -1,0 +1,75 @@
+# === QUERY ===
+extend type Query {
+    "Получение пользователей"
+    users(
+        "фильтр по фио"
+        userName: String @scope(name: "nameSearch")
+        "фильтр по телефону"
+        userPhone: String @scope(name: "userPhoneSearch")
+        "фильтр по бренду привязаного авто"
+        carBrandId: ID @scope(name: "carBrandId")
+        "фильтр по модели привязаного авто"
+        carModelId: ID @scope(name: "carModelId")
+        "фильтр по году привязаного авто"
+        carYear: String @scope(name: "carYear")
+        "фильтр по наявности заяки на смену телефон"
+        hasNewPhone: Boolean @scope(name: "userHasNewPhone")
+        orderBy: _ @orderBy(columns: ["created_at", "name", "email", "id", "status", "phone", "phone_edit_at"])
+    ): [User!]!
+        @paginate(defaultCount: 10)
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.list"])
+
+    "Получение пользователя"
+    user(
+        id: ID @eq
+    ): User!
+        @find
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.get"])
+
+    "Получение статусов для пользователя"
+    userStatuses: [SimpleData!]!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение типов пользователя (физ./юр. дицо)"
+    userType: [SimpleData!]!
+        @middleware(checks: ["set.locale"])
+
+    "Список пользователей, архив (удаленные)"
+    userArchive(
+        orderBy: _ @orderBy(columns: ["createdAt", "name", "email", "id"])
+    ): [User!]!
+        @paginate(defaultCount: 10, scopes: ["onlyTrashed"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:archive.user.list"])
+
+    "Получение кол-во пользователей по статусу, если статус не передовать, вернет кол-во всех пользователей"
+    userCount(status: UserStatus): SimpleData
+        @middleware(checks: ["auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Потверждение изменения номера телефона пользователя"
+    adminConfirmEditUserPhone(input: UserIdInput! @spread): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.moderation"])
+
+    "Смена статуса для пользователя"
+    adminChangeUserStatus(input: UserChangeStatusInput! @spread): User!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.edit"])
+
+    "Удаление пользователя админом (soft)"
+    adminDeleteUser(id: ID!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.delete"])
+
+    "Востановить пользователя (после удаления)"
+    adminRestoreUser(id: ID!): User!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:user.restore"])
+}
+# === INPUT ===
+"Поля для id пользователя"
+input UserIdInput {
+    id: ID!
+}
+"Поля для смены статуса пользователя"
+input UserChangeStatusInput {
+    id: ID!
+    status: UserStatus
+}

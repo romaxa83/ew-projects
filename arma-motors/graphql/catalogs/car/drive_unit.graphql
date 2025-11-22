@@ -1,0 +1,49 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"приводов\""
+    driveUnits(
+        active: Boolean @eq
+    ):  [DriveUnit!]!
+        @all(model: "App\\Models\\Catalogs\\Car\\DriveUnit")
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"привода\""
+    driveUnit(
+        id: ID @eq
+    ):  DriveUnit
+        @find(model: "App\\Models\\Catalogs\\Car\\DriveUnit")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"привода\""
+    driveUnitCreate(input: DriveUnitCreateInput! @spread): DriveUnit!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.create"])
+
+    "Редактирование \"привода\""
+    driveUnitEdit(input: DriveUnitEditInput! @spread): DriveUnit!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+}
+# === INPUT ===
+#"Поля для создания \привода\""
+input DriveUnitCreateInput {
+    active: Boolean
+    sort: Int
+    name: String!
+}
+"Поля для редактирования \"привода\""
+input DriveUnitEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    name: String
+}
+# === TYPE ===
+"\"Привод\""
+type DriveUnit {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    name: String!
+}

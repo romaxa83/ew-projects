@@ -1,0 +1,100 @@
+@startuml
+title
+Общая схема приложения
+end title
+
+left header
+Wezom
+endheader
+
+skinparam  {
+    FontSize 13
+    BackgroundColor<<Apache>> Red
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor gold
+    ArrowFontName Impact
+    ArrowColor #24292e
+    ArrowFontColor #777777
+}
+
+skinparam component {
+    BorderColor black
+    BackgroundColor tomato
+}
+
+skinparam title {
+    FontName Courier
+}
+
+skinparam frame {
+    BorderColor black
+    BackgroundColor #7ad378
+}
+
+"Admin" as Admin #black;line:black;line.bold;text:black
+"Haulk Base" as (HB) #f5f5f5;line:black;line.bold;text:black
+"Haulk ECOMMERCE" as (HE) #f5f5f5;line:black;line.bold;text:black
+"Admin panel" as (AP) #f5f5f5;line:black;line.bold;text:black
+
+frame Storage {
+    database db as "PostgresQL" {
+    }
+    database redis as "Redis" {
+    }
+}
+
+rectangle Workers {
+
+}
+
+node node as HE {
+}
+
+node node as HB {
+}
+
+cloud AWS ["aws"
+image storage
+]
+
+
+[BS-Service] <-right-> (HB) : RestAPI
+[BS-Service] <-up-> (HE) : RestAPI
+
+Admin -down-> (AP)
+[BS-Service] <-left-> (AP) : RestAPI
+
+[BS-Service] <-down-> db
+[BS-Service] <-down-> redis
+
+[BS-Service] .down-> Workers
+
+note left of redis
+for cache
+end note
+
+note right of HB
+sync vehicle
+end note
+
+note right of HE
+sync: category,
+brand, inventory,
+parts-order
+end note
+
+note bottom of AP
+Admin,
+SuperAdmin,
+SalesManager
+end note
+
+
+
+[BS-Service] <-up-> AWS
+[HB] <-up-> AWS
+[HE] <-right-> AWS
+
+@enduml

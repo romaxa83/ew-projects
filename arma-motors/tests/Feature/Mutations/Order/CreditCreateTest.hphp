@@ -1,0 +1,176 @@
+<?php
+
+namespace Tests\Feature\Mutations\Order;
+
+use App\Models\Catalogs\Car\Brand;
+use App\Models\Catalogs\Car\Model;
+use App\Models\Catalogs\Service\Duration;
+use App\Models\Catalogs\Service\Service;
+use App\Types\Communication;
+use App\Types\UserType;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
+use Tests\Traits\Statuses;
+use Tests\Traits\UserBuilder;
+
+class CreditCreateTest extends TestCase
+{
+    use DatabaseTransactions;
+    use UserBuilder;
+    use Statuses;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->passportInit();
+    }
+
+    /** @test */
+    public function success_create_casco()
+    {
+        $user = $this->userBuilder()->create();
+        $this->loginAsUser($user);
+
+        $user->refresh();
+        $brand = Brand::where('id', 1)->first();
+        $model = Model::where('id', 10)->first();
+        $duration = Duration::where('id', 1)->first();
+        $service = Service::where('alias', Service::CREDIT_ALIAS)->first();
+
+        $data = [
+            'brandId' => $brand->id,
+            'modelId' => $model->id,
+            'durationId' => $duration->id,
+            'communication' => Communication::PHONE,
+            'carCost' => 56888,
+            'typeUser' => UserType::TYPE_LEGAL,
+            'firstInstallment' => 10,
+        ];
+
+        $response = $this->postGraphQL(['query' => $this->getQueryStr($data)])
+            ->assertOk();
+
+        $responseData = $response->json('data.orderCreditCreate');
+
+        $this->assertArrayHasKey('id', $responseData);
+        $this->assertArrayHasKey('uuid', $responseData);
+        $this->assertArrayHasKey('status', $responseData);
+        $this->assertArrayHasKey('paymentStatus', $responseData);
+        $this->assertArrayHasKey('user', $responseData);
+        $this->assertArrayHasKey('name', $responseData['user']);
+        $this->assertArrayHasKey('phone', $responseData['user']);
+        $this->assertArrayHasKey('service', $responseData);
+        $this->assertArrayHasKey('id', $responseData['service']);
+        $this->assertArrayHasKey('name', $responseData['service']['current']);
+        $this->assertArrayHasKey('admin', $responseData);
+        $this->assertArrayHasKey('communication', $responseData);
+        $this->assertArrayHasKey('closedAt', $responseData);
+        $this->assertArrayHasKey('deletedAt', $responseData);
+        $this->assertArrayHasKey('createdAt', $responseData);
+        $this->assertArrayHasKey('updatedAt', $responseData);
+
+        $this->assertArrayHasKey('typeUser', $responseData['additions']);
+        $this->assertArrayHasKey('firstInstallment', $responseData['additions']);
+        $this->assertArrayHasKey('brand', $responseData['additions']);
+        $this->assertArrayHasKey('model', $responseData['additions']);
+        $this->assertArrayHasKey('driverAge', $responseData['additions']);
+        $this->assertArrayHasKey('insuranceCompany', $responseData['additions']);
+        $this->assertArrayHasKey('countPayments', $responseData['additions']);
+        $this->assertArrayHasKey('carCost', $responseData['additions']);
+        $this->assertArrayHasKey('duration', $responseData['additions']);
+
+        $this->assertNotNull($responseData['uuid']);
+        $this->assertEquals($service->id, $responseData['service']['id']);
+        $this->assertEquals($user->name, $responseData['user']['name']);
+        $this->assertNull($responseData['admin']);
+        $this->assertEquals(Communication::PHONE, $responseData['communication']);
+        $this->assertNull($responseData['closedAt']);
+        $this->assertNull($responseData['deletedAt']);
+        $this->assertNotNull($responseData['createdAt']);
+        $this->assertNotNull($responseData['updatedAt']);
+        $this->assertEquals($this->order_status_draft, $responseData['status']);
+        $this->assertEquals($this->order_payment_status_none, $responseData['paymentStatus']);
+
+
+        $this->assertEquals($brand->name, $responseData['additions']['brand']['name']);
+        $this->assertEquals($model->name, $responseData['additions']['model']['name']);
+        $this->assertEquals($duration->current->name, $responseData['additions']['duration']['current']['name']);
+        $this->assertEquals($data['carCost'], $responseData['additions']['carCost']);
+        $this->assertEquals($data['typeUser'], $responseData['additions']['typeUser']);
+        $this->assertEquals($data['firstInstallment'], $responseData['additions']['firstInstallment']);
+
+        $this->assertNull($responseData['additions']['driverAge']);
+        $this->assertNull($responseData['additions']['insuranceCompany']);
+    }
+
+    private function getQueryStr(array $data): string
+    {
+        return sprintf('
+            mutation {
+                orderCreditCreate(input:{
+                    communication: "%s"
+                    brandId: "%s"
+                    modelId: "%s"
+                    carCost: %d
+                    durationId: %s
+                    typeUser: %d
+                    firstInstallment: %d
+                }) {
+                    id
+                    uuid
+                    status
+                    paymentStatus
+                    user {
+                        name
+                        phone
+                    }
+                    service {
+                        id
+                        current {
+                            name
+                        }
+                    }
+                    admin {
+                        name
+                    }
+                    communication
+                    additions {
+                        typeUser
+                        firstInstallment
+                        brand {
+                            name
+                        }
+                        model {
+                            name
+                        }
+                        driverAge {
+                            current {
+                                name
+                            }
+                        }
+                        insuranceCompany
+                        countPayments
+                        carCost
+                        duration {
+                            current {
+                                name
+                            }
+                        }
+                    }
+                    closedAt
+                    deletedAt
+                    createdAt
+                    updatedAt
+                }
+            }',
+            $data['communication'],
+            $data['brandId'],
+            $data['modelId'],
+            $data['carCost'],
+            $data['durationId'],
+            $data['typeUser'],
+            $data['firstInstallment'],
+        );
+    }
+}
+

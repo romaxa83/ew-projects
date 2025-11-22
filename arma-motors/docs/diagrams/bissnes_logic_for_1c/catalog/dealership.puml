@@ -1,0 +1,83 @@
+@startuml
+
+title
+Каталог
+end title
+
+box "Dealership" #LightBlue
+participant AdminPanel
+participant 1C
+end box
+
+group #LightBlue createDealership
+
+rnote over AdminPanel
+create some ds
+endrnote
+
+AdminPanel -> 1C: POST api/dealership/create
+
+rnote over AdminPanel
+data: {
+    "uuid": "some_id",
+    "brand_uuid": "some_id",
+    .....
+}
+endrnote
+
+end
+
+group #LightBlue editDealership
+
+rnote over AdminPanel
+edit some ds
+endrnote
+
+AdminPanel -> 1C: POST api/dealership/edit/{uuid}
+
+rnote over AdminPanel
+data: {
+    "brand_uuid": "some_id",
+    .......
+}
+endrnote
+
+end
+
+group #LightBlue removeDealership
+
+rnote over AdminPanel
+remove some ds
+endrnote
+
+AdminPanel -> 1C: DELETE api/dealership/{uuid}
+
+end
+
+group #7ad378 SUCCESS
+1C -> AdminPanel: response {'success', 'message'}
+end
+
+group  #FFBBBB ERROR
+1C -> AdminPanel: response {'success', 'message', 'code'}
+end
+
+group #LightBlue getListBrand
+
+
+AdminPanel <- 1C: GET api/dealership/list
+
+rnote over AdminPanel
+data: {
+    {
+        "uuid": "some uuid",
+        "brand_uuid": "some uuid",
+
+    },
+    .......
+}
+endrnote
+
+end
+
+@enduml

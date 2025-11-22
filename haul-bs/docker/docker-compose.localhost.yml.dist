@@ -1,0 +1,94 @@
+services:
+
+    nginx:
+        container_name: ${APP_NAME}__nginx
+        hostname: ${APP_NAME}__nginx
+        restart: unless-stopped
+        platform: linux/arm64
+        build:
+            context: docker
+            dockerfile: nginx/Dockerfile
+        volumes:
+            - ./:/app
+        ports:
+            - 80:80
+        depends_on:
+            - php
+
+    php:
+        build:
+            context: docker
+            dockerfile: php/Dockerfile
+        container_name: ${APP_NAME}__php
+        hostname: ${APP_NAME}__php
+        working_dir: /app
+        volumes:
+            - ./:/app/
+            - ./docker/php/.bashrc:/root/.bashrc
+            - ./docker/php/.bash_aliases:/root/.bash_aliases
+        environment:
+            TERM: xterm-256color
+            COMPOSER_ALLOW_SUPERUSER: 1
+        depends_on:
+            - db
+            - redis
+
+    db:
+        image: &db-image postgres:14
+        platform: linux/arm64
+        container_name: ${APP_NAME}__db
+        hostname: ${APP_NAME}__db
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_DB: ${DB_DATABASE}
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - db_data:/var/lib/postgresql/data/
+        healthcheck:
+            test: pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}
+            interval: 5s
+            timeout: 10s
+            retries: 20
+
+    db_test:
+        image: *db-image
+        container_name: ${APP_NAME}__db_test
+        hostname: ${APP_NAME}__db_test
+        restart: unless-stopped
+        # розширюємо кількість одночасних підключень до Postgres БД та кількість транзакцій. Важливо для комфортного запуску паралельних тестів.
+        command: postgres -c 'max_connections=250' -c 'max_locks_per_transaction=128'
+        ports:
+            - 5433:5432
+        environment:
+            POSTGRES_DB: db_test
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - /var/lib/postgresql/data
+
+    redis:
+        image: redis:alpine
+        platform: linux/arm64
+        environment:
+            REDIS_PASSWORD: ${REDIS_PASSWORD}
+        container_name: ${APP_NAME}__redis
+        hostname: ${APP_NAME}__redis
+        ports:
+            - 6379:6379
+        volumes:
+            - redis_data:/data
+        healthcheck:
+            test: redis-cli ping
+            interval: 5s
+            timeout: 10s
+            retries: 20
+
+volumes:
+    db_data:
+        driver: local
+        name: ${APP_NAME}_db_data
+    redis_data:
+        driver: local
+        name: ${APP_NAME}_redis_data

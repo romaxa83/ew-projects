@@ -1,0 +1,73 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"запчастей\" (калькулятор)"
+    spares(
+        active: Boolean @eq
+        type: SparesType @eq
+        "поиск по артиклу"
+        article: String @scope(name: "articleSearch")
+    ): [Spares!]!
+        @paginate(defaultCount: 10 model: "App\\Models\\Catalogs\\Calc\\Spares")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение списка \"запчасти\" (калькулятор)"
+    spare(id: ID @eq): Spares
+        @find(model: "App\\Models\\Catalogs\\Calc\\Spares")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Загрузить файл с запчастями"
+    sparesDownload(
+        "Бренд запчасти"
+        type: SparesType
+        file: [Upload]
+        @rules(apply: ["file", "mimes:xlsx"])
+    ): Response!
+    @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.upload.spares"])
+
+    "Редактирование \"запчастей\" (калькулятор)"
+    sparesEdit(input: SparesEditInput! @spread): Spares!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+}
+# === INPUT ===
+"Поля для редактирования \"запчастей\" (калькулятор)"
+input SparesEditInput {
+    id: ID!
+    "id группы запчастей"
+    groupId: ID @rules(apply: ["nullable", "exists:spares_groups,id"])
+    active: Boolean
+    name: String
+    price: String
+    priceDiscount: String
+}
+# === TYPE ===
+"\"Запчасть (калькулятор)\""
+type Spares {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "к какому бренду относиться"
+    type: SparesType
+    "актикул"
+    article: String!
+    "название из импортируемого файла"
+    name: String
+    "кол-во"
+    qty: Int!
+    "цена"
+    price: String!
+    "цена, акционая"
+    priceDiscount: String @rename(attribute: "discount_price")
+    "группа запачастей"
+    group: SparesGroup @belongsTo(relation: "group")
+    "Данные по кол-во ед, присутствую при связывании \"запчастей\" и \"модели авто\" для калькуляции и запрашиваються через модель авто"
+    pivot: SparesPivot
+}
+# === ENUM ===
+"К какому бренду относиться запчасть"
+enum SparesType {
+    volvo @enum(value: "volvo")
+    mitsubishi @enum(value: "mitsubishi")
+    renault @enum(value: "renault")
+}

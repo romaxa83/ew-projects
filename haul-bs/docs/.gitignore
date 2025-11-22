@@ -1,0 +1,8 @@
+/customer/*.png
+/inventory/*.png
+/order_bs/*.png
+/order_parts/*.png
+/supplier/*.png
+/tag/*.png
+/vehicle/*.png
+*.png

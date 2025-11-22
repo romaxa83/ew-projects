@@ -1,0 +1,78 @@
+@startuml
+
+title
+Dealership
+end title
+
+    package Dealership <<Dealership>> {
+
+        class Dealership {
+            * brand_id : Int
+            * website : Str
+            * sort : Int
+            * active : Bool
+            * location : null|Location
+
+            translations(): HasMany
+            current(): HasOne
+
+            departments(): HasMany
+            departmentSales(): HasOne
+            departmentService(): HasOne
+            departmentCash(): HasOne
+            departmentBody(): HasOne
+
+            brand(): BelongsTo
+            images(): MorphMany
+        }
+        class DealershipTranslation {
+            * dealership_id : Int
+            * lang : Str
+            * name : Str
+            * text : Str
+            * address : Str
+        }
+
+        class Department {
+            * dealership_id : Int
+            * active : Bool
+            * sort : Int
+            * phone : Str
+            * email : Str
+            * telegram : Str
+            * viber : Str
+            * type : Str
+
+            translations()
+            current()
+
+            schedule(): HasMany
+        }
+        class DepartmentTranslation {
+            * department_id : Int
+            * lang : Str
+            * name : Str
+            * address : Str
+        }
+
+        class Schedule {
+            * department_id : Int
+            * day : Int
+            * from : Int
+            * to : Int
+        }
+    }
+
+    class Brand {}
+    class Image {}
+
+Dealership -left-> Department
+Dealership -left-> Department
+Dealership -left-> Department
+Dealership -down-> DealershipTranslation
+Department -down-> DepartmentTranslation
+Department -left-> Schedule
+Dealership -right-> Brand
+Dealership -right-> Image
+
+@enduml

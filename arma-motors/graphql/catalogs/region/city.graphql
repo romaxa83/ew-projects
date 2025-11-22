@@ -1,0 +1,49 @@
+# === QUERY ===
+extend type Query {
+    "Получение городов"
+    cities(
+        "получение по региону"
+        regionId: ID @eq(key: "region_id")
+        orderBy: _ @orderBy(columns: ["sort", "id", "active"])
+    ):  [City!]!
+        @paginate(defaultCount: 10)
+        @middleware(checks: ["set.locale"])
+
+    "Получение города (по id)"
+    city(id: ID @eq): City!
+        @find(model: "App\\Models\\Catalogs\\Region\\City")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактирование города"
+    cityEdit(input: CityEditInput! @spread): City
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.city.edit"])
+    "Переключение активно/неактивно"
+    cityToggleActive(id: ID!): City!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:catalog.city.edit"])
+}
+# === INPUT ===
+"Поля для редактирования города"
+input CityEditInput {
+    id: ID!
+    regionId: ID @rules(apply: ["nullable", "exists:regions,id"])
+    sort: Int
+    active: Boolean
+    "переводы"
+    translations: [NameTranslationsInput!]!
+}
+# === TYPE ===
+"Город"
+type City {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    location: Location
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+    "Область"
+    region: Region! @belongsTo(relation: "region")
+}

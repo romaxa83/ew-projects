@@ -1,0 +1,74 @@
+# === QUERY ===
+extend type Query {
+    "Получение статусов для машины в заказе"
+    carOrderStatuses: [CarOrderStatus!]!
+        @all(model: "App\\Models\\User\\OrderCar\\OrderStatus")
+        @middleware(checks: ["set.locale"])
+
+    "Получение по id статуса для машины в заказе"
+    carOrderStatus(id: ID @eq): CarOrderStatus
+        @find(model: "App\\Models\\User\\OrderCar\\OrderStatus")
+        @middleware(checks: ["set.locale"])
+
+    "Получение состояний статусов для машины в заказе"
+    carOrderStatusState: [SimpleData!]!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактировать статуса для машины в заказе"
+    carOrderStatusEdit(input: CarOrderStatusEditInput! @spread): CarOrderStatus!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:car-order-status.edit"])
+
+    "Редактировать состояния статусов заказа для машины в заказе"
+    carOrderStatusStateEdit(input: CarOrderStatusStateEditInput! @spread): UserCarOrderStatus!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:car-order-status.edit-state"])
+}
+# === INPUT ===
+"Поля для редактирования статусов"
+input CarOrderStatusEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]
+}
+"Поля для редактирования состояния статусов заказа"
+input CarOrderStatusStateEditInput {
+    id: ID!
+    state: UserCarOrderStatusState
+    dateAt: String
+}
+# === TYPE ===
+"Статусы для авто в заказе"
+type CarOrderStatus {
+    id: ID!
+    sort: Int!
+    active: Boolean!
+    "для вывода в мобильном приложении"
+    forFront: Boolean! @rename(attribute: "for_front")
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+}
+"Статусы для конкретного авто который находиться в заказе"
+type UserCarOrderStatus {
+    id: ID!
+    "состояние статуса"
+    state: UserCarOrderStatusState @rename(attribute: "status")
+    "дата выполнения статуса (может отсутствовать, если статус в состоянии \"skip\", \"wait\")"
+    dateAt: DateTime @rename(attribute: "date_at")
+    statusName: CarOrderStatus!
+}
+# === ENUM ===
+"Состояние статуса для машины в заказе"
+enum UserCarOrderStatusState {
+    "активное состояние статуса"
+    current @enum(value: "current")
+    "статуса в ожидании"
+    wait @enum(value: "wait")
+    "статуса в выполнен"
+    done @enum(value: "done")
+    "статуса в пропущен"
+    skip @enum(value: "skip")
+}

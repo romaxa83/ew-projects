@@ -1,0 +1,54 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"пробега\" (калькулятор)"
+    mileages(
+        active: Boolean @eq
+        "фильтр по бренду"
+        brandId: ID @scope(name: "byBrand")
+    ):  [Mileage!]!
+        @all(model: "App\\Models\\Catalogs\\Calc\\Mileage")
+#        @middleware(checks: ["set.locale", "auth:graph_admin"])
+        @middleware(checks: ["set.locale"])
+
+    "Получение \"пробега\" (калькулятор)"
+    mileage(
+        id: ID @eq
+    ): Mileage
+        @find(model: "App\\Models\\Catalogs\\Calc\\Mileage")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"пробега\" (калькулятор)"
+    mileageCreate(input: MileageCreateInput! @spread): Mileage!
+    @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.create"])
+
+    "Редактирование \"пробега\" (калькулятор)"
+    mileageEdit(input: MileageEditInput! @spread): Mileage!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+
+    "Переключение активно/неактивно"
+    mileageToggleActive(id: ID!): Mileage!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+}
+# === INPUT ===
+"Поля для создания \"пробега\" (калькулятор)"
+input MileageCreateInput {
+    active: Boolean
+    value: Int!
+}
+"Поля для редактирования \"пробега\" (калькулятор)"
+input MileageEditInput {
+    id: ID!
+    active: Boolean
+    value: Int
+}
+# === TYPE ===
+"\"Пробег (калькулятор)\""
+type Mileage {
+    id: ID!
+    active: Boolean!
+    value: Int!
+    "привязаные бренды"
+    brands: [Brand] @belongsToMany(relation: "brands")
+}

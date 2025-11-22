@@ -1,0 +1,107 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех \"акций\" (для админа)"
+    promotions(
+        "для получение активных"
+        active: Boolean @eq
+        "для получение по типу"
+        type: PromotionType @eq
+        orderBy: _ @orderBy(columns: ["sort", "id", "active", "type", "start_at", "finish_at"])
+    ): [Promotion!]!
+        @paginate(defaultCount: 10, model: "App\\Models\\Promotion\\Promotion")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:promotion.list"])
+
+    "Получение по id \"акции\""
+    promotion(id: ID @eq): Promotion
+        @find(model: "App\\Models\\Promotion\\Promotion")
+        @middleware(checks: ["set.locale"])
+
+    "Получение всех \"акций\", для авторизованого пользователя - общие и индивидуальные, для гостя - только общие"
+    promotionsForUser: [Promotion!]!
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"акции\""
+    promotionCreate(input: PromotionCreateInput! @spread): Promotion!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:promotion.create"])
+
+    "Редактирование \"акции\""
+    promotionEdit(input: PromotionEditInput! @spread): Promotion!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:promotion.edit"])
+
+    "Переключение активно/неактивно"
+    promotionToggleActive(id: ID!): Promotion!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:promotion.edit"])
+
+    "Подвязать пользователей к акции"
+    promotionAttachUsers(input: PromotionAttachUserInput! @spread): Promotion!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:promotion.edit"])
+
+    "Удаление \"акции\""
+    promotionDelete(id: ID!):  Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:promotion.delete"])
+}
+# === INPUT ===
+"Поля для создания \"акции\""
+input PromotionCreateInput {
+    active: Boolean
+    sort: Int
+    type: PromotionType!
+    link: String
+    departmentId: ID! @rules(apply: ["exists:dealership_departments,id"])
+    startAt: String
+    finishAt: String
+    translations: [NameTranslationsInput!]!
+    "массив id's \"пользователей\" (для привязывание к акции), актуально только для индивидуальной акции"
+    userIds: [ID]
+}
+"Поля для редактирования \"акции\""
+input PromotionEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    type: PromotionType!
+    link: String
+    departmentId: ID! @rules(apply: ["exists:dealership_departments,id"])
+    startAt: String!
+    finishAt: String!
+    translations: [NameTranslationsInput!]!
+    "массив id's \"пользователей\" (для привязывание к акции), актуально только для индивидуальной акции"
+    userIds: [ID]
+}
+"Поля для подвязывание пользователей к \"акции\""
+input PromotionAttachUserInput {
+    id: ID!
+    "массив id's \"пользователей\" (для привязывание к акции), актуально только для индивидуальной акции"
+    userIds: [ID!]!
+}
+# === TYPE ===
+"Акции"
+type Promotion {
+    id: ID!
+    sort: Int!
+    active: Boolean!
+    type: PromotionType!
+    link: String
+    image: Image @morphOne(relation: "image")
+    department: Department! @belongsTo(relation: "department")
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+    "начало акции"
+    startAt: DateTime! @rename(attribute: "start_at")
+    "конец акции"
+    finishAt: DateTime! @rename(attribute: "finish_at")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+    "пользователи (для индивидуальной акции)"
+    users: [User] @belongsToMany(relation: "users")
+}
+# === ENUM ===
+"Типы акций"
+enum PromotionType {
+    common @enum(value: "common")
+    individual @enum(value: "individual")
+}

@@ -1,0 +1,38 @@
+@startuml
+
+title
+Cхема связей для "Tag"
+end title
+
+left header
+Haulk BS
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package Domain #7ad378 {
+
+    class Tag <<(M,#7ad378)>> #tomato {}
+
+    class Taggable <<(E,#7ad378)>> {}
+}
+class Customer {}
+class Truck {}
+class Trailer {}
+
+Tag -up--{ Taggable : customers()
+Taggable -up--{ Customer : customers()
+
+Tag -up--{ Taggable : trucks()
+Taggable -up--{ Truck : trucks()
+
+Tag -up--{ Taggable : trailers()
+Taggable -up--{ Trailer : trailers()
+
+@enduml
+

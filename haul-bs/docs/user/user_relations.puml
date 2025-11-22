@@ -1,0 +1,52 @@
+@startuml
+
+title
+Cхема связей для "User"
+end title
+
+left header
+Haulk BS
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package Domain #7ad378 {
+
+    class "User" <<(M,#7ad378)>> #tomato {}
+
+    class Role <<(E,#7ad378)>> {}
+    class Permissions <<(E,#7ad378)>> {}
+    class RoleHasPermission <<(E,#7ad378)>> {}
+    class ModelHasRole <<(E,#7ad378)>> {}
+}
+
+class OrderParts {}
+class OrderBs {}
+class Media {}
+
+User -up--> ModelHasRole
+ModelHasRole -left--> Role
+
+Role -left--{ RoleHasPermission
+RoleHasPermission -down--{ Permissions
+
+User -down--> Media
+
+User -right--> OrderParts
+User -right--> OrderBs
+
+note bottom of OrderParts
+as sales manager
+end note
+
+note bottom of OrderBs
+as mechanic
+end note
+
+@enduml
+

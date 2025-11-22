@@ -1,0 +1,124 @@
+# === QUERY ===
+extend type Query {
+    "Получение \"модели авто\" для калькулятора"
+    calcModel(
+        id: ID @eq
+    ): CalcModel
+        @find(model: "App\\Models\\Catalogs\\Calc\\CalcModel")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение списка \"модели авто\" для калькулятора"
+    calcModels(
+        "фильтр по бренду"
+        brandId: ID @scope(name: "byBrand")
+        "фильтр по модели"
+        modelId: ID @scope(name: "byModel")
+        "сортировка по бренду (принимает ASC/DESC, сортирует по имени)"
+        orderByBrand: String @scope(name: "brandSort")
+        "сортировка по модели (принимает ASC/DESC, сортирует по имени)"
+        orderByModel: String @scope(name: "modelSort")
+        "сортировка по \"пробегу\" (принимает ASC/DESC, сортирует по значению)"
+        orderByMileage: String @scope(name: "mileageSort")
+        "сортировка по \"обьем двигателя\" (принимает ASC/DESC, сортирует по значению)"
+        orderByEngineVolume: String @scope(name: "engineVolumeSort")
+        orderBy: _ @orderBy(
+            columns: ["id"]
+        )
+    ): [CalcModel!]!
+        @paginate(defaultCount: 10, model: "App\\Models\\Catalogs\\Calc\\CalcModel")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"модели авто\" для калькулятора"
+    calcModelCreate(input: calcModelCreateInput! @spread): CalcModel!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.create"])
+
+    "Редактирование \"модели авто\" для калькулятора"
+    calcModelEdit(input: calcModelEditInput! @spread): CalcModel!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+
+    "Удаление \"модели авто\" для калькулятора"
+    calcModelDelete(id: ID!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.delete"])
+}
+# === INPUT ===
+"Поля для создания \"модели авто\" для калькуляции"
+input calcModelCreateInput {
+    "модель"
+    modelId: ID! @rules(apply: ["exists:car_models,id"])
+    "бренд"
+    brandId: ID! @rules(apply: ["exists:car_brands,id"])
+    "пробег"
+    mileageId: ID @rules(apply: ["exists:mileages,id"])
+    "обьем двигателя"
+    engineVolumeId: ID @rules(apply: ["exists:car_engine_volumes,id"])
+    "привод"
+    driveUnitId: ID @rules(apply: ["exists:drive_units,id"])
+    "кпп"
+    transmissionId: ID @rules(apply: ["exists:transmissions,id"])
+    "тип топлива"
+    fuelId: ID @rules(apply: ["exists:fuels,id"])
+    "работы"
+    works: [calcModelWorkRelationInput]
+    "запчасти"
+    spares: [calcModelSparesRelationInput]
+}
+"Поля для редактирования \"модели авто\" для калькуляции"
+input calcModelEditInput {
+    id: ID!
+    "модель"
+    modelId: ID @rules(apply: ["exists:car_models,id"])
+    "бренд"
+    brandId: ID @rules(apply: ["exists:car_brands,id"])
+    "пробег"
+    mileageId: ID @rules(apply: ["exists:mileages,id"])
+    "обьем двигателя"
+    engineVolumeId: ID @rules(apply: ["exists:car_engine_volumes,id"])
+    "привод"
+    driveUnitId: ID @rules(apply: ["exists:drive_units,id"])
+    "кпп"
+    transmissionId: ID @rules(apply: ["exists:transmissions,id"])
+    "тип топлива"
+    fuelId: ID @rules(apply: ["exists:fuels,id"])
+    "работы"
+    works: [calcModelWorkRelationInput]
+    "запчасти"
+    spares: [calcModelSparesRelationInput]
+}
+"Поля для \"работ\" привязаных к калькуляции модели авто"
+input calcModelWorkRelationInput {
+    "id \"работы\""
+    id: ID!
+    "коэфициент работы"
+    minutes: Float!
+}
+"Поля для \"запчастей\" привязаных к калькуляции модели авто"
+input calcModelSparesRelationInput {
+    "id \"работы\""
+    id: ID!
+    "кол-во ед."
+    qty: Float!
+}
+# === TYPE ===
+"Модель (авто) для калькуляции"
+type CalcModel {
+    id: ID!
+    brand: Brand! @belongsTo(relation: "brand")
+    model: Model! @belongsTo(relation: "model")
+    mileage: Mileage @belongsTo(relation: "mileage")
+    engineVolume: EngineVolume @belongsTo(relation: "engineVolume")
+    driveUnit: DriveUnit @belongsTo(relation: "driveUnit")
+    transmission: Transmission @belongsTo(relation: "transmission")
+    fuel: Fuel @belongsTo(relation: "fuel")
+    works: [Work] @belongsToMany(relation: "works")
+    spares: [Spares] @belongsToMany(relation: "spares")
+}
+"Данные по коэфициенту, присутствую при связывании \"работ\" и \"модели авто\" для калькуляции"
+type WorkPivot {
+    minutes: Float! @convertToFloat
+}
+"Данные по кол-во ед, присутствую при связывании \"запчастей\" и \"модели авто\" для калькуляции"
+type SparesPivot {
+    qty: Float! @convertToFloat
+}

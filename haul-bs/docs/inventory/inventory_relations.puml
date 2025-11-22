@@ -1,0 +1,58 @@
+@startuml
+
+title
+Cхема связей для "Inventory"
+end title
+
+left header
+Haulk BS
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package Domain #7ad378 {
+
+    class Inventory <<(M,#7ad378)>> #tomato {}
+
+    class Brand <<(E,#7ad378)>> {}
+    class Category <<(E,#7ad378)>> {}
+    class Unit <<(E,#7ad378)>> {}
+    class Supplier <<(E,#7ad378)>> {}
+    class Transaction <<(E,#7ad378)>> {}
+    class Feature <<(E,#7ad378)>> {}
+    class FeatureValue <<(E,#7ad378)>> {}
+    class InventoryFeature <<(E,#7ad378)>> {}
+}
+class Seo {}
+class History {}
+class Media {}
+
+Inventory -up--> Seo : seo()
+Brand -up--> Seo : seo()
+Category -up--> Seo : seo()
+
+Inventory -up--> Media : media()
+Category -up--> Media : media()
+
+Inventory -up--{ History : histories()
+Inventory -down--{ Transaction : supplier()
+
+Inventory -left--> Brand : brand()
+Inventory -left--> Category : category()
+Inventory -down--> Unit : unit()
+Inventory -down--> Supplier : supplier()
+
+Inventory -left--{ InventoryFeature : features()
+
+InventoryFeature -left--{ Feature : features()
+InventoryFeature -left--{ FeatureValue : features()
+
+Feature -down--{ FeatureValue : values()
+
+@enduml
+

@@ -1,0 +1,99 @@
+@startuml
+
+title
+OrderCar (авто пользователя которое в заказе)
+end title
+
+    package Car <<Car>> {
+
+        class Car  << (C,#FF7700) base >> {
+
+            * is_order : Bool
+            * aa_status : Int
+
+            carOrder(): HasOne
+        }
+        class OrderCar {
+        данные по заказу
+        table - user_car_orders
+
+            * int $id
+            * int $car_id
+                статус оплаты
+            * int $payment_status
+                сумма оплаты
+            * int $sum
+                сумма оплаты со скидкой
+            * int $sum_discount
+                номер накладной
+            * string $order_number
+                ссылка на файл
+            * string|null $files
+
+            statuses(): HasMany
+        }
+        class OrderCarStatus {
+        статусы заказа
+        table - user_car_order_statuses
+
+            СОСТОЯНИЯ
+            + done - выполненный статус;
+            + skip - пропущенный статус,
+                для разных ситуация статус
+                может быть не актуальным;
+            + current - статус в данный
+                момент выполняется;
+            + wait - ждет своей очереди;
+
+            *  int $id
+            *  int $order_car_id
+            *  int $status_id
+                состояние статуса
+            *  int $status
+                время выполнения
+            *  Carbon|null $date_at
+
+            statusName(): BelongsTo
+        }
+
+        class OrderStatus {
+            имеющиеся статусы
+            table - car_order_statuses
+
+            *  int $id
+            *  int $sort
+            *  int $active
+
+            translations(): HasMany
+            current(): HasOne
+        }
+        class OrderStatusTranslation {
+            table - car_order_status_translations
+
+            * lang: Str
+            * name : Str
+        }
+    }
+
+    class User {}
+
+User -up-> Car :cars()
+
+Car -left-> OrderCar :carOrder()
+OrderCar -left-> OrderCarStatus : statuses()
+OrderCar -left-> OrderCarStatus : statuses()
+OrderCar -left-> OrderCarStatus : statuses()
+
+OrderCarStatus -left-> OrderStatus: statusName()
+
+OrderStatus -down-> OrderStatusTranslation : current()
+
+note top of Car
+если авто в заказе, у нее есть связь на данные по заказу
+данные приходят/обновляются из AA
+состояние переключается в админке
+end note
+
+note top of OrderCarStatus: на данный момент восемь статусов
+
+@enduml

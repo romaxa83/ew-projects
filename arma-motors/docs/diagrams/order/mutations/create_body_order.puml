@@ -1,0 +1,112 @@
+@startuml
+
+title
+Создание заявки на кузовной (OrderBodyCreate)
+end title
+
+left header
+Wezom
+endheader
+
+skinparam title {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam header {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam  {
+    FontSize 13
+    FontName Courier
+    BorderColor black
+    BackgroundColor 172b3a
+    ArrowFontName Impact
+    ArrowColor white
+    ArrowFontColor f5f5f5
+    ArrowFontSize 20
+    ArrowFontSize<<Flow>> 10
+    ArrowThickness 16
+}
+
+skinparam activity {
+    StartColor f5f5f5
+    BarColor SaddleBrown
+    EndColor f5f5f5
+    BackgroundColor Peru
+    BackgroundColor<< Event >> Olive
+    BackgroundColor<< Exception >> Tomato
+    BorderColor<< Exception >> Yellow
+    BackgroundColor<< AA >> SaddleBrown
+    BorderColor Peru
+    DiamondBackgroundColor Peru
+    DiamondBorderColor Peru
+}
+
+skinparam note {
+    BorderColor 172b3a
+}
+
+skinparam legend {
+  FontSize 12
+  BackGroundColor f5f5f5
+  Padding 5000
+}
+
+start
+:приходит запрос на создания;
+:получаем авторизованного пользователя;
+:валидируем дату и время;
+:из бд получаем id кузовного сервиса;
+:формируем dto;
+if (у сервиса вызываем метод service->createBody) then (<size:15><color:yellow>create flow</color></size>)
+    :получаем авто из табл <size:15><color:f5f5f5>user_cars</color></size> по пришедшему в запросе id;
+
+    if (полученное авто верефицированное) then (true)
+        :заполняем модель данными;
+        if (передан id рекомендации) then (true)
+            : id рекомендации добавляем к данным;
+        endif
+        : сохраняем модель в бд, и возвращаем сохраненную модель;
+    else (false)
+        <<Exception>>: кидаем исключение;
+        stop
+    endif
+
+else (<size:15><color:yellow>bound flow</color></size>)
+    -[dotted,#yellow]->
+endif
+
+if (передан id рекомендации) then (true)
+    : данной рекомендации меняем статус на <size:15><color:f5f5f5>STATUS_USED</color></size>;
+endif
+
+<< Event >>:создаем событие CreateOrder, куда передаем созданную заявку;
+
+if (слушатель SendOrderToAAListeners) then (<size:15><color:yellow>SendOrderToAAListeners flow</color></size>)
+    : формируются данные (по заявке) для отправки запрос в систему АА;
+    <<AA>>: Отправляется POST запрос в систему АА \n на checkpoint - /arma_mdm/hs/maapi/service;
+    if (Результата запроса) then (success)
+        : результат пишем в табл. <size:15><color:f5f5f5>aa_response</color></size> \n с типом <size:15><color:f5f5f5>TYPE_CREATE_ORDER</color></size>;
+        : вызываем метод orderService->completeFromAA() для обновления данных;
+        : заявке записуется uuid , пришедший от АА;
+    else (error)
+        : результат пишем в табл. <size:15><color:f5f5f5>aa_response</color></size> \n со статусом <size:15><color:f5f5f5>STATUS_ERROR</color></size>;
+        <<Exception>>: кидаем исключение;
+        stop
+    endif
+else (<size:15><color:yellow>bound flow</color></size>)
+    -[dotted,#yellow]->
+endif
+
+: созданная заявка возвращается в ответе;
+stop
+
+legend left
+<#f5f5f5,#172b3a>|= Project |= Version |= Creator |= Status |= Created_at |= Updated_at |
+<#f5f5f5>| ArmaMotors | 1.0 | Rodomanov R. | dev | 21.01.2022 | 21.01.2022 |
+endlegend
+
+@enduml

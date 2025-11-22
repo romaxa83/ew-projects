@@ -1,0 +1,50 @@
+@startuml
+
+title
+Получение калькуляции
+end title
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+
+== Данные для по модели кальк. ==
+
+group #LightBlue Renault
+rnote over Mobile
+1) brandId - бренд
+2) modelId - модель
+3) mileageId - пробег
+4) engineVolumeId - обьем двигателя
+endrnote
+end
+
+group #LightBlue Volvo
+rnote over Mobile
+1) brandId - бренд
+2) modelId - модель
+3) mileageId - пробег
+4) engineVolumeId - обьем двигателя
+5) fuelId - тип топлива
+endrnote
+end
+
+group #LightBlue Mitsubishi
+rnote over Mobile
+1) brandId - бренд
+2) modelId - модель
+3) mileageId - пробег
+4) engineVolumeId - обьем двигателя
+5) fuelId - тип топлива
+6) driveUnitId - привод
+7) transmissionId - трансмиссия
+endrnote
+end
+
+'МОДЕЛИ
+group #LightBlue модели авто
+Mobile -> Backend: userCalc(data)
+end
+
+@enduml

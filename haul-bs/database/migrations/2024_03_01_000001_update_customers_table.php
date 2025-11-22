@@ -1,0 +1,24 @@
+<?php
+
+use App\Enums\Customers\CustomerType;
+use App\Models\Customers\Customer;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table(Customer::TABLE, function (Blueprint $table) {
+            $table->string('type', 20)->default(CustomerType::BS);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table(Customer::TABLE, function (Blueprint $table) {
+            $table->dropColumn('type');
+        });
+    }
+};

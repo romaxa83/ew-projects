@@ -1,0 +1,61 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"работ\" (калькулятор)"
+    works(
+        active: Boolean @eq
+        "фильтр по бренду"
+        brandId: ID @scope(name: "byBrand")
+    ):  [Work!]!
+        @all(model: "App\\Models\\Catalogs\\Calc\\Work")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение \"работы\" (калькулятор)"
+    work(
+        id: ID @eq
+    ): Work
+        @find(model: "App\\Models\\Catalogs\\Calc\\Work")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"работ\" (калькулятор)"
+    workCreate(input: WorkCreateInput! @spread): Work!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.create"])
+
+    "Редактирование \"работ\" (калькулятор)"
+    workEdit(input: WorkEditInput! @spread): Work!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+
+    "Переключение активно/неактивно"
+    workToggleActive(id: ID!): Work!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+}
+# === INPUT ===
+"Поля для создания \"работ\" (калькулятор)"
+input WorkCreateInput {
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]!
+}
+"Поля для редактирования \"работ\" (калькулятор)"
+input WorkEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    translations: [NameTranslationsInput!]
+}
+# === TYPE ===
+"\"Работы (калькулятор)\""
+type Work {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    "все переводы"
+    translations: [Translations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: Translations! @hasOne(relation: "current")
+    "привязаные бренды"
+    brands: [Brand] @belongsToMany(relation: "brands")
+    "Данные по кол-во минут, присутствую при связывании \"работ\" и \"модели авто\" для калькуляции и запрашиваються через модель авто"
+    pivot: WorkPivot
+}

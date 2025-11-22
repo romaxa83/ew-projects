@@ -1,0 +1,125 @@
+@startuml
+
+title
+<u>Связь таблиц хранящих информацию для просчета "свободно времени"</u>
+end title
+
+left header
+Wezom
+endheader
+
+skinparam {
+    TitleFontSize 25
+    TitleFontName Courier
+    ArrowColor #033649
+    ArrowFontColor #24292e
+    BackgroundColor #f5f5f5
+    BorderColor black
+    RoundCorner 25
+}
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+    package AAPost #7ad378 {
+
+        class AAPost <<(M,#7ad378)>> #tomato {
+            посты в системе АА
+
+            * id : Int
+            пришедший с АА
+            * uuid : Str
+            названия поста
+            * name : Str
+            алиас дц , к которому
+             относиться пост
+            * alias : Str
+
+            dealership(): BelongsTo
+            schedules(): HasMany
+        }
+
+        class AAPostSchedule <<(E,#7ad378)>> {
+            расписание постов
+
+            * id : Int
+            * post_id : Str
+            на какую дату
+            * date : Date
+            начало рабочего дня
+            * start_work : Date
+            конец рабочего дня
+            * end_work : Date
+            рабочий ли день
+            * wor_day : Bool
+        }
+    }
+
+    package AAOrder #7ad378 {
+
+        class AAOrder <<(M,#7ad378)>> #tomato {
+            заявки в системе АА
+
+            * id : Int
+            в пришедший с АА данных это - id
+            * order_uuid : Str|null
+            в пришедший с АА данных это - client
+            * user_uuid : Str|null
+            в пришедший с АА данных это - auto
+            * car_uuid : Str|null
+            в пришедший с АА данных это - type
+            * service_alias : Str|null
+            в пришедший с АА данных это - subType
+            * sub_service_alias : Str|null
+            в пришедший с АА данных это - base
+            * dealership_alias : Str|null
+            в пришедший с АА данных это - workshop
+            * post_uuid : Str
+            * start_date: Date
+            * end_date: Date
+            * comment: Str|null
+
+            post(): BelongsTo
+            planning(): HasMany
+        }
+
+        class AAOrderPlanning <<(E,#7ad378)>> {
+            составная часть данных AAOrder
+            в пришедший с АА данных это
+            секция planning
+
+            * id : Int
+            * aa_order_id : Str
+            * start_date : Date
+            * end_date : Date
+            в пришедший с АА данных это - workshop
+            * post_uuid : Str
+        }
+    }
+
+    class Dealership <<(E,#7ad378)>> {}
+
+note top of AAOrder
+ существуящая заявка в системе АА, может быть как создана через
+ МП, так и в самих дилерских центрах, содержат в себе информацию
+ о времени, на которое эта заявка назначена , что бы в дальнейшем высчитать
+ свободное время, приходит в систему когда верифицируется в системе АА (пришедшая из МП)
+ или когда создается на цех в дц
+endnote
+
+AAPost -[#black]-> Dealership :dealership()
+AAPostSchedule }-left[#black]- AAPost :schedules()
+
+AAOrder -up[#black]-> AAPost : post()
+AAOrderPlanning }-left[#black]- AAOrder :planning()
+
+
+left footer
+<#lightblue,#red>|= Projecy|= Version |= Creator |= Status|= Created_at |= Updated_at |
+<#lightgreen>| arma-motors | 1.0 | Rodomanov R. | dev | 21.01.2022 | 21.01.2022 |
+endfooter
+@enduml

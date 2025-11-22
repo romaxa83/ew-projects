@@ -1,0 +1,84 @@
+@startuml
+
+title
+Каталог
+end title
+
+box "Brand" #LightBlue
+participant AdminPanel
+participant 1C
+end box
+
+group #LightBlue createBrand
+
+rnote over AdminPanel
+create some brand
+endrnote
+
+AdminPanel -> 1C: POST api/brand/create
+
+rnote over AdminPanel
+data: {
+    "uuid": "some_id",
+    "name": "some_name",
+    .....
+}
+endrnote
+
+end
+
+group #LightBlue editBrand
+
+rnote over AdminPanel
+edit some brand
+endrnote
+
+AdminPanel -> 1C: POST api/brand/edit/{uuid}
+
+rnote over AdminPanel
+data: {
+    "name": "edit_name",
+    .......
+}
+endrnote
+
+end
+
+group #LightBlue removeBrand
+
+rnote over AdminPanel
+remove some brand
+endrnote
+
+AdminPanel -> 1C: DELETE api/brand/{uuid}
+
+end
+
+group #7ad378 SUCCESS
+1C -> AdminPanel: response {'success', 'message'}
+end
+
+group  #FFBBBB ERROR
+1C -> AdminPanel: response {'success', 'message', 'code'}
+end
+
+group #LightBlue getListBrand
+
+
+AdminPanel <- 1C: GET api/brand/list
+
+rnote over AdminPanel
+data: {
+    {
+        "uuid": "some uuid",
+        "name": "some name",
+        ....
+        "models" : []
+    },
+    .......
+}
+endrnote
+
+end
+
+@enduml

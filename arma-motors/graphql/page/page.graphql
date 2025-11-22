@@ -1,0 +1,64 @@
+# === QUERY ===
+extend type Query {
+    "Получение инф. страниц"
+    pages: [Page!]!
+        @all(model: "App\\Models\\Page\\Page")
+        @middleware(checks: ["set.locale"])
+
+    "Получение инф. страниц (id, alias - \"privacy_policy\", \"terms_use\")"
+    page(
+        id: ID @eq
+        alias: String @eq
+    ): Page
+        @find(model: "App\\Models\\Page\\Page")
+        @middleware(checks: ["set.locale"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Редактирование страниц"
+    pageEdit(input: PageEditInput! @spread): Page!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:page.edit"])
+
+    "Привязывание файл к странице"
+    pageAttachFile(
+        id: ID!
+        file: [Upload] @rules(apply: ["file"])
+    ): File!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:page.edit"])
+}
+# === INPUT ===
+"Поля для редактирования страниц"
+input PageEditInput {
+    id: ID!
+    translations: [PageTranslationsInput!]
+}
+"Поля для переводов названия"
+input PageTranslationsInput {
+    lang: String! @rules(apply: ["exists:languages,slug"])
+    name: String! @rules(apply: ["required", "min:3"])
+    text: String
+    "дополнительный текст"
+    subText: String
+}
+
+# === TYPE ===
+"Информационые страницы"
+type Page {
+    id: ID!
+    alias: String!
+    "все переводы"
+    translations: [PageTranslations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: PageTranslations! @hasOne(relation: "current")
+    "привязаный файл"
+    file: File @morphOne(relation: "file")
+}
+"Перевода для страницы"
+type PageTranslations {
+    id: ID!
+    lang: String!
+    name: String!
+    text: String
+    "дополнительный текст"
+    subText: String @rename(attribute: "sub_text")
+}

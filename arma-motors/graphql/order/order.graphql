@@ -1,0 +1,416 @@
+# === QUERY ===
+extend type Query {
+    "Получение всех заявок"
+    orders(
+        "по id"
+        id: ID @eq
+        "по статусу"
+        status: OrderStatus @eq
+        "по пользователю"
+        userId: ID @eq(key: "user_id")
+        "фильтр по фио"
+        userName: String @scope(name: "userName")
+        "фильтр по фио телефону владельца"
+        userPhone: String @scope(name: "userPhoneSearch")
+        "фильтр по имени ответственного"
+        responsiveName: String @scope(name: "responsiveName")
+        "фильтр по бренду (id)"
+        brandId: ID @scope(name: "brandId")
+        "фильтр по модели (id)"
+        modelId: ID @scope(name: "modelId")
+        "фильтр по дц (id)"
+        dealershipId: ID @scope(name: "dealershipId")
+        "по сервису"
+        serviceId: ID @eq(key: "service_id")
+        "сортировка по дц"
+        orderByDealership: OrderByType @scope(name: "dealershipOrderBy")
+        "сортировка по авто"
+        orderByCar: OrderByType @scope(name: "carOrderBy")
+        orderBy: _ @orderBy(columns: ["id", "status", "created_at", "communication"])
+
+    ): [Order!]
+#        @cache(maxAge: 10)
+        @paginate(defaultCount: 10, scopes: ["orderGate"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:order.list"])
+
+    "Получение всех заявок пользователя для таба истории (МП)"
+    ordersHistory(
+        "по пользователю"
+        userId: ID! @eq(key: "user_id")
+        "от (в милисекундах)"
+        from: String @scope(name: "fromClosed")
+        "до (в милисекундах)"
+        to: String @scope(name: "toClosed")
+        orderBy: _ @orderBy(columns: ["id", "created_at", "closed_at"])
+
+    ): [Order!]
+        @paginate(defaultCount: 10, scopes: ["forHistory"])
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Получение всех заявок пользователя для таба текущие (МП)"
+    ordersCurrent(
+        "по пользователю"
+        userId: ID! @eq(key: "user_id")
+        "период"
+        period: OrderPeriodType @scope(name: "period")
+        "сортировка по дате желаемой фактической"
+        orderByOnDateAndReal: OrderByType @scope(name: "orderByOnDateAndReal")
+        "сортировка по дате"
+        orderBy: _ @orderBy(columns: ["id", "created_at"])
+    ): [Order!]
+        @paginate(defaultCount: 10, scopes: ["forCurrent"])
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Получения заявки (по id)"
+    order(id: ID @eq): Order!
+        @find(model: "App\\Models\\Order\\Order")
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:order.get"])
+
+    "Получения заявки (по id) (МП)"
+    orderForUser(id: ID @eq): Order!
+        @find(model: "App\\Models\\Order\\Order")
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Список заявок, архив(удаленные)"
+    ordersArchive(
+        orderBy: _ @orderBy(columns: ["createdAt", "closedAt", "id"])
+    ): [Order!]!
+        @paginate(defaultCount: 10, scopes: ["onlyTrashed"])
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:archive.order.list"])
+
+    "Получение статусов по заявкам"
+    orderStatuses: [SimpleData!]!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение статусов по оплате заявки"
+    orderPaymentStatuses: [SimpleData!]!
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение свободного времени для заявки (актуально для \"сервисов\" и \"кузовного ремонта\")"
+    orderFreeTime(input: OrderFreeTimeInput): [FreeTimeData]
+        @middleware(checks: ["set.locale"])
+
+    "Получение кол-во новых заявок"
+    orderCountNew: SimpleData
+        @middleware(checks: ["auth:graph_admin"])
+
+    "Генерация счета для заявки"
+    orderGenerateBill(id: ID @eq): Response
+
+    "Генерация акта для заявки"
+    orderGenerateAct(id: ID @eq): Response
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание заявки на страхование"
+    orderInsuranceCreate(input: OrderInsuranceCreateInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Создание заявки на кредитование"
+    orderCreditCreate(input: OrderCreditCreateInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Создание заявки на сервис (ТО, диагностика, шиномонтаж, другие работы)"
+    orderServiceCreate(input: OrderServiceCreateInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Создание заявки на кузовной ремонт"
+    orderBodyCreate(input: OrderBodyCreateInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Создание заявки на запчасти"
+    orderSparesCreate(input: OrderSparesCreateInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Оценка заявки"
+    orderRate(input: OrderRateInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_user"])
+
+    "Смена статуса заявки"
+    orderChangeStatus(input: OrderChangeStatusInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_admin",  "permission:order.edit"])
+
+    "Смена статуса оплаты заявки"
+    orderChangePaymentStatus(input: OrderChangePaymetStatusInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_admin",  "permission:order.edit"])
+
+    "Установить фактическую дату для заявки"
+    orderSetRealDate(input: OrderSetRealDateInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_admin",  "permission:order.edit"])
+
+    "Привязать админа к заявке"
+    orderAttachAdmin(input: OrderAttachAdminInput! @spread): Order!
+        @middleware(checks: ["set.locale", "auth:graph_admin",  "permission:order.edit"])
+
+    "Удаление заявки (soft)"
+    orderDelete(id: ID!): Response!
+        @middleware(checks: ["set.locale", "auth:graph_admin",  "permission:order.delete"])
+
+    "Востановить заявку (после удаления)"
+    orderRestore(id: ID!): Order!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:order.restore"])
+
+    "Привязывание файл к заявки (счет, акт)"
+    orderAttachFile(
+        id: ID!
+        type: OrderFileType
+        file: [Upload] @rules(apply: ["file"])
+    ): File!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:order.edit"])
+}
+# === INPUT ===
+"Поля для создании заявки на страховку"
+input OrderInsuranceCreateInput {
+    serviceId: ID! @rules(apply: ["exists:services,id"])
+    franchiseId: ID! @rules(apply: ["exists:insurance_franchise,id"])
+    communication: String!
+    brandId: ID @rules(apply: ["nullable", "exists:car_brands,id"])
+    modelId: ID @rules(apply: ["nullable", "exists:car_models,id"])
+    driverAgeId: ID @rules(apply: ["nullable", "exists:driver_ages,id"])
+    insuranceCompany: String
+    countPayments: Int
+    carCost: Int
+    regionId: ID @rules(apply: ["nullable", "exists:regions,id"])
+    cityId: ID @rules(apply: ["nullable", "exists:cities,id"])
+    privilegesId: ID @rules(apply: ["nullable", "exists:privileges,id"])
+    transportTypeId: ID @rules(apply: ["nullable", "exists:transport_types,id"])
+    durationId: ID @rules(apply: ["nullable", "exists:service_durations,id"])
+    useTaxi: Boolean @rules(apply: ["nullable"])
+}
+"Поля для создании заявки на кредитование"
+input OrderCreditCreateInput {
+    communication: String!
+    brandId: ID! @rules(apply: ["exists:car_brands,id"])
+    modelId: ID! @rules(apply: ["exists:car_models,id"])
+    firstInstallment: Int!
+    carCost: Int!
+    typeUser: Int!
+    durationId: ID! @rules(apply: ["exists:service_durations,id"])
+}
+"Поля для создании заявки на сервис (ТО, диагностика, шиномонтаж, другие работы)"
+input OrderServiceCreateInput {
+    carId: ID! @rules(apply: ["exists:user_cars,id"])
+    serviceId: ID! @rules(apply: ["exists:services,id"])
+    dealershipId: ID! @rules(apply: ["exists:dealerships,id"])
+    "id рекомендации, на основе которой создается заявка"
+    recommendationId: ID @rules(apply: ["nullable", "exists:recommendations,id"])
+    mileage: Int!
+    communication: String!
+    comment: String
+    "дата в милисекундах (строковой тип , т.к. сильно большой Int)"
+    date: String!
+    "время в милисекундах от начала дня (строковой тип , т.к. сильно большой Int)"
+    time: String!
+    "uuid поста, приходит с данными при запросе на свободное време"
+    postUuid: String! @rules(apply: ["exists:aa_posts,uuid"])
+}
+"Поля для создании заявки на кузовной ремонт"
+input OrderBodyCreateInput {
+    carId: ID! @rules(apply: ["exists:user_cars,id"])
+    dealershipId: ID! @rules(apply: ["exists:dealerships,id"])
+    "id рекомендации, на основе которой создается заявка"
+    recommendationId: ID @rules(apply: ["nullable", "exists:recommendations,id"])
+    communication: String!
+    comment: String
+    "дата в милисекундах (строковой тип , т.к. сильно большой Int)"
+    date: String!
+    "время в милисекундах от начала дня (строковой тип , т.к. сильно большой Int)"
+    time: String!
+    "uuid поста, приходит с данными при запросе на свободное време"
+    postUuid: String! @rules(apply: ["exists:aa_posts,uuid"])
+}
+"Получение свободного времени для заявки (актуально для \"сервисов\" и \"кузовного ремонта\")"
+input OrderFreeTimeInput {
+    serviceId: ID! @rules(apply: ["exists:services,id"])
+    dealershipId: ID! @rules(apply: ["exists:dealerships,id"])
+    "дата в милисекундах (строковой тип , т.к. сильно большой Int)"
+    date: String!
+    human: Boolean
+}
+"Поля для создании заявки на запчасти"
+input OrderSparesCreateInput {
+    carId: ID! @rules(apply: ["exists:user_cars,id"])
+    "id рекомендации, на основе которой создается заявка"
+    recommendationId: ID @rules(apply: ["nullable", "exists:recommendations,id"])
+    communication: String!
+    comment: String!
+}
+"Поля для оценки заявки"
+input OrderRateInput {
+    id: ID!
+    rate: Int! @rules(apply: ["between:1,5"])
+    comment: String
+}
+"Поля для смена статуса заявки"
+input OrderChangeStatusInput {
+    id: ID!
+    status: OrderStatus
+}
+"Поля для смена статуса оплаьы заявки"
+input OrderChangePaymetStatusInput {
+    id: ID!
+    "статус оплаты"
+    status: OrderPaymentState
+}
+"Поля для редактирования фактического времени"
+input OrderSetRealDateInput {
+    id: ID!
+    "дата (timestamp, string)"
+    realDate: String!
+}
+"Поля для привязывания админа к заявки"
+input OrderAttachAdminInput {
+    id: ID!
+    adminId: ID @rules(apply: ["nullable", "exists:admins,id"])
+}
+# === TYPE ===
+"Заявка"
+type Order {
+    id: ID!
+    uuid: String
+    user: User! @belongsTo(relation: "user")
+    service: Service! @belongsTo(relation: "service")
+    "статус заявки"
+    status: OrderStatus
+    "тип заявки"
+    type: OrderType
+    "статус (состояние) оплаты заявки"
+    paymentStatus: OrderPaymentState @rename(attribute: "payment_status")
+    "способ связи"
+    communication: String!
+    admin: Admin @belongsTo(relation: "admin")
+    additions: Additions @hasOne(relation: "additions")
+    "относится ли заявка к системе (можно ли ей манипулировать)"
+    relatedSystem: Boolean
+    "привязаный файл (счет)"
+    billFile: File @morphOne(relation: "billFile")
+    "привязаный файл (акт)"
+    actFile: File @morphOne(relation: "actFile")
+    "присланные доп. работы для этой заявки"
+    agreements: [Agreement] @hasMany(relation: "agreements")
+    "доп. работы которые были приняты для этой заявки"
+    agreementsAccept: [Agreement] @hasMany(relation: "agreementsAccept")
+    closedAt: DateTime @rename(attribute: "closed_at")
+    deletedAt: DateTime @rename(attribute: "deleted_at")
+    createdAt: DateTime! @rename(attribute: "created_at")
+    updatedAt: DateTime! @rename(attribute: "updated_at")
+}
+"Доп. данные к заявке, которые варьируються от сервиса"
+type Additions {
+    "франшиза (актуальна для страховок)"
+    franchise: InsuranceFranchise @belongsTo(relation: "franchise")
+    "бренд авто"
+    brand: Brand @belongsTo(relation: "brand")
+    "модель авто"
+    model: Model @belongsTo(relation: "model")
+    "возраст водителя  (актуальна для страховки каско)"
+    driverAge: DriverAge @belongsTo(relation: "driverAge")
+    "область (актуальна для страховки каско)"
+    region: Region @belongsTo(relation: "region")
+    "горрод (актуальна для страховки каско)"
+    city: City @belongsTo(relation: "city")
+    "льготы (актуальна для страховки (го,дго))"
+    privileges: Privileges @belongsTo(relation: "privileges")
+    "тип транспорта (актуальна для страховки (го,дго))"
+    transportType: TransportType @belongsTo(relation: "transportType")
+    "срок действия/кредитования (актуальна для страховки (го,дго) / кредитования)"
+    duration: Duration @belongsTo(relation: "duration")
+    "дилерский центр (актуальна для сервисов)"
+    dealership: Dealership @belongsTo(relation: "dealership")
+    "рекомендация, на основе которой была создана данная заявка"
+    recommendation: Recommendation @belongsTo(relation: "recommendation")
+#    "доп. соглашение , на основе которой была создана данная заявка"
+#    agreement: Agreement @belongsTo(relation: "agreement")
+    "авто (актуальна для сервисов)"
+    car: Car @belongsTo(relation: "car")
+    "страховая компания (актуальна для страховки каско)"
+    insuranceCompany: String @rename(attribute: "insurance_company")
+    "кол-во платежей (актуальна для страховки каско)"
+    countPayments: Int  @rename(attribute: "count_pay")
+    "цена авто (актуальна для страховки каско / кредитования)"
+    carCost: String  @rename(attribute: "car_cost")
+    "использовалось в такси (актуальна для страховки (го,дго))"
+    useTaxi: Boolean! @rename(attribute: "use_as_taxi")
+    "тип пользователя (актуальна для кредитования)"
+    typeUser: Int @rename(attribute: "type_user")
+    "первый взнос в процентах (актуально для кредитования)"
+    firstInstallment: Int @rename(attribute: "first_installment_percent")
+    "оценка (актуально для сервисов)"
+    rate: Int
+    "комментарий к оценки (обязателен если оценка >= 3)"
+    rateComment: String @rename(attribute: "rate_comment")
+    "на какую дату заявка, желаемое время (актуален для сервисов)"
+    onDate: DateTime @rename(attribute: "on_date")
+    "на какую дату заявка, фактическое время (актуален для сервисов)"
+    realDate: DateTime @rename(attribute: "real_date")
+    "комментарий к заявке (актуален для сервисов)"
+    comment: String
+    "укзаные пробег авто (актуален для сервисов)"
+    mileage: Int
+    "ответсвенный сотрудник , со стороны АА (актуальна для сервисов, кузовного, заказ запчастей)"
+    responsible: String
+}
+# === ENUM ===
+"Статусы заявок"
+enum OrderStatus {
+    "создана пользователем"
+    DRAFT @enum(value: 0)
+    "принята в работу (AA), проставлен исполнитель (SYS)"
+    CREATED @enum(value: 1)
+    "в работе (АА, SYS)"
+    IN_PROCESS @enum(value: 2)
+    "выполнена (выполнена, но не оплачена или частично оплачена)"
+    DONE @enum(value: 3)
+    "отклонена (SYS)"
+    REJECT @enum(value: 4)
+    "закрыта (выполнена и оплачена)"
+    CLOSE @enum(value: 5)
+}
+"Статусы оплаты заявок"
+enum OrderPaymentState {
+    "нет статуса"
+    NONE @enum(value: 0)
+    "не оплачено"
+    NOT @enum(value: 1)
+    "частично"
+    PART @enum(value: 2)
+    "полностью"
+    FULL @enum(value: 3)
+}
+"Типы привязаных файлов заявок"
+enum OrderFileType {
+    "счет"
+    bill @enum(value: "bill")
+    "акт"
+    act @enum(value: "act")
+}
+"Периоды заявок"
+enum OrderPeriodType {
+    all @enum(value: "all")
+    today @enum(value: "today")
+    incoming @enum(value: "incoming")
+}
+
+"Типы заявок"
+enum OrderType {
+    "обычная"
+    ordinary @enum(value: "ordinary")
+    "созданая по рекомендации"
+    recommend @enum(value: "recommend")
+    "созданая по согласованию"
+    agreement @enum(value: "agreement")
+}
+
+type Array{
+    key: Int
+}
+
+"Данные по свободным временным меткам"
+type FreeTimeData{
+    "id поста , на который можно записаться"
+    postUuid: String!
+    "время"
+    humanTime: String!
+    "кол-во милисекунд от начала дня до времени"
+    milliseconds: Int!
+}

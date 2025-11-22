@@ -1,0 +1,87 @@
+# === QUERY ===
+extend type Query {
+    "Получение списка \"группа запчастей\""
+    sparesGroups(
+        active: Boolean @eq
+        "фильтр по бренду"
+        brandId: ID @eq(key: "brand_id")
+    ):  [SparesGroup!]!
+        @all(model: "App\\Models\\Catalogs\\Calc\\SparesGroup")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+
+    "Получение \"группы запчастей\" (калькулятор)"
+    sparesGroup(
+        id: ID @eq
+    ):  SparesGroup
+        @find(model: "App\\Models\\Catalogs\\Calc\\SparesGroup")
+        @middleware(checks: ["set.locale", "auth:graph_admin"])
+}
+# === MUTATION ===
+extend type Mutation {
+    "Создание \"группы запчастей\" (калькулятор)"
+    sparesGroupCreate(input: SparesGroupCreateInput! @spread): SparesGroup!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.create"])
+
+    "Редактирование \"группы запчастей\" (калькулятор)"
+    sparesGroupEdit(input: SparesGroupEditInput! @spread): SparesGroup!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+
+    "Переключение активно/неактивно"
+    sparesGroupToggleActive(id: ID!): SparesGroup!
+        @middleware(checks: ["set.locale", "auth:graph_admin", "permission:calc.catalog.edit"])
+}
+# === INPUT ===
+"Поля для создания \"группы запчастей\" (калькулятор)"
+input SparesGroupCreateInput {
+    active: Boolean
+    sort: Int
+    type: TypeSparesGroup!
+    translations: [SparesGroupTranslationsInput!]!
+    brandId: ID @rules(apply: ["exists:car_brands,id"])
+}
+"Поля для редактирования \"группы запчастей\" (калькулятор)"
+input SparesGroupEditInput {
+    id: ID!
+    active: Boolean
+    sort: Int
+    type: TypeSparesGroup
+    translations: [SparesGroupTranslationsInput!]
+    brandId: ID @rules(apply: ["exists:car_brands,id"])
+}
+"Поля для переводов \"группы запчастей\" (калькулятор)"
+input SparesGroupTranslationsInput {
+    lang: String! @rules(apply: ["exists:languages,slug"])
+    name: String! @rules(apply: ["required", "min:3"])
+    unit: String!
+}
+# === TYPE ===
+"\"Группа запчастей\""
+type SparesGroup {
+    id: ID!
+    active: Boolean!
+    sort: Int!
+    type: TypeSparesGroup!
+    "все переводы"
+    translations: [SparesGroupTranslations!] @hasMany(relation: "translations")
+    "текущий перевод по локали"
+    current: SparesGroupTranslations! @hasOne(relation: "current")
+    brand: Brand @belongsTo(relation: "brand")
+    "привязаные запчасти"
+    spares: [Spares] @hasMany(relation: "spares")
+}
+"Переводы \"Группа запчастей\""
+type SparesGroupTranslations {
+    id: ID!
+    name: String!
+    lang: String!
+    unit: String!
+}
+# === ENUM ===
+"Типы измерений для группы"
+enum TypeSparesGroup {
+    "кол-во"
+    qty @enum(value: 1)
+    "обьем"
+    volume @enum(value: 2)
+}
+

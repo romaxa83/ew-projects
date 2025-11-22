@@ -1,0 +1,26 @@
+Api E-commerce
+https://ecomm-dev-api.haulk.app/docs#authenticating-requests
+
+
+
+При деплои
+- переноса данных
+
+// prod
+HAULK_DB_CONNECTION=haulk
+HAULK_DB_HOST=haulkapp-pg-db.cn3jkemlds2a.us-east-2.rds.amazonaws.com
+HAULK_DB_PORT=5432
+HAULK_DB_DATABASE=haulkapp_db
+HAULK_DB_USERNAME=haulkapp_db_u
+HAULK_DB_PASSWORD=E15Efruxq6OKnOwKr8F9TSji
+
+BASE_HAULK_HOST=https://crm.api.haulk.app
+BASE_HAULK_TOKEN=wdpGBBBBlLS9sMjAfeDxgTHplwovTM5ePiKgJcHULnS1X1r33To9CVmNfz8Yb12Q
+
+
+- php artisan helper:add_profit_to_order
+
+// поправить секвенцию
+SELECT setval('bs_order_type_of_works_id_seq', COALESCE((SELECT MAX(id)+1 FROM bs_order_type_of_works), 1), false);
+SELECT setval('bs_order_type_of_work_inventories_id_seq', COALESCE((SELECT MAX(id)+1 FROM bs_order_type_of_work_inventories), 1), false);
+SELECT setval('translations_id_seq', COALESCE((SELECT MAX(id)+1 FROM translations), 1), false);

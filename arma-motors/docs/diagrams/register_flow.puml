@@ -1,0 +1,142 @@
+@startuml
+
+title
+Регистрация в мп Armo Motors
+end title
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+participant Sms_service
+participant "AA (1C)"
+
+== REGISTRATION ==
+
+group #LightBlue first step
+
+Mobile -> Backend: api/register/first-step
+
+rnote over Backend
+data: [
+    name*,
+    phone*,
+    password*,
+    email,
+]
+endrnote
+
+rnote over Backend
+create user (role user, status = 1)
+endrnote
+
+rnote over Backend
+generate sms_code
+endrnote
+
+Backend -> Sms_service: request {'phone', 'sms_code'}
+... **some time for response** ...
+Sms_service -> Mobile: sms {'sms_code'}
+
+end
+
+group #LightBlue second step
+
+Mobile -> Backend: api/phone-verify {'phone', 'sms_code'}
+
+rnote over Backend
+check sms_code
+endrnote
+
+group #7ad378 SUCCESS
+Backend -> Mobile: response {'access_token', 'refresh_token'}
+end
+
+group  #FFBBBB ERROR
+Backend -> Mobile: response {'error_code'}
+
+note left of Backend
+error_code:
+1 - некорректный sms-код (три попытки)
+2 - sms-код стух
+3 - пользователь не найден
+end note
+
+note right of Mobile
+запрос на повторную
+генерцию sms-кода
+end note
+
+Mobile -> Backend: api/phone-verify-request {'phone'}
+
+Backend -> Sms_service: request {'phone', 'sms_code'}
+... **some time for response** ...
+Sms_service -> Mobile: sms {'sms_code'}
+
+end
+
+end
+
+Backend -> "AA (1C)" : api/1c/verify-user
+... **some time for response** ...
+Backend <- "AA (1C)" : api/1c/response
+
+group #LightBlue third step
+
+Mobile -> Backend: api/user/set-legal-entity-code {'code'}
+
+rnote over Backend
+set auth user "legal entity code"
+endrnote
+
+Mobile -> Backend: api/user/get-cars
+rnote over Backend
+get user cars from 1c (if exists)
+endrnote
+
+Mobile -> Backend: api/user/add-cars
+
+end
+== LOGIN ==
+
+Mobile -> Backend: api/login {phone*, password*}
+
+group #7ad378 SUCCESS
+Backend -> Mobile: response {'access_token', 'refresh_token'}
+end
+
+group  #FFBBBB ERROR
+Backend -> Mobile: response {'error_code'}
+end
+
+== RESET PASSWORD ==
+
+Mobile -> Backend: api/reset-password-request {phone*}
+
+rnote over Backend
+generate sms_code
+endrnote
+
+Backend -> Sms_service: request {'phone', 'sms_code'}
+... **some time for response** ...
+Sms_service -> Mobile: sms {'sms_code'}
+
+Mobile -> Backend: api/reset-password-phone-verify {'phone', 'sms_code'}
+
+rnote over Backend
+check sms_code
+endrnote
+
+group #7ad378 SUCCESS
+Backend -> Mobile: response {'statusCode', 'message'}
+
+Mobile -> Backend: api/reset-password-new {'password*'}
+
+Backend -> Mobile: response {'statusCode', 'message'}
+end
+
+group  #FFBBBB ERROR
+Backend -> Mobile: response {'error_code'}
+end
+
+@enduml
