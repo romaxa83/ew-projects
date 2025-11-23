@@ -1,0 +1,29 @@
+{
+    "name": "wezom-cms/amo-crm",
+    "description": "Wezom CMS amo crm module",
+    "type": "library",
+    "version": "8.1.0",
+    "require": {
+        "wezom-cms/core": "^8.1",
+        "amocrm/amocrm-api-library": "0.7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\AmoCrm\\": "src/",
+            "WezomCms\\AmoCrm\\Database\\Factories\\": "database/factories",
+            "WezomCms\\AmoCrm\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WezomCms\\AmoCrm\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\AmoCrm\\AmoCrmServiceProvider"
+            ]
+        }
+    }
+}

@@ -1,0 +1,119 @@
+@startuml
+
+title
+<u>Flow sms verify
+end title
+
+left header
+Wezom
+endheader
+
+skinparam {
+    TitleFontSize 25
+    TitleFontName Courier
+    TitleFontStyle underscore
+    ArrowColor #033649
+    ArrowFontColor #24292e
+    BackgroundColor #f5f5f5
+    BorderColor black
+    RoundCorner 25
+    SequenceLifeLineBorderColor #033649
+    ParticipantFontSize 17
+    BoxPadding 50
+    SequenceBoxBorderColor '
+}
+
+skinparam note {
+    BackgroundColor gold
+    BorderColor gold
+}
+
+skinparam group {
+    BackgroundColor red
+    BorderColor black
+}
+
+skinparam participant {
+    BorderColor black
+    BackgroundColor tomato
+}
+
+
+box "App" #LightBlue
+participant Mobile
+participant Backend
+end box
+participant SmsService
+
+
+Mobile -> Backend: request/sms-verify
+
+rnote over Mobile
+data {
+    "phone"
+    OR
+    "accessToken"
+}
+endrnote
+
+
+rnote over Backend
+save phone
+generate and save smsCode
+generate and save smsToken (expired ~ 5min)
+endrnote
+
+Backend -> SmsService: send {"smsCode"}
+Backend -> Mobile: response {"smsToken"}
+
+SmsService -> Mobile: response {"smsCode"}
+
+Mobile -> Backend: request/sms-check
+rnote over Mobile
+data {
+    "smsCode"
+    "smsToken"
+}
+endrnote
+
+rnote over Backend
+find row into db by "smsToken"
+check "smsCode"
+endrnote
+
+rnote over Backend
+generate "actionToken" (expired ~ 60min)
+endrnote
+
+group #7ad378 SUCCESS
+Backend -> Mobile: response {"actionToken"}
+end
+
+group  #FFBBBB ERROR
+Backend -> Mobile: response {"errorCode", "message"}
+end
+
+... **some time for response** ...
+
+Mobile -> Backend:  some request
+
+rnote over Mobile
+data {
+    ....
+    "actionToken"
+    .......
+}
+endrnote
+
+rnote over Backend
+if find row by "actionToken"
+I perceive the data as verified
+them remove "actionToken"
+endrnote
+
+legend left
+<#f5f5f5,#172b3a>|= Project |= Version |= Creator |= Status |= Created_at |= Updated_at |
+<#f5f5f5>| Oovii | 1.0 | Rodomanov R. | stable | 04.02.2022 | 04.02.2022 |
+endlegend
+
+@enduml

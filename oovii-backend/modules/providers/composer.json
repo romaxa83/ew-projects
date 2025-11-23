@@ -1,0 +1,27 @@
+{
+    "name": "wezom-cms/providers",
+    "description": "Wezom CMS providers module",
+    "type": "library",
+    "version": "8.1.1",
+    "require": {
+        "wezom-cms/core": "^8.1"
+    },
+    "suggest": {
+        "ext-soap": "Required to use turbosms notification channel",
+        "yakimka/laravel-notification-channel-turbosms": "Required to use turbosms notification channel"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Providers\\": "src/",
+            "WezomCms\\Providers\\Database\\Factories\\": "database/factories/",
+            "WezomCms\\Providers\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Providers\\ProvidersServiceProvider"
+            ]
+        }
+    }
+}

@@ -1,0 +1,95 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.0",
+        "antistress-store/cdek-sdk-v2": "^1.0",
+        "darkaonline/l5-swagger": "^8.1",
+        "doctrine/dbal": "^3.3",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "laravel/framework": "^8.75",
+        "laravel/passport": "^10.1",
+        "laravel/sanctum": "^2.11",
+        "laravel/telescope": "^4.7",
+        "laravel/tinker": "^2.5",
+        "maatwebsite/excel": "^3.1",
+        "mcamara/laravel-localization": "^1.6",
+        "mtownsend/response-xml": "^2.1",
+        "wezom-cms/amo-crm": "^8.1",
+        "wezom-cms/catalog": "^8.1",
+        "wezom-cms/core": "^8.1",
+        "wezom-cms/firebase": "^8.0",
+        "wezom-cms/imports": "^8.0",
+        "wezom-cms/orders": "^8.1",
+        "wezom-cms/pages": "^8.1",
+        "wezom-cms/product-reviews": "^8.1",
+        "wezom-cms/providers": "^8.1",
+        "wezom-cms/sms-verify": "^8.0",
+        "wezom-cms/telegram-bot": "^8.0",
+        "wezom-cms/translates": "^8.1",
+        "wezom-cms/users": "^8.1"
+    },
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.11",
+        "facade/ignition": "^2.5",
+        "fakerphp/faker": "^1.9.1",
+        "laravel/sail": "^1.0.1",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^5.10",
+        "phpunit/phpunit": "^9.5.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "ide": [
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta",
+            "@php artisan ide-helper:models -N"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./modules/*"
+        }
+    ]
+}

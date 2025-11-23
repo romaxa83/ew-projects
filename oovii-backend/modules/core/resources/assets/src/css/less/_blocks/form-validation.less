@@ -1,0 +1,17 @@
+
+.is-invalid {
+    .form-control {
+        border-color: @danger;
+    }
+}
+
+.invalid-feedback {
+  color: @danger;
+  display: none;
+  margin-top: 0.25rem;
+}
+
+.is-invalid .invalid-feedback,
+ .is-invalid .invalid-tooltip {
+  display: block;
+}

@@ -1,0 +1,68 @@
+{
+    "name": "wezom-cms/core",
+    "description": "Wezom CMS Core",
+    "type": "library",
+    "version": "8.1.3",
+    "authors": [
+        {
+            "name": "Protsiv Andrey",
+            "email": "protsiv.a@wezom.com.ua"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "ext-json": "*",
+        "artesaos/seotools": "^0.19",
+        "astrotomic/laravel-translatable": "^11.9",
+        "bensampo/laravel-enum": "^3.3",
+        "cviebrock/eloquent-sluggable": "^8.0",
+        "cyrildewit/eloquent-viewable": "^6.0",
+        "genealabs/laravel-caffeine": "^8.0",
+        "intervention/image": "^2.5",
+        "jaybizzle/laravel-crawler-detect": "^1.2",
+        "johannebert/laravel-spam-protector": "^6.0",
+        "laracasts/flash": "^3.2",
+        "laravel/framework": "^8.0",
+        "laravel/helpers": "^1.4",
+        "laravelcollective/html": "^6.2",
+        "lavary/laravel-menu": "^1.7",
+        "livewire/livewire": "^2.4",
+        "mcamara/laravel-localization": "^1.3",
+        "p-andrey/tentacles": "^1.3",
+        "proengsoft/laravel-jsvalidation": "^4.4.0",
+        "spatie/schema-org": "^3.1",
+        "tightenco/ziggy": "^1.0",
+        "tucker-eric/eloquentfilter": "^2.4",
+        "unisharp/laravel-filemanager": "^2.2"
+    },
+    "suggest": {
+        "google/cloud-translate": "Required to use google translator."
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Core\\": "src/",
+            "WezomCms\\Core\\Database\\Factories\\": "database/factories"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WezomCms\\Core\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Core\\CoreServiceProvider"
+            ],
+            "aliases": {
+                "Flash": "WezomCms\\Core\\Facades\\Flash",
+                "NotifyMessage": "WezomCms\\Core\\Facades\\NotifyMessage",
+                "SidebarMenu": "WezomCms\\Core\\Facades\\SidebarMenu",
+                "RouteRegistrar": "WezomCms\\Core\\Facades\\RouteRegistrar"
+            }
+        }
+    }
+}

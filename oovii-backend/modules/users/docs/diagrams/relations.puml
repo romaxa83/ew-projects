@@ -1,0 +1,26 @@
+@startuml
+
+title
+<u>Users</u>
+end title
+
+left header
+Oovii
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+
+    package UsersBound #7ad378 {
+
+        class User <<(M,#7ad378)>> #tomato {
+             .. users ..
+        }
+    }
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+
+title
+Providers
+end title
+
+left header
+Oovii
+endheader
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+
+    package ProviderBound #7ad378 {
+
+        class Provider <<(M,#7ad378)>> #tomato {
+             .. providers ..
+
+            adminProfile(): BelongsTo
+        }
+    }
+
+    class Admin <<(E,#7ad378)>> {
+        .. administrators ..
+    }
+
+
+Provider -up[#black]-> Admin :adminProfile()
+
+@enduml

@@ -1,0 +1,22 @@
+{
+    "name": "wezom-cms/imports",
+    "description": "Wezom imports",
+    "type": "library",
+    "version": "8.0.0",
+    "require": {
+        "wezom-cms/core": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Imports\\": "src/",
+            "WezomCms\\Imports\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Imports\\ImportServiceProvider"
+            ]
+        }
+    }
+}

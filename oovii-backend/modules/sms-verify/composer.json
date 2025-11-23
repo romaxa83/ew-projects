@@ -1,0 +1,23 @@
+{
+    "name": "wezom-cms/sms-verify",
+    "description": "Wezom CMS sms-verify",
+    "type": "library",
+    "version": "8.0.0",
+    "require": {
+        "wezom-cms/core": "^8.1",
+        "telegram-bot/api": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\SmsVerify\\": "src/",
+            "WezomCms\\SmsVerify\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\SmsVerify\\SmsVerifyServiceProvider"
+            ]
+        }
+    }
+}

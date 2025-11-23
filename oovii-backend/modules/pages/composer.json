@@ -1,0 +1,28 @@
+{
+    "name": "wezom-cms/pages",
+    "description": "Wezom CMS pages module",
+    "type": "library",
+    "version": "8.1.0",
+    "authors": [
+        {
+            "name": "Protsiv Andrey",
+            "email": "protsiv.a@wezom.com.ua"
+        }
+    ],
+    "require": {
+        "wezom-cms/core": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Pages\\": "src/",
+            "WezomCms\\Pages\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Pages\\PagesServiceProvider"
+            ]
+        }
+    }
+}

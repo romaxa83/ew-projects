@@ -1,0 +1,28 @@
+{
+    "name": "wezom-cms/translates",
+    "description": "Wezom CMS translates module",
+    "type": "library",
+    "version": "8.1.0",
+    "authors": [
+        {
+            "name": "Protsiv Andrey",
+            "email": "protsiv.a@wezom.com.ua"
+        }
+    ],
+    "require": {
+        "wezom-cms/core": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Translates\\": "src/",
+            "WezomCms\\Translates\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Translates\\TranslatesServiceProvider"
+            ]
+        }
+    }
+}

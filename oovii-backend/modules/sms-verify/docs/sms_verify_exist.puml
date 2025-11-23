@@ -1,0 +1,82 @@
+@startuml
+
+title
+<u>Проверка токенов ( метод checkExistRecord($phony) )
+end title
+
+left header
+Wezom
+endheader
+
+skinparam title {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam header {
+    FontName Courier
+    FontColor f5f5f5
+}
+
+skinparam  {
+    FontSize 13
+    FontName Courier
+    BorderColor black
+    BackgroundColor 172b3a
+    ArrowFontName Impact
+    ArrowColor white
+    ArrowFontColor f5f5f5
+    ArrowFontSize 20
+    ArrowFontSize<<Flow>> 10
+    ArrowThickness 16
+}
+
+skinparam activity {
+    StartColor f5f5f5
+    BarColor SaddleBrown
+    EndColor f5f5f5
+    BackgroundColor Peru
+    BackgroundColor<< Event >> Olive
+    BackgroundColor<< Exception >> Tomato
+    BorderColor<< Exception >> Yellow
+    BackgroundColor<< AA >> SaddleBrown
+    BorderColor Peru
+    DiamondBackgroundColor Peru
+    DiamondBorderColor Peru
+}
+
+skinparam note {
+    BorderColor 172b3a
+}
+
+skinparam legend {
+  FontSize 12
+  BackGroundColor f5f5f5
+  Padding 5000
+}
+
+start
+:По телефону получаем запись в таблице <size:15><color:f5f5f5>sms_verify;
+if (проверяем наличие <size:15><color:f5f5f5>actionToken) then (true)
+    if (проверяем \n протух ли он) then (true)
+    :удаляем и создаем \nновую запись;
+    else (false)
+    <<Exception>>:кидаем исключение \nчто активен actionToken;
+    endif
+else (false)
+:переходим к smsToken;
+ if (проверяем \n протух ли он) then (true)
+    :удаляем и создаем \nновую запись;
+    else (false)
+    <<Exception>>:кидаем исключение \nчто активен smsToken;
+    endif
+endif
+stop
+
+legend left
+<#f5f5f5,#172b3a>|= Project |= Version |= Creator |= Status |= Created_at |= Updated_at |
+<#f5f5f5>| Oovii | 1.0 | Rodomanov R. | stable | 04.02.2022 | 04.02.2022 |
+endlegend
+
+@enduml
+

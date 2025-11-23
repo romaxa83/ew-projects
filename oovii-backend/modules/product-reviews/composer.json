@@ -1,0 +1,29 @@
+{
+    "name": "wezom-cms/product-reviews",
+    "description": "Wezom CMS product reviews module",
+    "type": "library",
+    "version": "8.1.0",
+    "authors": [
+        {
+            "name": "Chaplygin Dmitriy",
+            "email": "chaplygin.d@wezom.com.ua"
+        }
+    ],
+    "require": {
+        "wezom-cms/core": "^8.1",
+        "wezom-cms/catalog": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\ProductReviews\\": "src/",
+            "WezomCms\\ProductReviews\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\ProductReviews\\ProductReviewsServiceProvider"
+            ]
+        }
+    }
+}

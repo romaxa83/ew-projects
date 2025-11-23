@@ -1,0 +1,21 @@
+{
+    "name": "wezom-cms/firebase",
+    "description": "Wezom firebase",
+    "type": "library",
+    "version": "8.0.0",
+    "require": {
+        "wezom-cms/core": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Firebase\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Firebase\\FirebaseServiceProvider"
+            ]
+        }
+    }
+}

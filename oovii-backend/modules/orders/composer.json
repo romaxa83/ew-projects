@@ -1,0 +1,37 @@
+{
+    "name": "wezom-cms/orders",
+    "description": "Wezom CMS orders module",
+    "type": "library",
+    "version": "8.1.0",
+    "authors": [
+        {
+            "name": "Protsiv Andrey",
+            "email": "protsiv.a@wezom.com.ua"
+        }
+    ],
+    "require": {
+        "wezom-cms/core": "^8.1",
+        "wezom-cms/catalog": "^8.1"
+    },
+    "suggest": {
+        "serj1chen/nova-poshta-sdk-php": "Required to use nova poshta api",
+        "wezom-cms/users": "^8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "WezomCms\\Orders\\": "src/",
+            "WezomCms\\Orders\\Database\\Factories\\": "database/factories",
+            "WezomCms\\Orders\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "WezomCms\\Orders\\OrdersServiceProvider"
+            ],
+            "aliases": {
+                "Cart": "WezomCms\\Orders\\Facades\\Cart"
+            }
+        }
+    }
+}

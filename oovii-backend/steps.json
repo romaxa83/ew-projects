@@ -1,0 +1,26 @@
+{
+    "develop": [
+        "git reset --hard",
+        "git checkout develop",
+        "git pull origin develop",
+        "composer install",
+        "php artisan cache:clear",
+        "php artisan config:cache",
+        "php artisan queue:restart",
+        "php artisan l5-swagger:generate",
+        "php artisan migrate",
+        "php artisan db:seed",
+        "php artisan cmd:set-data",
+        "php artisan translations:scan"
+    ],
+    "master": [
+        "git reset --hard HEAD",
+        "git checkout master",
+        "git pull origin master",
+        "composer80 install --no-dev",
+        "php80 artisan cms:install --force --no-interaction",
+        "php80 artisan optimize:clear",
+        "php80 artisan route:trans:cache",
+        "php80 artisan queue:restart"
+    ]
+}

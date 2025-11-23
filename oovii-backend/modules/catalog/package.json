@@ -1,0 +1,39 @@
+{
+    "name": "catalog",
+    "description": "A Vue.js project",
+    "version": "2.0.0",
+    "author": "Protsiv Andrey <protsiv.a@wezom.com.ua>",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "watch": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
+        "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not ie <= 8"
+    ],
+    "devDependencies": {
+        "babel-core": "^6.26.3",
+        "babel-loader": "^7.1.2",
+        "babel-plugin-syntax-dynamic-import": "^6.18.0",
+        "babel-preset-env": "^1.6.0",
+        "babel-preset-stage-3": "^6.24.1",
+        "bootstrap-vue": "^2.0.0-rc.16",
+        "cross-env": "^5.0.5",
+        "css-loader": "^0.28.7",
+        "file-loader": "^1.1.4",
+        "uglifyjs-webpack-plugin": "^1.0.0-beta.3",
+        "vee-validate": "^2.2.0",
+        "vue": "^2.6.10",
+        "vue-color": "^2.7.0",
+        "vue-loader": "^13.0.5",
+        "vue-loading-overlay": "^2.2.2",
+        "vue-template-compiler": "^2.6.10",
+        "webpack": "^3.6.0"
+    },
+    "dependencies": {
+        "npm": "^6.9.0"
+    }
+}

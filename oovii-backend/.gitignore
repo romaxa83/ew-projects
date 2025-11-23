@@ -1,0 +1,65 @@
+## Project
+/public/svg
+.env
+/public/hot
+/public/storage
+/public/mix-manifest.json
+/storage/*.key
+Homestead.json
+Homestead.yaml
+.phpunit.result.cache
+
+## Logs
+#npm-debug.log
+#yarn-error.log
+*.log*
+
+## PhpShtorm
+.idea/
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+## Nodejs
+.npm/
+node_modules/
+.cache/
+
+## Composer
+/vendor
+
+## Sitemap
+/public/sitemap.xml
+
+## Webpack
+webpack.stats.json
+
+## Database
+thumbs.db
+
+# From module/ui
+/.cache
+/.design
+/.idea
+/.phpstorm.meta.php
+/_ide_helper.php
+/bash.exe.stackdump
+/public/.build-temp
+/public/build
+/public/vendor
+/public/*.txt
+/public/*.xml
+/public/*.html
+/storage/debugbar
+
+/public/docs
+/resources/docs
+/public/robots.txt
+
+/storage/redis
+/storage/db
+/storage/api-docs
+.env.testing
+
+dump.sh
+*.sql
