@@ -1,0 +1,137 @@
+@startuml
+
+title
+Cхема связей для "Order"
+end title
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package OrderScope #7ad378 {
+
+    class Order <<(M,#7ad378)>> #tomato {
+    }
+
+    class Status <<(E,#7ad378)>> {
+    }
+    class StatusGroup <<(E,#7ad378)>> {
+    }
+    class StatusHistory <<(E,#7ad378)>> {
+    }
+    class Extended <<(E,#7ad378)>> {
+    }
+    class Waypoint <<(E,#7ad378)>> {
+    }
+    class WaypointNotes <<(E,#7ad378)>> {
+    }
+    class Work <<(E,#7ad378)>> {
+    }
+    class Worker <<(E,#7ad378)>> {
+    }
+    class Activity <<(E,#7ad378)>> {
+    }
+    class Notes <<(E,#7ad378)>> {
+    }
+    class Estimate <<(E,#7ad378)>> {
+    }
+    class EstimateLocal <<(E,#7ad378)>> {
+    }
+    class EstimateInterstate <<(E,#7ad378)>> {
+    }
+    class EstimateIntrastate <<(E,#7ad378)>> {
+    }
+    class EstimateCalculated <<(E,#7ad378)>> {
+    }
+    class MobileEstimate <<(E,#7ad378)>> {
+    }
+    class Service <<(E,#7ad378)>> {
+    }
+    class Material <<(E,#7ad378)>> {
+    }
+    class CustomExtra <<(E,#7ad378)>> {
+    }
+    class Inventory <<(E,#7ad378)>> {
+    }
+    class Payment <<(E,#7ad378)>> {
+    }
+    class Tag <<(E,#7ad378)>> {
+    }
+    class Source <<(E,#7ad378)>> {
+    }
+}
+
+class Client {}
+class User {}
+class Task {}
+class Division {}
+class ParkingType {}
+class BuildingType {}
+class WaypointFlights {}
+class DispatchTruck {}
+class DispatchEmployer {}
+class Truck {}
+class Employee {}
+class WorkTypes {}
+class PeakDate {}
+class MaterialParent {}
+class ServiceParent {}
+
+Order -up--{ Waypoint : waypoints()
+Order -up--> Status : status()
+Order -up--{ StatusHistory : statusHistory()
+Order -up--> Extended : extended()
+Order -up--> MobileEstimate : mobileEstimate()
+Order -up--> Estimate : estimate()
+Order -up--> EstimateCalculated : calculated()
+Order -up--{ Tag : tags()
+
+Order -down--{ Worker : workers()
+Order -down--{ Work : works()
+Order -down--{ Activity : activities()
+Order -down--{ Notes : notes()
+Order -down--{ Service : services()
+Order -down--{ Material : materials()
+Order -down--{ CustomExtra : customsExtras()
+Order -down--{ Inventory : inventories()
+Order -down--{ Payment : payments()
+Order -down--{ Source
+
+Order -left--> User : manager()
+Order -left--> Client : client()
+Order -down--> Division : division()
+
+Order -right--{ Task : tasks()
+
+Status -up--> StatusGroup : group()
+
+StatusHistory -up--> User
+
+Waypoint -right--> ParkingType : parkingType()
+Waypoint -up--> BuildingType : buildingType()
+Waypoint -up--> WaypointFlights : flights()
+Waypoint -up--{ WaypointNotes : notes()
+
+Activity -up--> User : author()
+
+Work -down--{ DispatchTruck : dispatchTrucks()
+Work -down--{ DispatchEmployer : dispatchEmployees()
+Work -down--{ WorkTypes : workTypes()
+Work -down--> PeakDate : peakDate()
+
+DispatchTruck -left--> Truck : truck()
+DispatchEmployer -right--> Employee : employee()
+Employee -right--> User : user()
+
+Estimate -up--> EstimateLocal : local()
+Estimate -up--> EstimateInterstate : interstate()
+Estimate -up--> EstimateIntrastate : intrastate()
+
+Material -down--> MaterialParent : material()
+Service -down--> ServiceParentParent : service()
+
+@enduml
+

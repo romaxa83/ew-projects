@@ -1,0 +1,58 @@
+@startuml
+
+title
+Cхема связей для "CommunicationRecord"
+end title
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package CommunicationRecordScope #7ad378 {
+
+    class CommunicationRecord <<(M,#7ad378)>> #tomato {
+    }
+
+    class ConversationFavorites <<(E,#7ad378)>> {}
+    class ConversationMark <<(E,#7ad378)>> {}
+
+    class Task <<(E,#7ad378)>> {}
+    class Client\Activity <<(E,#7ad378)>> {}
+    class Order\Activity <<(E,#7ad378)>> {}
+    class TwilioSms <<(E,#7ad378)>> {}
+    class SmsEvents <<(E,#7ad378)>> {}
+    class CallsEvents <<(E,#7ad378)>> {}
+    class EventAfterCall <<(E,#7ad378)>> {}
+    class Message <<(E,#7ad378)>> {}
+    class Order\Notes <<(E,#7ad378)>> {}
+
+}
+
+class Client {}
+class User {}
+class Order {}
+
+CommunicationRecord -right--> Client : client()
+CommunicationRecord -down--> Order : order()
+CommunicationRecord -up--> Task : entity()
+CommunicationRecord -up--> Client\Activity : entity()
+CommunicationRecord -up--> Order\Activity : entity()
+CommunicationRecord -up--> TwilioSms : entity()
+CommunicationRecord -up--> SmsEvents : entity()
+CommunicationRecord -down--> CallsEvents : entity()
+CommunicationRecord -down--> EventAfterCall : entity()
+CommunicationRecord -down--> Message : entity()
+CommunicationRecord -down--> Order\Notes : entity()
+CommunicationRecord -down--> ConversationMark : entity()
+
+ConversationFavorites -up--> Client : client()
+ConversationFavorites -up--> User : user()
+
+ConversationMark -up--> Client : client()
+ConversationMark -up--> User : user()
+
+@enduml
+

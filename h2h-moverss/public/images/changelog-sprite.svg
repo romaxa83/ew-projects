@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <symbol id="asterisk" viewBox="0 0 11 11">
+            <path fill="currentColor" fill-rule="evenodd"
+                  d="M5.542.494a.625.625 0 0 1 .625.625v3.293l2.85-1.647a.625.625 0 1 1 .626 1.083L6.792 5.494l2.85 1.646a.625.625 0 1 1-.624 1.083L6.167 6.577v3.292a.625.625 0 1 1-1.25 0V6.577L2.065 8.223A.625.625 0 1 1 1.44 7.14l2.852-1.646L1.44 3.848a.625.625 0 0 1 .625-1.083l2.852 1.647V1.119a.625.625 0 0 1 .625-.625Z"
+                  clip-rule="evenodd"/>
+        </symbol>
+        <symbol id="trash" viewBox="0 0 11 11">
+            <path fill="currentColor" fill-rule="evenodd"
+                  d="M2.104 1.12a.625.625 0 0 0-.625.624v.625a.625.625 0 0 0 .625.625h.313V8.62a1.25 1.25 0 0 0 1.25 1.25h3.75a1.25 1.25 0 0 0 1.25-1.25V2.994h.312a.625.625 0 0 0 .625-.625v-.625a.625.625 0 0 0-.625-.625H6.792a.625.625 0 0 0-.625-.625h-1.25a.625.625 0 0 0-.625.625H2.104Zm1.875 2.5a.312.312 0 0 1 .313.312v4.375a.313.313 0 0 1-.625 0V3.932a.312.312 0 0 1 .312-.313Zm1.563 0a.312.312 0 0 1 .312.312v4.375a.313.313 0 0 1-.625 0V3.932a.312.312 0 0 1 .313-.313Zm1.875.312a.313.313 0 0 0-.625 0v4.375a.312.312 0 1 0 .625 0V3.932Z"
+                  clip-rule="evenodd"/>
+        </symbol>
+        <symbol id="pencil" viewBox="0 0 11 11">
+            <path fill="currentColor" fill-rule="evenodd"
+                  d="M8.578.582a.313.313 0 0 0-.442 0l-1.03 1.03 2.317 2.316 1.03-1.029a.312.312 0 0 0 0-.442L8.578.582ZM8.98 4.37 6.665 2.053 2.602 6.115h.13a.312.312 0 0 1 .312.313v.312h.312a.312.312 0 0 1 .313.313v.312h.312a.312.312 0 0 1 .313.313v.312h.312a.312.312 0 0 1 .313.313v.13L8.98 4.37ZM4.314 9.037a.312.312 0 0 1-.02-.109v-.313H3.98a.313.313 0 0 1-.312-.312V7.99h-.313a.313.313 0 0 1-.312-.312v-.313h-.313a.312.312 0 0 1-.312-.312V6.74h-.313a.312.312 0 0 1-.109-.02l-.112.112a.312.312 0 0 0-.069.105l-1.25 3.125a.313.313 0 0 0 .407.406l3.125-1.25a.313.313 0 0 0 .105-.069l.11-.111Z"
+                  clip-rule="evenodd"/>
+        </symbol>
+        <symbol id="unknown" viewBox="0 0 10 10">
+            <line x1="10" y1="0" x2="0" y2="10" stroke-width="2"
+                  stroke="currentColor"/>
+        </symbol>
+        <symbol id="lines" viewBox="0 0 16 16">
+            <polyline stroke="currentColor" stroke-miterlimit="10"
+                      stroke-width="1" points="3 2 9 8 3 14"/>
+            <polyline stroke="currentColor" stroke-miterlimit="10"
+                      stroke-width="1" points="7 2 13 8 7 14"/>
+        </symbol>
+        <symbol id="show-more" viewBox="0 0 16 16">
+            <g stroke="currentColor" stroke-miterlimit="10" stroke-width="1"
+               fill="none">
+                <polyline points="6 3 8 1 10 3"/>
+                <line x1="8" y1="1" x2="8" y2="6.5"/>
+                <line x1="2" y1="8" x2="14" y2="8"/>
+                <line x1="8" y1="9.5" x2="8" y2="15"/>
+                <polyline points="6 13 8 15 10 13"/>
+            </g>
+        </symbol>
+        <symbol id="show-less" viewBox="0 0 16 16">
+            <g stroke="currentColor" stroke-miterlimit="10" stroke-width="1"
+               fill="none">
+                <polyline points="6 4 8 6 10 4"/>
+                <line x1="8" y1="1" x2="8" y2="6"/>
+                <line x1="2" y1="8" x2="14" y2="8"/>
+                <line x1="8" y1="10" x2="8" y2="15"/>
+                <polyline points="6 12 8 10 10 12"/>
+            </g>
+        </symbol>
+        <symbol id="copy" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+                <rect fill="currentColor" width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </g>
+        </symbol>
+    </defs>
+</svg>

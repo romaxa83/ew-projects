@@ -1,0 +1,54 @@
+@startuml
+
+title
+Cхема связей для "User"
+end title
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package UserScope #7ad378 {
+
+    class User <<(M,#7ad378)>> #tomato {
+    }
+
+    class Role <<(E,#7ad378)>> {}
+    class RoleRoute <<(E,#7ad378)>> {}
+    class Employee <<(E,#7ad378)>> #tomato{}
+    class Busy <<(E,#7ad378)>> {}
+    class BusyWeekDay <<(E,#7ad378)>> {}
+    class Phone <<(E,#7ad378)>> {}
+    class Email <<(E,#7ad378)>> {}
+    class SalesPlan <<(E,#7ad378)>> {}
+    class Messenger <<(E,#7ad378)>> {}
+    class MessengerType <<(E,#7ad378)>> {}
+    class Note <<(E,#7ad378)>> {}
+    class PbxData <<(E,#7ad378)>> {}
+
+}
+
+class Order {}
+
+
+User -up--{ Role: employee()
+Role -right--{ RoleRoute: allowedRoutes()
+User -down--> Employee : roles()
+User -left--> Order : manager()
+
+Employee -down--{ Busy: busyDates()
+Employee -down--> BusyWeekDay: busyWeeksDays()
+Employee -left--{ Phone: phones()
+Employee -right--{ Email: emails()
+Employee -right--{ SalesPlan: SalesPlan()
+Employee -up--{ Messenger: messengers()
+Employee -up--{ Note: notes()
+Employee -up--{ PbxData: pbxdata()
+
+Messenger -up--> MessengerType: type()
+
+@enduml
+

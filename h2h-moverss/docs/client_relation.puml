@@ -1,0 +1,47 @@
+@startuml
+
+title
+Cхема связей для "Client"
+end title
+
+skinparam class {
+    BackgroundColor Wheat
+    BorderColor Black
+}
+
+skinparam stereotypeCBackgroundColor DimGray
+
+package ClientScope #7ad378 {
+
+    class Client <<(M,#7ad378)>> #tomato {
+    }
+
+    class Phone <<(E,#7ad378)>> {}
+    class Email <<(E,#7ad378)>> {}
+    class Note <<(E,#7ad378)>> {}
+    class Tag <<(E,#7ad378)>> {}
+    class Activity <<(E,#7ad378)>> {}
+    class Messenger <<(E,#7ad378)>> {}
+    class MessengerType <<(E,#7ad378)>> {}
+
+}
+
+class Order {}
+class User {}
+
+
+Client -up--{ Phone : phones()
+Client -up--{ Email : emails()
+Client -up--{ Messenger : messengers()
+Client -down--{ Note : notes()
+Client -down--{ Activity : activities()
+Client -down--{ Tag : tags()
+
+Client -up--{ Order : orders()
+
+Messenger -down--> MessengerType : type()
+Note -down--> User : author()
+Activity -down--> User : author()
+
+@enduml
+

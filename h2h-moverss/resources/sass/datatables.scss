@@ -1,0 +1,111 @@
+// DataTables Editor
+@import "~datatables.net-editor-bs4/css/editor.bootstrap4.css";
+
+
+/* DATATABLES */
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
+    background: transparent;
+}
+
+.dataTables_wrapper {
+    padding-bottom: 30px;
+}
+
+.dataTables_filter label {
+    margin-right: 5px;
+}
+
+div.dt-button-info {
+    z-index: 100;
+}
+
+@media (max-width: 768px) {
+    .dataTables_length {
+        float: none;
+    }
+}
+
+td.column-text-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+//table.dataTable.dtr-column>tbody>tr.parent td.control:before,
+//table.dataTable.dtr-column>tbody>tr.parent th.control:before,
+//table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
+//table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
+//    background-color: #1dc9b7;
+//}
+
+//dataTables_wrapper tr.child td.child .dtr-details:after {
+//
+//}
+
+table.dataTable {
+    tbody {
+        tr {
+            &.shown-child {
+                position: relative;
+
+                td.shown-child:after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    width: 1rem;
+                    background: #4de5d5;
+                }
+            }
+
+            td.dtr-control {
+                position: relative;
+                padding-left: 30px;
+                cursor: pointer;
+
+                &:before {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    //display: -webkit-box;
+                    //display: -ms-flexbox;
+                    display: flex;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    align-items: center;
+                    -webkit-box-pack: center;
+                    -ms-flex-pack: center;
+                    justify-content: center;
+                    height: 100%;
+                    width: 1rem;
+                    -webkit-box-shadow: none;
+                    box-shadow: none;
+                    border-radius: 0;
+                    border: 0;
+                    margin: 0;
+                    box-sizing: content-box;
+                    text-align: center;
+                    text-indent: 0 !important;
+                    font-family: 'Courier New', Courier, monospace;
+                    line-height: 14px;
+                    content: '+';
+                    color: #fff;
+                    background-color: #886ab5;
+                }
+            }
+
+            &.shown {
+                td.dtr-control:before {
+                    background-color: #1dc9b7;
+                    content: '-';
+                }
+            }
+        }
+    }
+}

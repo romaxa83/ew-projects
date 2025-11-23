@@ -1,0 +1,97 @@
+@startuml
+title
+Общая схема приложения
+end title
+
+left header
+Wezom
+endheader
+
+skinparam  {
+    FontSize 13
+    BackgroundColor<<Apache>> Red
+    BorderColor<<Apache>> #FF6655
+    FontName Courier
+    BorderColor black
+    BackgroundColor gold
+    ArrowFontName Impact
+    ArrowColor #24292e
+    ArrowFontColor #777777
+}
+
+skinparam component {
+    BorderColor black
+    BackgroundColor tomato
+}
+
+skinparam title {
+    FontName Courier
+}
+
+skinparam frame {
+    BorderColor black
+    BackgroundColor #7ad378
+}
+
+"Mobile app" as (MA)#black;line:black;line.bold;text:black
+"Landing IL (WP)" as (LIL) #f5f5f5;line:black;line.bold;text:black
+"Landing CA (WP)" as (LCA) #f5f5f5;line:black;line.bold;text:black
+
+
+frame Storage {
+    database db_main as "Main data" {
+    }
+    database db_audit as "Audit data" {
+    }
+    database db_ringostat as "Ringostat data" {
+    }
+    database db_mailbox as "Gmail data" {
+    }
+}
+
+cloud <<Twilio>> {
+[SMS]
+}
+cloud <<ZADARMA>> {
+[ZADARMA]
+}
+cloud <<Ringostat>> {
+[Ringostat]
+}
+cloud <<Gmail>> {
+[Gmail]
+}
+cloud <<Mailchimp>> {
+[Mailchimp]
+}
+
+
+node node as MA {
+}
+
+
+[App] -left-> [SMS]
+[App] -left-> [ZADARMA]
+
+[App] -right-> [Ringostat]
+[App] -up-> [Gmail]
+[App] -up-> [Mailchimp]
+
+
+[App] -up-> (LIL) : getOrders
+[App] -up-> (LCA) : getOrders
+
+[App] <-right-> (MA) : RestAPI
+
+Admin -down-> [App]
+
+[App] <-down-> db_main
+[App] <-down-> db_audit
+[App] <-down-> db_ringostat
+[App] <-down-> db_mailbox
+
+
+
+
+
+@enduml

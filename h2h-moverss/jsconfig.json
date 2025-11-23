@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "target": "ES2022",
+        "allowSyntheticDefaultImports": true,
+        "paths": {
+            "@/*": [
+                "resources/js/*"
+            ],
+            "@components/*": [
+                "resources/js/components/*"
+            ],
+            "@ui/*": [
+                "resources/js/ui/*"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "public"
+    ]
+}

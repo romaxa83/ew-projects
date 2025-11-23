@@ -1,0 +1,41 @@
+{
+    "develop": [
+        "git reset --hard",
+        "git checkout develop",
+        "git pull origin develop",
+        "composer81 install",
+        "php81 artisan optimize:clear",
+        "php81 artisan migrate --force",
+        "php81 artisan optimize",
+        "php81 artisan queue:restart",
+        "php81 artisan websockets:restart",
+        "npm ci --legacy-peer-deps",
+        "npm run production"
+    ],
+    "stage": [
+        "git reset --hard",
+        "git checkout stage",
+        "git pull origin stage",
+        "composer install",
+        "php artisan optimize:clear",
+        "php artisan migrate --force",
+        "php artisan optimize",
+        "php artisan queue:restart",
+        "php artisan websockets:restart",
+        "npm ci --legacy-peer-deps",
+        "npm run production"
+    ],
+    "master": [
+        "git reset --hard",
+        "git checkout master",
+        "git pull origin master",
+        "composer install",
+        "php artisan optimize:clear",
+        "php artisan migrate --force",
+        "php artisan optimize",
+        "php artisan queue:restart",
+        "php artisan websockets:restart",
+        "npm ci --legacy-peer-deps",
+        "npm run production"
+    ]
+}

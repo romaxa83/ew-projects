@@ -1,0 +1,56 @@
+import { render, screen } from '@testing-library/vue';
+import { describe, expect, it } from 'vitest';
+import Item from '../Item.vue';
+
+describe('Item', () => {
+	// TODO: Vitest does not support current Node.js version (14.21.3) need to update to 18+
+	// Alternative variant Jest - it need to update Node.js to 16+
+	it.todo('should render Client info if field is not empty', () => {
+		render(Item, {
+			props: {
+				item: {
+					id: 6782142,
+					user: {
+						id: 251,
+						name: '[dev-partner] Oleh',
+						email: 'dutchenko.o.dev@gmail.com',
+						employee: {
+							id: 239,
+							first_name: '[dev-partner] Oleh',
+							last_name: 'Dutchenko',
+						},
+					},
+					client: {
+						id: 68723,
+						first_name: 'Despo',
+						last_name: 'Rumowski',
+					},
+					created_at: 1724663245,
+					details: [
+						{
+							field: 'sizing_volume',
+							new: 54,
+							old: '46.00',
+						},
+						{
+							field: 'sizing_weight',
+							new: 310,
+							old: '270.00',
+						},
+					],
+					event: {
+						name: 'updated',
+						target: 'Order',
+						target_id: 144774,
+					},
+					is_client_activity: true,
+				},
+			},
+		});
+
+		const text = screen.getByText(
+			'"Order" updated by client Despo Rumowski at'
+		);
+		expect(text).toBeInTheDocument();
+	});
+});

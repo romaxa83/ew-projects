@@ -1,0 +1,585 @@
+//@import 'flatpickr/dist/plugins/monthSelect/style';
+@import 'vendor/tooltipster/tooltipster.bundle.css';
+@import 'vendor/tooltipster/tooltipster-sideTip-shadow.min.css';
+
+$dispatchCols: 30;
+$calendarCols: 7;
+$--scrollbar: rgba(0, 0, 0, 0.15);
+$red: #ff6252;
+
+.panel-tag.draggable-source--is-dragging {
+	margin-bottom: 0;
+}
+
+.d-scheduler-only {
+	display: none;
+}
+
+.dispatch-popover-orders {
+	max-width: 1100px;
+
+	div {
+		margin: 0 5px 0 5px;
+	}
+}
+
+.reserved-time {
+	height: 100%;
+	position: absolute;
+	top: 0;
+	opacity: 1;
+	left: 0;
+	z-index: -1;
+	background: #9bccec
+		repeating-linear-gradient(
+			-45deg,
+			transparent,
+			transparent 5px,
+			rgba(255, 255, 255, 0.1) 5px,
+			rgba(255, 255, 255, 0.1) 12px
+		);
+}
+
+.tag-list-inline {
+	display: inline;
+	list-style: none;
+	padding: 0;
+
+	li {
+		display: inline;
+
+		&:after {
+			content: ', ';
+		}
+
+		&:last-child:after {
+			content: '';
+		}
+	}
+}
+
+.works-horizontal {
+	scrollbar-color: $--scrollbar transparent;
+	overflow-x: auto;
+	min-height: 210px;
+
+	&.crew-works .work-snippet {
+		min-width: 250px;
+	}
+
+	&::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+		background-color: transparent;
+	}
+
+	&::-webkit-scrollbar-corner {
+		background-color: transparent;
+		border-color: transparent;
+	}
+
+	&::-webkit-scrollbar-track {
+		border-radius: 10px;
+		background-color: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background-color: $--scrollbar;
+	}
+
+	.work-snippet {
+		margin-right: 1rem;
+
+		.drag-handle {
+			min-width: 100px;
+			white-space: nowrap !important;
+		}
+	}
+
+	.reserved-time {
+		display: none;
+	}
+}
+
+.crew-works {
+	.panel-tag {
+		min-width: 350px;
+		margin-right: 0.5rem;
+	}
+
+	.work-snippet {
+		&.crew-completed {
+			&.panel-tag {
+				background: #ecffe1;
+				border-left-color: #52bf11;
+			}
+		}
+
+		&.crew-empty {
+			&.panel-tag {
+				background: #ffd5df;
+				border-left-color: #fc1349;
+			}
+		}
+
+		&.crew-half {
+			&.panel-tag {
+				background: #ffecd2;
+				border-left-color: #ff9a13;
+			}
+		}
+	}
+}
+
+.date-empty {
+	&.panel-tag {
+		background: #ffde66;
+		border-left-color: #9c0f2e;
+	}
+}
+
+.work-snippet {
+    z-index: 6;
+    opacity: 1;
+    position: relative;
+
+	&:focus {
+		outline: none;
+	}
+
+	&.draggable-source--is-dragging {
+		min-width: 250px;
+
+		.drag-handle {
+			cursor: grab;
+		}
+	}
+
+	&.draggable-mirror {
+		display: none;
+		min-width: 250px;
+		z-index: 20;
+
+		.d-scheduler-only {
+			display: none;
+		}
+
+		.drag-handle {
+			cursor: grab;
+		}
+	}
+
+	.drag-handle {
+		cursor: pointer;
+	}
+
+	.truck-work-checkbox,
+	.crew-work-checkbox {
+		position: absolute;
+		right: 0;
+		bottom: 10px;
+
+		input,
+		label {
+			cursor: pointer;
+		}
+	}
+}
+
+.works-unassigned {
+	.panel-tag {
+		margin-bottom: 0.5rem;
+		min-width: 350px;
+		margin-right: 0.5rem;
+	}
+
+	.dropzone {
+		min-height: 50px;
+		background-color: #e5e3e34d;
+	}
+
+	.reserved-time {
+		display: none;
+	}
+}
+
+.badge-info a,
+.badge-info a:visited {
+	color: #fff;
+}
+
+.gantt-wrapper,
+.calendar-wrapper {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.calendar {
+    --border: 1px solid rgba(0, 0, 0, 0.3);
+	display: grid;
+	border: var(--border);
+	position: relative;
+	overflow: hidden;
+
+	&__body {
+		display: grid;
+		grid-template-columns: repeat($calendarCols, 1fr);
+		grid-template-rows: repeat(5, minmax(120px, 1fr));
+		//background-color: rgba(0, 0, 0, 0.5);
+		//grid-gap: 1px;
+
+		.calendar-cell {
+			background-color: #fff;
+			padding: 0.5rem;
+            border: var(--border);
+		}
+	}
+
+	&__row {
+		display: grid;
+		grid-template-columns: repeat($calendarCols, minmax(100px, 1fr));
+		//background-color: rgba(0, 0, 0, 0.5);
+		//grid-gap: 1px;
+
+		&--header {
+			color: #000;
+			grid-template-rows: minmax(100px, 1fr);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+			grid-template-rows: auto;
+			/*
+            .day-color-Mon {
+                background: #b2b2b2;
+            }
+
+            .day-color-Tue {
+                background: #cc2b24;
+            }
+
+            .day-color-Wed {
+                background: #7b51aa;
+            }
+
+            .day-color-Thu {
+                background: #2a80b8;
+            }
+
+            .day-color-Fri {
+                background: #9dc02b;
+            }
+            */
+
+			.day-color-Sat {
+				background: #1d1d1b;
+				color: #fff;
+			}
+
+			.day-color-Sun {
+				background: #fcc23c;
+			}
+
+			& > div {
+				background-color: #f5f5f5;
+				text-align: center;
+				font-size: 13px;
+				align-self: center;
+				font-weight: bold;
+				padding: 20px 0;
+                border: var(--border);
+			}
+		}
+	}
+}
+
+.gantt {
+	display: grid;
+	border: 0;
+	position: relative;
+
+	&__row {
+		display: grid;
+		grid-template-columns: 150px 1fr;
+		grid-template-rows: minmax(80px, 1fr);
+		grid-gap: 0 0;
+		background-color: #fff;
+
+		& .scheduler-hidden {
+			display: none;
+		}
+
+		& .overflow-no-wrap {
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		& .d-scheduler-only {
+			display: block;
+		}
+
+		&:nth-child(odd) {
+			background-color: #fff;
+
+			.gantt__row-first {
+				background-color: #fff;
+			}
+		}
+
+		&:nth-child(3) {
+			.gantt__row-bars {
+				border-top: 0;
+			}
+
+			.gantt__row-first {
+				border-top: 0;
+			}
+		}
+
+		&--empty {
+			background-color: lighten($red, 25%) !important;
+			z-index: 1;
+
+			.gantt__row-first {
+				border-width: 1px 1px 0 0;
+			}
+		}
+
+		&--lines {
+			&-truck,
+			&-crew {
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				background-color: transparent;
+				grid-template-columns: 150px 1fr;
+				z-index: 5;
+
+				span:first-child {
+					border-right: 1px solid rgba(0, 0, 0, 0.5);
+				}
+
+				.gantt__row--lines-timeline {
+					background-color: transparent;
+					height: 100%;
+					width: 100%;
+					grid-template-columns: repeat($dispatchCols, 1fr);
+					overflow: auto;
+
+					span.marker {
+						background-color: rgba(10, 52, 68, 0.13);
+					}
+
+					span:nth-child(even) {
+						border-right: 1px solid rgba(0, 0, 0, 0.5);
+					}
+
+					span:nth-child(odd) {
+						border-right: 1px solid rgba(0, 0, 0, 0.05);
+					}
+
+					span {
+						display: block;
+					}
+
+					span:last-of-type {
+						border-right: none !important;
+					}
+				}
+			}
+
+			& {
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				background-color: transparent;
+				grid-template-columns: 150px repeat($dispatchCols, 1fr);
+				overflow: auto;
+				z-index: 5;
+			}
+
+			span:nth-child(even) {
+				border-right: 1px solid rgba(0, 0, 0, 0.05);
+			}
+
+			span:nth-child(odd) {
+				border-right: 1px solid rgba(0, 0, 0, 0.5);
+			}
+
+			span {
+				display: block;
+			}
+
+			span:last-of-type {
+				border-right: none !important;
+			}
+
+			&:after,
+			&:before {
+				grid-row: 1;
+				grid-column: 0;
+				background-color: #1688b345;
+				z-index: 2;
+				height: 100%;
+			}
+		}
+
+		&--header {
+			color: #000;
+			position: sticky;
+			z-index: 11;
+			top: 70px;
+			background-color: #f5f5f5 !important;
+
+			border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+			grid-template-columns: 150px repeat($dispatchCols, 1fr);
+			overflow: auto;
+			grid-template-rows: auto;
+
+			.gantt__row-first {
+				border-top: 0 !important;
+				background-color: #f5f5f5 !important;
+				border-right: 1px solid rgba(0, 0, 0, 0.5);
+			}
+
+			span {
+				border-right: 1px solid rgba(0, 0, 0, 0.5);
+				text-align: center;
+				font-size: 11px;
+				align-self: center;
+				padding: 20px 0;
+			}
+
+			span:last-of-type {
+				border-right: none !important;
+			}
+		}
+
+		&-first {
+			background-color: #fff;
+			border-width: 1px 0 0 0;
+			border-color: rgba(0, 0, 0, 0.5);
+			border-style: solid;
+			padding: 10px 10px;
+			font-size: 13px;
+			font-weight: bold;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+
+			.crew-checkbox,
+			.truck-checkbox {
+				z-index: 6;
+
+				input,
+				label {
+					cursor: pointer !important;
+				}
+			}
+		}
+
+		&-test {
+			position: relative;
+		}
+
+		@for $i from 1 through $dispatchCols {
+			.c-span-#{$i} {
+				grid-column-end: span #{$i};
+			}
+			.c-start-#{$i} {
+				grid-column-start: #{$i};
+			}
+		}
+
+		&-bars {
+			display: grid;
+			padding: 0 0;
+			margin: 0;
+			grid-template-columns: repeat($dispatchCols, 1fr);
+			overflow: auto;
+			grid-auto-flow: column;
+			grid-gap: 0 0;
+			border-top: 1px solid rgba(0, 0, 0, 0.5);
+
+			.cell {
+				overflow: hidden;
+				position: relative;
+				grid-auto-rows: 160px;
+
+				&.crew-work {
+					grid-row: auto;
+				}
+
+				&.dropzone {
+					&.draggable-dropzone--active {
+						min-height: 160px;
+						background-color: rgba(29, 201, 183, 0.3);
+						background-image: repeating-linear-gradient(
+							-45deg,
+							transparent,
+							transparent 10px,
+							rgba(255, 255, 255, 0.2) 5px,
+							rgba(255, 255, 255, 0.2) 20px
+						);
+					}
+
+					.item {
+					}
+				}
+
+				&.stripes {
+					background-image: repeating-linear-gradient(
+						45deg,
+						transparent,
+						transparent 5px,
+						rgba(255, 255, 255, 0.1) 5px,
+						rgba(255, 255, 255, 0.1) 12px
+					);
+				}
+
+				.work-snippet {
+					margin: 0.5rem 0.3rem;
+				}
+
+				&.busy {
+					background-color: lighten($red, 25%) !important;
+					height: 150px;
+				}
+			}
+		}
+	}
+}
+
+.panel-container .works-container .hide-cell {
+	display: none;
+}
+
+.works-container {
+	min-height: 80px;
+
+	&.crew-works {
+		min-height: 150px;
+	}
+
+	&.moveToSchedule-truck {
+		min-height: 130px;
+
+		.not-allow-remove {
+			display: none;
+		}
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	.cell {
+		&.dropzone {
+			z-index: 10;
+		}
+	}
+}
+
+.truck-row {
+	.work-snippet {
+	}
+}

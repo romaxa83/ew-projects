@@ -1,0 +1,21 @@
+body {
+    min-width: 320px;
+}
+
+#customer-order .card-body table {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+@media (max-width: 767px) {
+    #customer-order .container {
+        width: 100%;
+    }
+}
+
+@media (max-width: 460px) {
+    #customer-order .container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
